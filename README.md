@@ -4,7 +4,7 @@
 
 # INOVA UI
 
-### Componentes, tokens e logos do INOVA Lab — Leroy Merlin Brasil
+### Componentes, tokens e logos do INOVA Lab · Leroy Merlin Brasil
 
 *Um desenho no Figma, um pacote em código, a mesma interface em todo produto.*
 
@@ -101,7 +101,7 @@ import { Button, Alert, Toast, ToastViewport } from "@inova-lab-ws/ui";
 | `Toast` · `ToastViewport` | `toast` | success, error, info · sombra · topo, abaixo do notch no mobile; centro no desktop |
 
 **Próximas versões:** overlay (dialog, drawer e bottom sheet), menu, table, tooltip, textarea, multi-select,
-date-range-picker, metric-tile, gráficos e logos — todos já desenhados na biblioteca.
+date-range-picker, metric-tile, gráficos e logos, todos já desenhados na biblioteca.
 
 <a id="tokens"></a>
 

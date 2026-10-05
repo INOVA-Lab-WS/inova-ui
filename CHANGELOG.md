@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.3 · 2026-10-05
+
+- DateRangePicker: a faixa do intervalo passa por trás do início e do fim, contínua, como no Figma.
+
 ## 0.2.2 · 2026-10-05
 
 - DateRangePicker: dia ativo (início e fim) em preto (`surface-ink`) e intervalo em preto a 10%, como o padrão de seleção.

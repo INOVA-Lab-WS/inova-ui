@@ -158,7 +158,12 @@ export function DateRangePicker({ value, onValueChange, presets = defaultDatePre
                 const d = new Date(month.getFullYear(), month.getMonth(), i + 1);
                 const edge = same(d, draft.from) || same(d, draft.to);
                 const inRange = !!draft.from && !!draft.to && d > draft.from && d < draft.to;
-                return <DateRangeDay key={i} date={d} edge={edge} inRange={inRange} today={same(d, new Date())} disabled={d > max} onSelect={pick} />;
+                const band = !!draft.from && !!draft.to && !same(draft.from, draft.to) && (inRange || edge);
+                return (
+                  <div key={i} className={cn("flex h-9 items-center", band && "bg-surface-ink/10", band && same(d, draft.from) && "rounded-l-8", band && same(d, draft.to) && "rounded-r-8")}>
+                    <DateRangeDay date={d} edge={edge} today={same(d, new Date())} disabled={d > max} onSelect={pick} />
+                  </div>
+                );
               })}
             </div>
             <div className="flex items-center justify-between gap-2 border-t border-border-default pt-3">

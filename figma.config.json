@@ -2,6 +2,6 @@
   "codeConnect": {
     "include": ["figma/**/*.figma.tsx"],
     "parser": "react",
-    "importPaths": { "../src": "@inova-lab/ui" }
+    "importPaths": { "../src": "@inova-lab-ws/ui" }
   }
 }

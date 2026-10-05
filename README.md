@@ -1,4 +1,4 @@
-# @inova-lab/ui
+# @inova-lab-ws/ui
 
 Os componentes, tokens e logos da **INOVA Lab Library** (Figma) em React. É a fonte única de interface do
 INOVA Lab: AmbientAI, Gate e todo produto novo instalam este pacote. **Nenhum app cria componente de interface
@@ -12,15 +12,15 @@ próprio nem copia o código daqui.** O que faltar entra por este repositório.
 
 1. `.npmrc` do projeto:
    ```
-   @inova-lab:registry=https://npm.pkg.github.com
+   @inova-lab-ws:registry=https://npm.pkg.github.com
    ```
-2. `npm install @inova-lab/ui` (React 19 e Tailwind 4 no projeto).
+2. `npm install @inova-lab-ws/ui` (React 19 e Tailwind 4 no projeto).
 3. No CSS global do app:
    ```css
-   @import "@inova-lab/ui/theme.css";
-   @source "../node_modules/@inova-lab/ui/dist";
+   @import "@inova-lab-ws/ui/theme.css";
+   @source "../node_modules/@inova-lab-ws/ui/dist";
    ```
-4. Use: `import { Button, Input, Chip, Alert, Toast } from "@inova-lab/ui";`
+4. Use: `import { Button, Input, Chip, Alert, Toast } from "@inova-lab-ws/ui";`
 
 ## Regras
 

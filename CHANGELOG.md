@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2 · 2026-10-05
+
+- DateRangePicker: dia ativo (início e fim) em preto (`surface-ink`) e intervalo em preto a 10%, como o padrão de seleção.
+
 ## 0.2.1 · 2026-10-05
 
 - DateRangePicker: atalhos e "Aplicar" passam a ser Chip (os componentes preset e apply saíram da biblioteca).

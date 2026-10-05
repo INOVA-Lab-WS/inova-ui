@@ -65,7 +65,7 @@ export function DateRangeDay({
       className={cn(
         "mx-auto flex size-9 items-center justify-center rounded-8 text-xs tabular-nums transition-colors outline-none",
         "focus-visible:outline-2 focus-visible:outline-text-primary",
-        edge ? "bg-surface-action font-bold text-text-on-action" : inRange ? "bg-surface-action/10 text-text-primary" : "text-text-primary hover:bg-surface-muted",
+        edge ? "bg-surface-ink font-bold text-text-on-ink" : inRange ? "bg-surface-ink/10 text-text-primary" : "text-text-primary hover:bg-surface-muted",
         today && !edge && "font-bold",
         disabled && "text-text-disabled hover:bg-transparent",
       )}

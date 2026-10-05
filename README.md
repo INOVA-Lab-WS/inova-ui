@@ -60,26 +60,20 @@ flowchart LR
 
 ## 📦 Instalar num projeto
 
-**1. Registro.** No `.npmrc` do projeto (com um token do GitHub que leia pacotes da organização):
-
-```text
-@inova-lab-ws:registry=https://npm.pkg.github.com
-```
-
-**2. Dependência.** O projeto precisa de React 19 e Tailwind 4.
+**1. Dependência.** Público no npm, sem token nem `.npmrc`. O projeto precisa de React 19 e Tailwind 4.
 
 ```bash
 npm install @inova-lab-ws/ui
 ```
 
-**3. Tema.** No CSS global, e nenhum outro tema:
+**2. Tema.** No CSS global, e nenhum outro tema:
 
 ```css
 @import "@inova-lab-ws/ui/theme.css";
 @source "../node_modules/@inova-lab-ws/ui/dist";
 ```
 
-**4. Usar.**
+**3. Usar.**
 
 ```tsx
 import { Button, Alert, Toast, ToastViewport } from "@inova-lab-ws/ui";

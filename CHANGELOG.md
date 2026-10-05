@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.4 · 2026-10-05
+
+- MetricTile: a ajuda do "i" usa o Tooltip do pacote em vez do `title` do navegador.
+- README: tabela de componentes completa, agrupada por categoria, com o nome de cada um no Figma.
+- Code Connect salvo no Figma para os 51 componentes novos.
+
 ## 0.2.3 · 2026-10-05
 
 - DateRangePicker: a faixa do intervalo passa por trás do início e do fim, contínua, como no Figma.

@@ -92,16 +92,100 @@ import { Button, Alert, Toast, ToastViewport } from "@inova-lab-ws/ui";
 
 ## 🧩 Componentes
 
-| Componente | No Figma | O que oferece |
-| :--- | :--- | :--- |
-| `Button` | `button` | primary (preto), outline, ghost, ink (translúcido, sobre imagem), destructive · 56px no mobile e 48px no desktop · só ícone com `iconOnly` |
-| `Input` | `input` | label, ajuda, erro e ícones opcionais · ajuda e erro juntos · 56/48px |
-| `Chip` | `chip` | filled, outline, ghost, ink, action · small (32px) e medium (40px) · ícone, contador e remoção |
-| `Alert` | `alert` | information, success, warning, error · sem contorno · título e ação opcionais |
-| `Toast` · `ToastViewport` | `toast` | success, error, info · sombra · topo, abaixo do notch no mobile; centro no desktop |
+Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Connect em `figma/`.
 
-**Próximas versões:** overlay (dialog, drawer e bottom sheet), menu, table, tooltip, textarea, multi-select,
-date-range-picker, metric-tile, gráficos e logos, todos já desenhados na biblioteca.
+**Indicadores**
+
+| Componente | No Figma |
+| :--- | :--- |
+| `Badge` | `badge` |
+| `Spinner` | `spinner` |
+| `Tooltip · TooltipProvider` | `tooltip` |
+| `Avatar` | `avatar` |
+| `BotAvatar` | `bot-avatar` |
+| `Divider` | `divider` |
+| `Alert` | `alert` |
+| `Toast · ToastViewport` | `toast` |
+| `Chip` | `chip` |
+
+**Navegação**
+
+| Componente | No Figma |
+| :--- | :--- |
+| `NavigationTabBar` | `navigation-tab-bar` |
+| `Menu` | `menu` |
+| `PillTab · PillTabs` | `pill-tab` |
+
+**Estrutura**
+
+| Componente | No Figma |
+| :--- | :--- |
+| `Header` | `header` |
+| `TopArea` | `top-area` |
+
+**Logos**
+
+| Componente | No Figma |
+| :--- | :--- |
+| `LogoAmbientAI` | `logo / ambientai` |
+| `LogoGate` | `logo / gate` |
+| `LogoFormaLab` | `logo / forma-lab` |
+| `LogoInovaUI` | `logo / inova-ui` |
+| `LogoPlaceholder` | `logo / placeholder` |
+
+**Formulário**
+
+| Componente | No Figma |
+| :--- | :--- |
+| `Button` | `button` |
+| `Input` | `input` |
+| `Textarea` | `textarea` |
+| `Checkbox` | `checkbox` |
+| `Radio` | `radio` |
+| `RoleRadio` | `role-radio` |
+| `Toggle` | `toggle` |
+| `MultiSelect` | `multi-select` |
+| `DateRangePicker · DateRangeDay` | `date-range-picker` |
+| `LoginForm` | `login-form` |
+
+**Overlay**
+
+| Componente | No Figma |
+| :--- | :--- |
+| `Overlay (dialog, drawer, bottom sheet)` | `overlay` |
+
+**Dados e gráficos**
+
+| Componente | No Figma |
+| :--- | :--- |
+| `MetricTile` | `metric-tile` |
+| `ProgressReadout` | `progress-readout` |
+| `BarChart` | `bar-chart` |
+| `HorizontalBarChart` | `horizontal-bar-chart` |
+| `StackedBarChart` | `stacked-bar-chart` |
+| `DistributionChart` | `distribution-chart` |
+| `Table · TableRow · TableCell` | `table` |
+| `ActivityLog · ActivityLogRow` | `activity-log` |
+
+**Conversa**
+
+| Componente | No Figma |
+| :--- | :--- |
+| `UserMessage` | `user-message` |
+| `AssistantMessage` | `assistant-message` |
+| `Composer` | `composer` |
+| `InputCard` | `input-card` |
+| `ListeningBanner` | `listening-banner` |
+| `Waveform` | `waveform` |
+| `MentionResult` | `mention-result` |
+| `SuggestionList` | `suggestion-list` |
+| `FeedbackPrompt` | `feedback-prompt` |
+| `ActionCard` | `action-card` |
+| `MetaRow` | `meta-row` |
+| `GenerationBoard` | `generation-board` |
+| `HistoryThumbnail` | `history-thumbnail` |
+| `Thumbnail` | `thumbnail` |
+| `ProductListRow` | `product-list-row` |
 
 <a id="tokens"></a>
 

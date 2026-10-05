@@ -1,0 +1,62 @@
+import * as React from "react";
+import * as Primitive from "@radix-ui/react-dropdown-menu";
+import { cn } from "../lib/cn";
+
+/**
+ * ActionMenu · Figma "action-menu" (+ "action-menu / item").
+ * A list of actions opened from an icon button. Items are 40px with the chip states
+ * (default, hover, pressed, disabled, focus); the destructive action goes last, after a divider.
+ */
+export const ActionMenu = Primitive.Root;
+export const ActionMenuTrigger = Primitive.Trigger;
+
+export const ActionMenuContent = React.forwardRef<
+  React.ElementRef<typeof Primitive.Content>,
+  React.ComponentPropsWithoutRef<typeof Primitive.Content>
+>(({ className, align = "end", sideOffset = 4, ...props }, ref) => (
+  <Primitive.Portal>
+    <Primitive.Content
+      ref={ref}
+      align={align}
+      sideOffset={sideOffset}
+      className={cn(
+        "z-50 flex min-w-48 flex-col rounded-12 border border-border-default bg-surface-card p-1 font-sans shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1)]",
+        className,
+      )}
+      {...props}
+    />
+  </Primitive.Portal>
+));
+ActionMenuContent.displayName = "ActionMenuContent";
+
+export interface ActionMenuItemProps extends React.ComponentPropsWithoutRef<typeof Primitive.Item> {
+  icon?: React.ReactNode;
+  tone?: "default" | "danger";
+}
+
+export const ActionMenuItem = React.forwardRef<React.ElementRef<typeof Primitive.Item>, ActionMenuItemProps>(
+  ({ className, icon, tone = "default", children, ...props }, ref) => (
+    <Primitive.Item
+      ref={ref}
+      className={cn(
+        "flex h-10 cursor-default items-center gap-2 rounded-8 px-3 text-sm outline-none transition-colors select-none [&_svg]:size-4",
+        "data-[highlighted]:bg-surface-control-hover active:bg-chip-pressed",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
+        "data-[disabled]:pointer-events-none data-[disabled]:text-text-disabled",
+        tone === "danger" ? "text-status-error-fg" : "text-text-primary",
+        className,
+      )}
+      {...props}
+    >
+      {icon}
+      <span className="min-w-0 flex-1 truncate">{children}</span>
+    </Primitive.Item>
+  ),
+);
+ActionMenuItem.displayName = "ActionMenuItem";
+
+export const ActionMenuSeparator = React.forwardRef<
+  React.ElementRef<typeof Primitive.Separator>,
+  React.ComponentPropsWithoutRef<typeof Primitive.Separator>
+>(({ className, ...props }, ref) => <Primitive.Separator ref={ref} className={cn("my-1 h-px bg-border-default", className)} {...props} />);
+ActionMenuSeparator.displayName = "ActionMenuSeparator";

@@ -101,6 +101,7 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 | `Alert` | `alert` |
 | `Toast · ToastViewport` | `toast` |
 | `Chip` | `chip` |
+| `ConnectorCard` | `connector-card` |
 
 **Navegação**
 
@@ -116,6 +117,8 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 | :--- | :--- |
 | `Header` | `header` |
 | `TopArea` | `top-area` |
+| `PageHeader` | `page-header` |
+| `Accordion · AccordionItem` | `accordion` |
 
 **Logos**
 
@@ -141,12 +144,14 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 | `MultiSelect` | `multi-select` |
 | `DateRangePicker · DateRangeDay` | `date-range-picker` |
 | `LoginForm` | `login-form` |
+| `CopyField` | `copy-field` |
 
 **Overlay**
 
 | Componente | No Figma |
 | :--- | :--- |
 | `Overlay (dialog, drawer, bottom sheet)` | `overlay` |
+| `ActionMenu · ActionMenuTrigger · ActionMenuContent · ActionMenuItem · ActionMenuSeparator` | `action-menu` |
 
 **Dados e gráficos**
 

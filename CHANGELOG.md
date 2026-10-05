@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0 · 2026-10-05
+
+- 5 componentes novos, vindos do que o Gate usava: `Accordion` (conteúdo livre), `ActionMenu` (itens com os estados do chip), `ConnectorCard`, `CopyField` e `PageHeader` (abas feitas com `Chip`).
+- Para a tag, use `Badge`; para abas com contagem, use `Chip` com `count`.
+
 ## 0.2.4 · 2026-10-05
 
 - MetricTile: a ajuda do "i" usa o Tooltip do pacote em vez do `title` do navegador.

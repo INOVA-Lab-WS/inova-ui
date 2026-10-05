@@ -52,3 +52,8 @@ export { InputCard, type InputCardProps, type InputCardPhoto } from "./component
 export { ListeningBanner, type ListeningBannerProps } from "./components/listening-banner";
 export { Waveform, type WaveformProps } from "./components/waveform";
 export { MentionResult, type MentionResultProps } from "./components/mention-result";
+export { Accordion, AccordionItem, type AccordionItemProps } from "./components/accordion";
+export { ActionMenu, ActionMenuTrigger, ActionMenuContent, ActionMenuItem, ActionMenuSeparator, type ActionMenuItemProps } from "./components/action-menu";
+export { ConnectorCard, connectorCardClassName, type ConnectorCardProps } from "./components/connector-card";
+export { CopyField, type CopyFieldProps } from "./components/copy-field";
+export { PageHeader, type PageHeaderProps } from "./components/page-header";

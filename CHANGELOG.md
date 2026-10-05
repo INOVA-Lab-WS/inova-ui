@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 · 2026-10-05
+
+- DateRangePicker: atalhos e "Aplicar" passam a ser Chip (os componentes preset e apply saíram da biblioteca).
+- DateRangePicker segue as correções do Figma: popup 320 no mobile e 352 no desktop, cantos 16, dia 36px com texto 12, hoje e bordas em negrito, intervalo em verde ação a 10%.
+
 ## 0.2.0 · 2026-10-05
 
 - Todos os componentes da INOVA Lab Library entram no pacote: indicadores, navegação, estrutura, logos, controles de formulário, overlays, dados, gráficos, tabela e conversa (57 exports).

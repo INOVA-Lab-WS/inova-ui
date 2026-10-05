@@ -3,9 +3,10 @@ import * as Popover from "@radix-ui/react-popover";
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "../lib/cn";
 import { Button } from "./button";
+import { Chip } from "./chip";
 
 /**
- * DateRangePicker · Figma "date-range-picker" (+ day, preset, apply parts).
+ * DateRangePicker · Figma "date-range-picker" (+ day part; presets and "Aplicar" are Chip).
  * Trigger (56/48px) → popover with presets, month grid and "Aplicar". pt-BR via Intl, no date library.
  */
 export interface DateRange {
@@ -62,10 +63,10 @@ export function DateRangeDay({
       onClick={() => onSelect?.(date)}
       aria-pressed={selected || edge}
       className={cn(
-        "flex size-10 items-center justify-center rounded-8 text-sm tabular-nums transition-colors outline-none",
+        "mx-auto flex size-9 items-center justify-center rounded-8 text-xs tabular-nums transition-colors outline-none",
         "focus-visible:outline-2 focus-visible:outline-text-primary",
-        edge ? "bg-surface-action font-semibold text-text-on-action" : inRange ? "bg-surface-accent text-text-accent" : "hover:bg-surface-control",
-        today && !edge && "font-semibold underline",
+        edge ? "bg-surface-action font-bold text-text-on-action" : inRange ? "bg-surface-action/10 text-text-primary" : "text-text-primary hover:bg-surface-muted",
+        today && !edge && "font-bold",
         disabled && "text-text-disabled hover:bg-transparent",
       )}
     >
@@ -104,7 +105,7 @@ export function DateRangePicker({ value, onValueChange, presets = defaultDatePre
         <Popover.Trigger
           id={id}
           className={cn(
-            "flex h-14 w-full items-center gap-2 rounded-12 border border-border-default bg-surface-card px-4 text-left text-base lg:h-12 lg:px-3 lg:text-sm",
+            "flex h-14 w-full items-center gap-2 rounded-16 border border-border-default bg-surface-card px-4 text-left text-base lg:h-12 lg:px-3 lg:text-sm",
             "shadow-[0_1px_2px_rgb(0_0_0/0.05)] hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
           )}
         >
@@ -112,23 +113,20 @@ export function DateRangePicker({ value, onValueChange, presets = defaultDatePre
           <span className="min-w-0 flex-1 truncate text-text-primary">{trigger}</span>
         </Popover.Trigger>
         <Popover.Portal>
-          <Popover.Content align="start" sideOffset={4} className="z-50 flex w-[320px] flex-col gap-3 rounded-12 border border-border-default bg-surface-card p-3 font-sans shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1)]">
+          <Popover.Content align="start" sideOffset={4} className="z-50 flex w-80 flex-col gap-3 rounded-16 lg:w-88 border border-border-default bg-surface-card p-3 font-sans shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1)]">
             <div className="flex flex-wrap gap-2">
               {presets.map((p) => (
-                <button
+                <Chip
                   key={p.label}
-                  type="button"
+                  size="small"
+                  appearance={activePreset?.label === p.label ? "action" : "filled"}
                   onClick={() => {
                     onValueChange(p.range());
                     setOpen(false);
                   }}
-                  className={cn(
-                    "h-8 rounded-pill px-3 text-xs font-medium",
-                    activePreset?.label === p.label ? "bg-surface-action text-text-on-action" : "bg-surface-control text-text-primary hover:bg-surface-control-hover",
-                  )}
                 >
                   {p.label}
-                </button>
+                </Chip>
               ))}
             </div>
             <div className="flex items-center justify-between">
@@ -147,9 +145,9 @@ export function DateRangePicker({ value, onValueChange, presets = defaultDatePre
                 <ChevronRight aria-hidden />
               </Button>
             </div>
-            <div className="grid grid-cols-7 gap-1 text-center">
+            <div className="grid grid-cols-7 gap-y-1 text-center">
               {["D", "S", "T", "Q", "Q", "S", "S"].map((d, i) => (
-                <span key={i} className="text-xs text-text-muted">
+                <span key={i} className="text-xs font-semibold text-text-muted">
                   {d}
                 </span>
               ))}
@@ -165,17 +163,17 @@ export function DateRangePicker({ value, onValueChange, presets = defaultDatePre
             </div>
             <div className="flex items-center justify-between gap-2 border-t border-border-default pt-3">
               <span className="text-xs text-text-muted">{summary}</span>
-              <button
-                type="button"
+              <Chip
+                size="small"
+                appearance="action"
                 disabled={!draft.from || !draft.to}
                 onClick={() => {
                   if (draft.from && draft.to) onValueChange({ from: draft.from, to: draft.to });
                   setOpen(false);
                 }}
-                className="h-8 rounded-pill bg-surface-action px-3 text-xs font-medium text-text-on-action disabled:bg-surface-disabled disabled:text-text-disabled"
               >
                 Aplicar
-              </button>
+              </Chip>
             </div>
           </Popover.Content>
         </Popover.Portal>

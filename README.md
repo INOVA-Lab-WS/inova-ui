@@ -1,42 +1,170 @@
-# @inova-lab-ws/ui
+<div align="center">
 
-Os componentes, tokens e logos da **INOVA Lab Library** (Figma) em React. É a fonte única de interface do
-INOVA Lab: AmbientAI, Gate e todo produto novo instalam este pacote. **Nenhum app cria componente de interface
-próprio nem copia o código daqui.** O que faltar entra por este repositório.
+<img src="assets/logo-inova-ui.svg" width="72" alt="INOVA UI" />
 
-- Figma: [INOVA Lab Library](https://www.figma.com/design/Ze0WiY6G9j2yLxKb55dDMK/INOVA-Lab-Library)
-- Guia de uso: INOVA UI Skill (`skills/inova-ui-skill`)
-- Dono: @gabriel-moma-lmbr (único que edita e aprova, por enquanto)
+# INOVA UI
 
-## Instalar num projeto
+### Componentes, tokens e logos do INOVA Lab — Leroy Merlin Brasil
 
-1. `.npmrc` do projeto:
-   ```
-   @inova-lab-ws:registry=https://npm.pkg.github.com
-   ```
-2. `npm install @inova-lab-ws/ui` (React 19 e Tailwind 4 no projeto).
-3. No CSS global do app:
-   ```css
-   @import "@inova-lab-ws/ui/theme.css";
-   @source "../node_modules/@inova-lab-ws/ui/dist";
-   ```
-4. Use: `import { Button, Input, Chip, Alert, Toast } from "@inova-lab-ws/ui";`
+*Um desenho no Figma, um pacote em código, a mesma interface em todo produto.*
 
-## Regras
+`inova-ui` é o repositório. **`@inova-lab-ws/ui`** é o pacote que os apps instalam.
 
-- **Escala 4/8.** Raios 0, 4, 8, 12, 16, 24 e pill; espaçamento em múltiplos de 4; fonte 12, 14, 16, 20, 24, 32, 40, 48.
-  Única exceção: `font.size.chart-axis` (10px), só para eixos de gráfico.
-- **Tokens vêm do Figma.** `tokens/tokens.json` é exportado da biblioteca; `src/styles/theme.css` é gerado
-  (`npm run tokens`). Não edite o CSS à mão.
-- **Componente novo ou variante nova:** primeiro na biblioteca do Figma, depois aqui, com Code Connect.
+[![figma](https://img.shields.io/badge/figma-INOVA%20Lab%20Library-F24E1E?logo=figma&logoColor=white)](https://www.figma.com/design/Ze0WiY6G9j2yLxKb55dDMK/INOVA-Lab-Library)
+[![repo](https://img.shields.io/badge/repo-INOVA--Lab--WS%2Finova--ui-181717?logo=github)](https://github.com/INOVA-Lab-WS/inova-ui)
+[![package](https://img.shields.io/badge/package-%40inova--lab--ws%2Fui-41A017?logo=npm&logoColor=white)](https://github.com/INOVA-Lab-WS/inova-ui/pkgs/npm/ui)
 
-## Desenvolver
+</div>
 
+> [!IMPORTANT]
+> **🔒 Fonte única de interface do INOVA Lab.** AmbientAI, Gate e todo produto novo instalam este pacote.
+> **Nenhum app cria componente de interface próprio nem copia o código daqui.** O que faltar é pedido por
+> [issue](https://github.com/INOVA-Lab-WS/inova-ui/issues). Dono e único aprovador: [@gabriel-moma-lmbr](https://github.com/gabriel-moma-lmbr).
+
+[Como funciona](#como-funciona) · [Instalar](#instalar) · [Componentes](#componentes) ·
+[Tokens](#tokens) · [Pedir algo novo](#pedir-algo-novo) · [Desenvolver](#desenvolver)
+
+## 🔆 O caminho de uma mudança
+
+```text
+1. Desenhar     → o componente ou token nasce na INOVA Lab Library (Figma) e é publicado
+2. Exportar     → as variáveis viram tokens/tokens.json; o tema é gerado (npm run tokens)
+3. Implementar  → o componente entra em src/components, com Code Connect para o Figma
+4. Lançar       → uma release no GitHub publica a nova versão do pacote
+5. Atualizar    → cada app sobe a versão da dependência; nada é copiado
 ```
+
+**O Figma desenha, o pacote implementa, a [INOVA UI Skill](#skill) orienta o uso.** Valor que não
+passou pela biblioteca não entra aqui; componente que não está aqui não existe no app.
+
+<a id="como-funciona"></a>
+
+## 🎯 Como funciona
+
+```mermaid
+flowchart LR
+    Figma[INOVA Lab Library<br/>Figma] -->|variáveis| Tokens[tokens.json]
+    Tokens -->|build-tokens| Tema[theme.css]
+    Figma -->|Code Connect| Comp[Componentes React]
+    Tema --> Pacote["@inova-lab-ws/ui"]
+    Comp --> Pacote
+    Pacote --> AmbientAI
+    Pacote --> Gate
+    Pacote --> Novo[Produto novo]
+    Skill[INOVA UI Skill] -.orienta.-> AmbientAI
+    Skill -.orienta.-> Gate
+    Skill -.orienta.-> Novo
+```
+
+<a id="instalar"></a>
+
+## 📦 Instalar num projeto
+
+**1. Registro.** No `.npmrc` do projeto (com um token do GitHub que leia pacotes da organização):
+
+```text
+@inova-lab-ws:registry=https://npm.pkg.github.com
+```
+
+**2. Dependência.** O projeto precisa de React 19 e Tailwind 4.
+
+```bash
+npm install @inova-lab-ws/ui
+```
+
+**3. Tema.** No CSS global, e nenhum outro tema:
+
+```css
+@import "@inova-lab-ws/ui/theme.css";
+@source "../node_modules/@inova-lab-ws/ui/dist";
+```
+
+**4. Usar.**
+
+```tsx
+import { Button, Alert, Toast, ToastViewport } from "@inova-lab-ws/ui";
+
+<Button variant="primary">Salvar pedido</Button>
+<Alert tone="warning" title="Dados de exemplo">Ainda não há eventos reais neste servidor.</Alert>
+```
+
+<a id="componentes"></a>
+
+## 🧩 Componentes
+
+| Componente | No Figma | O que oferece |
+| :--- | :--- | :--- |
+| `Button` | `button` | primary (preto), outline, ghost, ink (translúcido, sobre imagem), destructive · 56px no mobile e 48px no desktop · só ícone com `iconOnly` |
+| `Input` | `input` | label, ajuda, erro e ícones opcionais · ajuda e erro juntos · 56/48px |
+| `Chip` | `chip` | filled, outline, ghost, ink, action · small (32px) e medium (40px) · ícone, contador e remoção |
+| `Alert` | `alert` | information, success, warning, error · sem contorno · título e ação opcionais |
+| `Toast` · `ToastViewport` | `toast` | success, error, info · sombra · topo, abaixo do notch no mobile; centro no desktop |
+
+**Próximas versões:** overlay (dialog, drawer e bottom sheet), menu, table, tooltip, textarea, multi-select,
+date-range-picker, metric-tile, gráficos e logos — todos já desenhados na biblioteca.
+
+<a id="tokens"></a>
+
+## 🎨 Tokens
+
+**Escala 4/8.** Tudo é múltiplo de 4, no ritmo de 8.
+
+| Tipo | Valores |
+| :--- | :--- |
+| Raio | 0 · 4 · 8 · 12 · 16 · 24 · pill |
+| Espaçamento | 4 · 8 · 12 · 16 · 20 · 24 · 32 · 40 · 48 · 64 |
+| Fonte | 12 · 14 · 16 · 20 · 24 · 32 · 40 · 48 |
+| Exceção | `chart-axis` 10px, só em eixo e rótulo de gráfico |
+
+[`tokens/tokens.json`](tokens/tokens.json) é exportado da biblioteca e [`src/styles/theme.css`](src/styles/theme.css)
+é gerado a partir dele. **Não edite o CSS à mão.**
+
+<a id="pedir-algo-novo"></a>
+
+## 🙋 Pedir algo novo
+
+1. **Abra uma [issue](https://github.com/INOVA-Lab-WS/inova-ui/issues)** com a tela, o caso de uso e por que nenhum componente atual serve.
+2. **O dono desenha primeiro na biblioteca**, publica e só então implementa aqui.
+3. **Sai uma nova versão**, e o app atualiza a dependência.
+
+> [!WARNING]
+> **Variante local é divergência.** `className` serve para posicionar (margem, largura, alinhamento), nunca para
+> mudar cor, tamanho ou borda. Valor solto (`text-[15px]`, `rounded-[10px]`, hex) também não entra no app.
+
+<a id="desenvolver"></a>
+
+## 🛠️ Desenvolver
+
+```bash
 npm install
-npm run check      # typecheck + build
+npm run tokens            # regenera src/styles/theme.css a partir de tokens/tokens.json
+npm run check             # typecheck + build
 npx figma connect parse   # valida o Code Connect
 ```
 
-Publicar: criar uma release no GitHub com a versão de `package.json`; o workflow `publish.yml` publica no GitHub Packages.
-Publicar o Code Connect no Figma: `FIGMA_ACCESS_TOKEN=… npx figma connect publish` (exige plano Organization ou Enterprise).
+| Caminho | O que é |
+| :--- | :--- |
+| `tokens/tokens.json` | os tokens exportados da INOVA Lab Library |
+| `scripts/build-tokens.mjs` | gera o tema (variáveis CSS + mapeamento do Tailwind 4) |
+| `src/components/` | os componentes React |
+| `figma/` | o Code Connect de cada componente |
+| `assets/` | o logo do INOVA UI |
+
+**Publicar o pacote:** criar uma release no GitHub com a versão do `package.json`; o workflow `publish.yml`
+publica no GitHub Packages. **Publicar o Code Connect:** `FIGMA_ACCESS_TOKEN=… npx figma connect publish`
+(exige plano Organization ou Enterprise no Figma).
+
+<a id="skill"></a>
+
+## 🧭 INOVA UI Skill
+
+A skill (`skills/inova-ui-skill`) é o guia de uso: como instalar, qual componente usar em cada caso, os padrões
+de tela (área segura, overlays, estados, texto em pt-BR) e o que é proibido. **Ela orienta; o pacote decide o visual.**
+
+---
+
+<div align="center">
+
+*INOVA Lab · Leroy Merlin Brasil*
+
+</div>

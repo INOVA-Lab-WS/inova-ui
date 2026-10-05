@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0 · 2026-10-05
+
+- **Estilos no servidor (#2):** novo ponto de entrada `@inova-lab-ws/ui/variants`, sem `"use client"`, com `cn`, `buttonVariants`, `chipVariants`, `badgeVariants`, `avatarVariants`, `actionCardVariants`, `historyThumbnailVariants`, `connectorCardClassName` e `pillTabClassName`. Os componentes continuam em `@inova-lab-ws/ui`.
+- **Botão e aba como link (#3):** `Button` e `PillTab` aceitam `asChild` (o filho, por exemplo um `Link`, recebe o visual). A aba como link ganha `aria-current="page"`, e `PillTabs navigation` vira um `<nav>`.
+- **Fonte com next/font (#4):** o tema usa `var(--font-inter, "Inter")`, `var(--font-instrument-serif, "Instrument Serif")` e `var(--font-roboto-mono, "Roboto Mono")`. Funciona com `next/font` (variáveis com esses nomes) e com a fonte instalada pelo nome.
+- **Ícones (#8), quebra:** `lucide-react` deixa de ser dependência e passa a ser `peerDependency` `>=1`. O app precisa ter `lucide-react` 1.x instalado.
+
 ## 0.3.0 · 2026-10-05
 
 - 5 componentes novos, vindos do que o Gate usava: `Accordion` (conteúdo livre), `ActionMenu` (itens com os estados do chip), `ConnectorCard`, `CopyField` e `PageHeader` (abas feitas com `Chip`).

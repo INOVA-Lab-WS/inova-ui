@@ -19,7 +19,7 @@ export { Checkbox, type CheckboxProps } from "./components/checkbox";
 export { Radio, type RadioProps } from "./components/radio";
 export { Toggle, type ToggleProps } from "./components/toggle";
 export { Textarea, type TextareaProps } from "./components/textarea";
-export { PillTab, PillTabs, type PillTabProps } from "./components/pill-tab";
+export { PillTab, PillTabs, pillTabClassName, type PillTabProps, type PillTabsProps } from "./components/pill-tab";
 export { RoleRadio, type RoleRadioProps, type RoleRadioOption } from "./components/role-radio";
 export { MultiSelect, type MultiSelectProps, type MultiSelectOption } from "./components/multi-select";
 export { DateRangePicker, DateRangeDay, defaultDatePresets, type DateRange, type DateRangePreset, type DateRangePickerProps } from "./components/date-range-picker";

@@ -132,9 +132,9 @@
   --inova-font-weight-medium: 500;
   --inova-font-weight-semibold: 600;
   --inova-font-weight-bold: 700;
-  --inova-font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --inova-font-serif: "Instrument Serif", ui-serif, Georgia, serif;
-  --inova-font-mono: "Roboto Mono", ui-monospace, monospace;
+  --inova-font-sans: var(--font-inter, "Inter"), ui-sans-serif, system-ui, sans-serif;
+  --inova-font-serif: var(--font-instrument-serif, "Instrument Serif"), ui-serif, Georgia, serif;
+  --inova-font-mono: var(--font-roboto-mono, "Roboto Mono"), ui-monospace, monospace;
 }
 
 @theme inline {

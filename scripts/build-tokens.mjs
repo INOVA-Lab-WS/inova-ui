@@ -32,9 +32,9 @@ for (const [k, v] of Object.entries(t.font.size)) {
 }
 for (const [k, v] of Object.entries(t.font["line-height"])) vars.push(`  --inova-line-height-${k}: ${v}px;`);
 for (const [k, v] of Object.entries(t.font.weight)) vars.push(`  --inova-font-weight-${k}: ${v};`);
-vars.push(`  --inova-font-sans: "${t.font.family.sans}", ui-sans-serif, system-ui, sans-serif;`);
-vars.push(`  --inova-font-serif: "${t.font.family.serif}", ui-serif, Georgia, serif;`);
-vars.push(`  --inova-font-mono: "${t.font.family.mono}", ui-monospace, monospace;`);
+vars.push(`  --inova-font-sans: var(--font-inter, "${t.font.family.sans}"), ui-sans-serif, system-ui, sans-serif;`);
+vars.push(`  --inova-font-serif: var(--font-instrument-serif, "${t.font.family.serif}"), ui-serif, Georgia, serif;`);
+vars.push(`  --inova-font-mono: var(--font-roboto-mono, "${t.font.family.mono}"), ui-monospace, monospace;`);
 theme.push("  --font-sans: var(--inova-font-sans);", "  --font-serif: var(--inova-font-serif);", "  --font-mono: var(--inova-font-mono);");
 // px values for numeric scales
 const px = (s) => s.replace(/: (\d+);$/, ": $1px;");

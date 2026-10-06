@@ -165,6 +165,7 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 | :--- | :--- |
 | `Overlay (dialog, drawer, bottom sheet)` | `overlay` |
 | `ActionMenu · ActionMenuTrigger · ActionMenuContent · ActionMenuItem · ActionMenuSeparator` | `action-menu` |
+| `ProfileMenu` | `profile-menu` |
 
 **Dados e gráficos**
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.8 · 2026-10-05
+
+- **`ProfileMenu` (#18):** o menu da pessoa, desenhado na INOVA Lab Library (`profile-menu`). O avatar abre um painel com avatar grande, nome e e-mail, as ações do app (filhos, como `ActionMenuItem`) e "Sair" por último (`onSignOut`, ou `signOut` para trocar o item). Esc, clique fora e as setas vêm do `DropdownMenu` do Radix.
+
 ## 0.4.7 · 2026-10-05
 
 - **Logos com tamanho padrão (#17):** o símbolo tem 20px de altura (o espaço de logo do trilho e do cabeçalho), wordmark e mark têm 14px; a largura segue o desenho. `className` muda o tamanho.

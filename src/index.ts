@@ -57,3 +57,4 @@ export { ActionMenu, ActionMenuTrigger, ActionMenuContent, ActionMenuItem, Actio
 export { ConnectorCard, connectorCardClassName, type ConnectorCardProps } from "./components/connector-card";
 export { CopyField, type CopyFieldProps } from "./components/copy-field";
 export { PageHeader, type PageHeaderProps } from "./components/page-header";
+export { ProfileMenu, type ProfileMenuProps } from "./components/profile-menu";

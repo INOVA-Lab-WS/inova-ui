@@ -2,7 +2,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../lib/cn";
 
-/** Badge · Figma "badge". 10 variants; native-* add a 1px stroke. */
+/** Badge · Figma "badge". 11 variants (error = light red, like warning); native-* add a 1px stroke. */
 export const badgeVariants = cva(
   "inline-flex shrink-0 items-center gap-1 rounded-8 px-2 py-1 font-sans text-xs font-medium whitespace-nowrap [&_svg]:size-3",
   {
@@ -14,6 +14,7 @@ export const badgeVariants = cva(
         muted: "bg-surface-control text-text-muted",
         warning: "bg-status-warning-bg text-status-warning-fg",
         destructive: "bg-surface-danger text-text-on-action",
+        error: "bg-status-error-bg text-status-error-fg",
         "native-muted": "border border-border-neutral bg-surface-control text-text-muted",
         "native-outline": "border border-border-neutral bg-surface-card text-text-primary",
         "native-secondary": "border border-text-accent/20 bg-surface-accent text-text-accent",

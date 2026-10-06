@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.1 · 2026-10-05
+
+- `Badge` ganha a variante `error`: vermelho claro (`status-error-bg` e `status-error-fg`), no mesmo formato de `warning`, para erro que não é alarme (#7).
+
 ## 0.4.0 · 2026-10-05
 
 - **Estilos no servidor (#2):** novo ponto de entrada `@inova-lab-ws/ui/variants`, sem `"use client"`, com `cn`, `buttonVariants`, `chipVariants`, `badgeVariants`, `avatarVariants`, `actionCardVariants`, `historyThumbnailVariants`, `connectorCardClassName` e `pillTabClassName`. Os componentes continuam em `@inova-lab-ws/ui`.

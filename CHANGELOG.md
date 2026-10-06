@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.3 · 2026-10-05
+
+- `ConnectorCard`: seta à direita do título (`arrow`, ligada por padrão), como na biblioteca (#12); `asChild` implementado: o `Link` do app, como único filho, recebe o visual e o conteúdo e navega sem recarregar a página (#11).
+- `Accordion`: os 5 estados do botão (padrão, hover, pressionado, desabilitado, foco); `disabled` no `AccordionItem`; anel de foco por fora do cartão.
+
 ## 0.4.2 · 2026-10-05
 
 - `Chip` aceita `asChild`: a aba que é página vira link (`<Chip asChild appearance="filled" count={24}><Link href=…>Todos</Link></Chip>`), com ícone e contagem dentro dele.

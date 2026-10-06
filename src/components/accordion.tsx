@@ -3,7 +3,10 @@ import * as Primitive from "@radix-ui/react-accordion";
 import { ChevronDown } from "lucide-react";
 import { cn } from "../lib/cn";
 
-/** Accordion · Figma "accordion". Sections that open and close; the content is a free slot. Items stack with gap 8. */
+/**
+ * Accordion · Figma "accordion". Sections that open and close; the content is a free slot. Items stack with gap 8.
+ * The trigger has the button states: default, hover, pressed, disabled (pass `disabled` to the item) and focus.
+ */
 export const Accordion = React.forwardRef<
   React.ElementRef<typeof Primitive.Root>,
   React.ComponentPropsWithoutRef<typeof Primitive.Root>
@@ -18,19 +21,29 @@ export interface AccordionItemProps extends Omit<React.ComponentPropsWithoutRef<
 
 export const AccordionItem = React.forwardRef<React.ElementRef<typeof Primitive.Item>, AccordionItemProps>(
   ({ className, title, subtitle, children, ...props }, ref) => (
-    <Primitive.Item ref={ref} className={cn("overflow-hidden rounded-16 border border-border-default bg-surface-card", className)} {...props}>
+    <Primitive.Item
+      ref={ref}
+      className={cn(
+        "overflow-hidden rounded-16 border border-border-default bg-surface-card",
+        // focus ring outside the card, like the button
+        "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-text-primary",
+        className,
+      )}
+      {...props}
+    >
       <Primitive.Header className="m-0">
         <Primitive.Trigger
           className={cn(
-            "group flex w-full items-center gap-3 p-4 text-left outline-none transition-colors hover:bg-surface-muted/50",
-            "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-border-focus focus-visible:rounded-16",
+            "group flex w-full items-center gap-3 p-4 text-left outline-none transition-colors",
+            "hover:bg-surface-control-hover active:bg-chip-pressed",
+            "disabled:pointer-events-none",
           )}
         >
           <span className="flex min-w-0 flex-1 flex-col gap-1">
-            <span className="text-sm font-semibold text-text-primary">{title}</span>
-            {subtitle && <span className="text-xs text-text-muted">{subtitle}</span>}
+            <span className="text-sm font-semibold text-text-primary group-disabled:text-text-disabled">{title}</span>
+            {subtitle && <span className="text-xs text-text-muted group-disabled:text-text-disabled">{subtitle}</span>}
           </span>
-          <ChevronDown aria-hidden className="size-4 shrink-0 text-text-muted transition-transform group-data-[state=open]:rotate-180" />
+          <ChevronDown aria-hidden className="size-4 shrink-0 text-text-muted transition-transform group-disabled:text-text-disabled group-data-[state=open]:rotate-180" />
         </Primitive.Trigger>
       </Primitive.Header>
       <Primitive.Content className="flex flex-col gap-2 px-4 pb-4 text-sm text-text-primary">{children}</Primitive.Content>

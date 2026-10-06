@@ -5,7 +5,8 @@ import { cn } from "../lib/cn";
 /**
  * GenerationBoard · Figma "generation-board". The stage that holds the generated image.
  * state: empty (badge + title + subtitle), loading (phrase + progress), ready (image), regenerating (image + overlay).
- * Actions (products, download…) are passed as `actions` and render over the image.
+ * Actions (products, download…) are passed as `actions` and render over the image: chips `appearance="ink" size="medium"`.
+ * Products, download and enlarge are icon-only (`iconOnly` + `aria-label`); "Registrar pedido" keeps its label.
  */
 export interface GenerationBoardProps extends React.HTMLAttributes<HTMLDivElement> {
   state?: "empty" | "loading" | "ready" | "regenerating";

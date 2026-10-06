@@ -3,6 +3,7 @@ import { Chip } from "../src";
 
 figma.connect(Chip, "https://www.figma.com/design/Ze0WiY6G9j2yLxKb55dDMK/INOVA-Lab-Library?node-id=60-28", {
   props: {
+    iconOnly: figma.boolean("show-label", { true: false, false: true }),
     appearance: figma.enum("appearance", { filled: "filled", outline: "outline", ghost: "ghost", ink: "ink", action: "action" }),
     size: figma.enum("size", { small: "small", medium: "medium" }),
     disabled: figma.enum("state", { disabled: true }),

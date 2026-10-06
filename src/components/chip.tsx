@@ -20,12 +20,18 @@ export const chipVariants = cva(
         ink: "bg-surface-ink-translucent font-semibold text-text-on-ink backdrop-blur-[8px] hover:bg-surface-ink-translucent-hover active:bg-surface-ink-translucent-hover",
         action: "bg-surface-ink font-semibold text-text-on-ink hover:bg-surface-ink-hover active:bg-surface-ink-hover",
       },
+      /** No label: square chip (32 or 40). Give it an aria-label. */
+      iconOnly: { true: "", false: "" },
       size: {
         small: "h-8 px-3 text-xs [&_svg]:size-4",
         medium: "h-10 px-2 text-sm [&_svg]:size-5",
       },
     },
-    defaultVariants: { appearance: "filled", size: "small" },
+    compoundVariants: [
+      { iconOnly: true, size: "small", className: "w-8 justify-center px-0" },
+      { iconOnly: true, size: "medium", className: "w-10 justify-center px-0" },
+    ],
+    defaultVariants: { appearance: "filled", size: "small", iconOnly: false },
   },
 );
 
@@ -40,10 +46,10 @@ export interface ChipProps
 }
 
 export const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
-  ({ className, appearance, size, icon, count, onRemove, asChild, children, type = "button", ...props }, ref) => {
+  ({ className, appearance, size, iconOnly, icon, count, onRemove, asChild, children, type = "button", ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     return (
-    <Comp ref={ref} {...(asChild ? {} : { type })} className={cn(chipVariants({ appearance, size }), className)} {...props}>
+    <Comp ref={ref} {...(asChild ? {} : { type })} className={cn(chipVariants({ appearance, size, iconOnly }), className)} {...props}>
       {icon}
       <Slottable>{children}</Slottable>
       {count !== undefined && <span className="tabular-nums">{count}</span>}

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.3 · 2026-10-06
+
+- `Chip iconOnly`: chip sem rótulo, quadrado (32 no small, 40 no medium), com `aria-label`. Na biblioteca, a propriedade `show-label` do `chip` passou a funcionar em todas as 50 variantes (antes não estava ligada a nenhuma). No `generation-board`, mostrar produtos, baixar e ampliar ficam só com ícone; "Registrar pedido" mantém o rótulo.
+
 ## 0.6.2 · 2026-10-06
 
 - `ProductListRow kind="catalog"`: a linha do catálogo sem cartão (só 16 em cima e embaixo), como na biblioteca (decisão do Gabriel). As outras continuam como cartão (`kind="card"`, padrão).

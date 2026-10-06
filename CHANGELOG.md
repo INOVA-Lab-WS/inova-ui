@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.1 · 2026-10-06
+
+- **`bot-avatar` saiu da biblioteca:** o avatar do assistente é o `avatar` com o símbolo da marca. No código, `<Avatar size="small" name="AmbientAI" icon={<LogoAmbientAI type="mark" color="white" />} />`. O `BotAvatar` continua exportado, marcado como obsoleto, e agora usa o `Avatar` por dentro.
+- **`Avatar`:** quando recebe `icon`, mostra o ícone mesmo com `name` (o nome fica só como nome acessível).
+
 ## 0.5.0 · 2026-10-06
 
 - **`Card` (#25):** a caixa branca vazia da biblioteca (`card`): borda de 1px, raio 12, padding 16, conteúdo livre. `interactive` (ou `asChild` com um `Link`) liga hover (borda mais forte e sombra quase invisível) e foco. `cardClassName` também em `@inova-lab-ws/ui/variants`.

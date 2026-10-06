@@ -45,10 +45,12 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(({ classNam
         <img src={src} alt="" className="size-full object-cover" onError={() => setFailed(true)} />
       ) : app ? (
         (icon ?? <Package aria-hidden />)
+      ) : icon ? (
+        icon
       ) : name ? (
         name.trim().charAt(0).toUpperCase()
       ) : (
-        (icon ?? <User aria-hidden />)
+        <User aria-hidden />
       )}
     </span>
   );

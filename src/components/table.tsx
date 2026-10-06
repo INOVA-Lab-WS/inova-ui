@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
+import { Skeleton } from "./skeleton";
 
 /**
  * Table · Figma "table": semantic table on a card, with an empty state. Compose with TableRow and TableCell.
@@ -13,8 +14,10 @@ export interface TableProps extends Omit<React.TableHTMLAttributes<HTMLTableElem
   emptyMessage?: string;
   /** Names the table for screen readers; hidden on screen (sr-only). */
   caption?: React.ReactNode;
-  /** While loading: becomes aria-busy. */
+  /** While loading: becomes aria-busy and, without rows, shows skeletonRows skeleton lines. */
   busy?: boolean;
+  /** Number of skeleton lines while busy and empty of rows (default 4). */
+  skeletonRows?: number;
   /** Optional header above the table, as in Figma: title (14 semibold, muted) and a summary beside it. */
   title?: React.ReactNode;
   summary?: React.ReactNode;
@@ -22,7 +25,7 @@ export interface TableProps extends Omit<React.TableHTMLAttributes<HTMLTableElem
   note?: React.ReactNode;
 }
 
-export const Table = React.forwardRef<HTMLTableElement, TableProps>(({ head, empty, emptyMessage = "Nenhum registro no filtro atual.", caption, busy, title, summary, note, className, children, ...props }, ref) => (
+export const Table = React.forwardRef<HTMLTableElement, TableProps>(({ head, empty, emptyMessage = "Nenhum registro no filtro atual.", caption, busy, skeletonRows = 4, title, summary, note, className, children, ...props }, ref) => (
   <div className="flex w-full flex-col gap-4 relative overflow-x-auto rounded-16 border border-border-default bg-surface-card p-5 font-sans">
     {(title || summary) && (
       <div className="flex items-baseline gap-3 text-sm">
@@ -33,7 +36,9 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(({ head, emp
     <table ref={ref} aria-busy={busy || undefined} className={cn("w-full border-collapse font-sans", className)} {...props}>
       {caption && <caption className="sr-only">{caption}</caption>}
       {head && <thead>{head}</thead>}
-      <tbody>{empty ? <tr><td colSpan={999} className="text-left text-sm text-text-muted">{emptyMessage}</td></tr> : children}</tbody>
+      <tbody>{busy && !React.Children.count(children) ? Array.from({ length: skeletonRows }, (_, i) => (
+        <tr key={i} aria-hidden><td colSpan={999} className="py-3"><div className="flex items-center gap-4"><Skeleton shape="circle" className="size-8" /><Skeleton shape="text" className="w-1/3" /><Skeleton shape="text" className="w-1/6" /><Skeleton shape="text" className="w-1/8" /></div></td></tr>
+      )) : empty ? <tr><td colSpan={999} className="text-left text-sm text-text-muted">{emptyMessage}</td></tr> : children}</tbody>
     </table>
     {note && <p className="border-t border-border-default pt-3 text-xs text-text-muted">{note}</p>}
   </div>

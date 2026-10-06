@@ -5,6 +5,8 @@ import { cn } from "../lib/cn";
 /**
  * Rating · Figma "rating" (stars from "rating-star"). Whole score from 1 to 5; 0 means no score yet.
  * Click a star to set it; click the current score again to clear it. Hover previews up to the star under the pointer.
+ * previousValue shows last cycle's score in neutral gray: the current score sits on top and the previous one shows
+ * where it goes beyond it. Screen readers hear both ("3 de 5, ciclo anterior 2 de 5"). Without it, nothing changes.
  * Keyboard: radiogroup with roving tabindex; arrows change the score, Home and End jump to 1 and 5.
  * readOnly shows a whole score without interaction. An average (e.g. 3,7) is shown as a number only, outside it.
  * size 20 (evaluation row, 32px cell, 48px touch target below 768px) or 16 (tables and legends).
@@ -13,6 +15,8 @@ export interface RatingProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
   value?: number;
   defaultValue?: number;
   onValueChange?: (value: number) => void;
+  /** Last cycle's score (1 to max), in neutral gray behind the current one. */
+  previousValue?: number;
   max?: number;
   size?: 20 | 16;
   disabled?: boolean;
@@ -24,7 +28,7 @@ export interface RatingProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
 }
 
 export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
-  ({ value: valueProp, defaultValue = 0, onValueChange, max = 5, size = 20, disabled, readOnly, label, name, className, ...props }, ref) => {
+  ({ value: valueProp, defaultValue = 0, onValueChange, previousValue, max = 5, size = 20, disabled, readOnly, label, name, className, ...props }, ref) => {
     const [inner, setInner] = React.useState(defaultValue);
     const value = valueProp ?? inner;
     const [hover, setHover] = React.useState(0);
@@ -48,11 +52,13 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
       }
     };
     const shown = hover || value;
+    const prev = previousValue && previousValue > 0 ? Math.min(max, previousValue) : 0;
+    const prevText = prev ? `, ciclo anterior ${prev} de ${max}` : "";
     return (
       <div
         ref={ref}
         role={readOnly ? "img" : "radiogroup"}
-        aria-label={readOnly ? `${label}: ${value} de ${max}` : label}
+        aria-label={readOnly ? `${label}: ${value} de ${max}${prevText}` : prev ? `${label}${prevText}` : label}
         aria-disabled={disabled || undefined}
         onMouseLeave={() => setHover(0)}
         className={cn("inline-flex items-center", className)}
@@ -61,13 +67,16 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
         {Array.from({ length: max }, (_, i) => {
           const n = i + 1;
           const filled = n <= shown;
+          const previous = !filled && n <= prev;
           const tone = disabled
             ? filled
               ? "fill-text-disabled text-text-disabled"
               : "text-border-strong"
             : filled
               ? "fill-rating-filled text-rating-filled"
-              : "text-border-strong";
+              : previous
+                ? "fill-border-strong text-border-strong"
+                : "text-border-strong";
           const star = <Star aria-hidden strokeWidth={1.5} className={cn(size === 20 ? "size-5" : "size-4", tone)} />;
           if (readOnly) return <span key={n} className={cn("flex items-center justify-center", size === 20 ? "size-8" : "size-5")}>{star}</span>;
           const checked = n === value;

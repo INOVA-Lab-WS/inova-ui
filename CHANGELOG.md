@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.1 · 2026-10-06
+
+- **`Rating previousValue` (pedido do Forma Lab):** a nota do ciclo anterior em cinza neutro; a atual fica por cima e a anterior aparece onde passa dela. O leitor de tela lê as 2 ("3 de 5, ciclo anterior 2 de 5"), também em `readOnly`. Sem `previousValue`, nada muda.
+- **`Slider` (#46, Forma Lab):** escolhe um número num intervalo (`min`, `max`, `step`, `value`/`defaultValue`, `onValueChange`, `name`). Valor ao lado em `tabular-nums` e pt-BR, com `formatValue` para a unidade. Trilho `surface-muted`, faixa `surface-action`, alça de 20px com alvo de 48px no celular. Setas, Page Up/Down (10 passos), Home e End; `role="slider"` com `aria-valuetext` ("45 por cento"). Foco no padrão preto; estado desativado.
+- **`Skeleton` (#47, Forma Lab):** esqueleto de carregamento em `surface-muted`, com as formas `rect` (raio 8), `text` (12px, raio 4) e `circle`. Pulsa só com movimento permitido (`motion-safe:animate-pulse`) e é `aria-hidden`.
+- **`MetricTile loading`:** valor e legenda viram esqueleto, com `aria-busy`. O foco do botão de ajuda segue o padrão preto.
+- **`Table busy` sem linhas:** mostra `skeletonRows` (padrão 4) linhas de esqueleto.
+
 ## 0.7.0 · 2026-10-06
 
 - **`Menu` novo, no lugar do antigo:** `presentation="sidebar"` (agora o padrão) é o menu lateral responsivo. Abaixo de 768px ele some, e o app usa o botão do `Header` com `presentation="fullscreen"`. De 768 a 1023px fica fechado em 64px. A partir de 1024px abre em 240px ou fecha em 64px pelo botão de painel (`PanelLeftClose` / `PanelLeftOpen`), controlado (`expanded`, `onExpandedChange`) ou não (`defaultExpanded`). Fechado, a própria logo é o botão de abrir: no hover ou no foco ela vira o ícone de painel. `account` põe o avatar da pessoa embaixo, depois de um divisor; no menu fechado aparece só o 1º item (o avatar), e o nome fica para o leitor de tela. `expanded` e `collapsed` fixam um estado só. `navigation` pode ser uma função que recebe `{ collapsed }`, para usar `ActionCard context="rail"` fechado e `context="menu"` aberto. **`presentation="rail"` continua funcionando** como nome antigo de `collapsed`. **Atenção:** um `<Menu>` sem `presentation` era trilho e agora é o menu responsivo.

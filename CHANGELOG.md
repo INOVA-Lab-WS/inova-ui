@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.6 · 2026-10-06
+
+- **`Header` (#40):** a página não fica mais 32px mais larga no celular. A área segura soma na altura (`h-[calc(3.5rem+var(--inova-safe-area-top))]`) sem `box-content`, que somava também o padding lateral à largura.
+- **`MultiSelect` (#41):** `help` e `error` como no `Input`, ligados ao gatilho por `aria-describedby`, com `aria-invalid` e borda vermelha no erro.
+- **`MultiSelect` (#42):** o painel é uma `listbox` com `aria-multiselectable`, e cada opção é `role="option"` com `aria-selected`. As setas, Home e End navegam e Espaço ou Enter marcam. A caixa de seleção que a biblioteca desenha continua, só como desenho. O gatilho tem `aria-haspopup="listbox"`.
+
 ## 0.6.5 · 2026-10-06
 
 - **`Button variant="destructive-ghost"` (#31):** ação destrutiva secundária, texto vermelho sem fundo e vermelho claro no hover e no pressionado, para "Excluir" ou "Remover" ao lado da ação principal. Desenhada e aprovada na biblioteca.

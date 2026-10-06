@@ -25,6 +25,11 @@ export interface OverlayProps {
   hideClose?: boolean;
   children?: React.ReactNode;
   className?: string;
+  /** dialog only: "alertdialog" for short destructive confirmations (announced as an alert). */
+  role?: "dialog" | "alertdialog";
+  /** dialog and drawer: where focus starts when it opens (e.g. the Cancel button). */
+  initialFocus?: React.RefObject<HTMLElement | null>;
+  onOpenAutoFocus?: (event: Event) => void;
   /** Called once the exit animation has finished (e.g. to change the URL after the panel is gone). */
   onExitComplete?: () => void;
 }
@@ -70,7 +75,7 @@ function Header({ title, description, hideClose, Close, handle }: { title?: Reac
   );
 }
 
-export function Overlay({ open, onOpenChange, presentation: requested = "dialog", size = "compact", title, description, footer, hideClose, children, className, onExitComplete }: OverlayProps) {
+export function Overlay({ open, onOpenChange, presentation: requested = "dialog", size = "compact", title, description, footer, hideClose, children, className, onExitComplete, role, initialFocus, onOpenAutoFocus }: OverlayProps) {
   const desktop = useIsDesktop();
   const presentation = requested === "responsive" ? (desktop ? "drawer" : "bottom-sheet") : requested;
   if (presentation === "bottom-sheet") {
@@ -99,6 +104,14 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className={cn(scrim, scrimAnim)} />
         <DialogPrimitive.Content
+          role={!drawer && role ? role : undefined}
+          onOpenAutoFocus={(e) => {
+            onOpenAutoFocus?.(e);
+            if (!e.defaultPrevented && initialFocus?.current) {
+              e.preventDefault();
+              initialFocus.current.focus();
+            }
+          }}
           onAnimationEnd={(e) => {
             if (e.currentTarget.dataset.state === "closed") onExitComplete?.();
           }}

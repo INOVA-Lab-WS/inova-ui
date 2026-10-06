@@ -17,18 +17,19 @@ export interface AccordionItemProps extends Omit<React.ComponentPropsWithoutRef<
   title: React.ReactNode;
   /** Supporting text under the title (12px). */
   subtitle?: React.ReactNode;
+  /** Keep the content mounted while closed (hidden), so form fields inside still submit. */
+  keepMounted?: boolean;
 }
 
 export const AccordionItem = React.forwardRef<React.ElementRef<typeof Primitive.Item>, AccordionItemProps>(
-  ({ className, title, subtitle, children, ...props }, ref) => (
+  ({ className, title, subtitle, keepMounted, children, ...props }, ref) => (
     <Primitive.Item
       ref={ref}
       className={cn(
         "overflow-hidden rounded-16 border border-border-default bg-surface-card transition-colors",
-        // hover and pressed color the whole card, like the library
-        "has-[button:hover:not(:disabled)]:bg-surface-control-hover has-[button:active:not(:disabled)]:bg-chip-pressed",
-        // focus ring outside the card, like the button
-        "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-text-primary",
+        // hover, pressed and focus react to the item's own trigger only, never to buttons or fields inside the content
+        "has-[>h3>button:hover:not(:disabled)]:bg-surface-control-hover has-[>h3>button:active:not(:disabled)]:bg-chip-pressed",
+        "has-[>h3>button:focus-visible]:outline-2 has-[>h3>button:focus-visible]:outline-offset-2 has-[>h3>button:focus-visible]:outline-text-primary",
         className,
       )}
       {...props}
@@ -47,7 +48,12 @@ export const AccordionItem = React.forwardRef<React.ElementRef<typeof Primitive.
           <ChevronDown aria-hidden className="size-4 shrink-0 text-text-muted transition-transform group-disabled:text-text-disabled group-data-[state=open]:rotate-180" />
         </Primitive.Trigger>
       </Primitive.Header>
-      <Primitive.Content className="flex flex-col gap-2 px-4 pb-4 text-sm text-text-primary">{children}</Primitive.Content>
+      <Primitive.Content
+        forceMount={keepMounted ? true : undefined}
+        className="flex flex-col gap-2 px-4 pb-4 text-sm text-text-primary data-[state=closed]:hidden"
+      >
+        {children}
+      </Primitive.Content>
     </Primitive.Item>
   ),
 );

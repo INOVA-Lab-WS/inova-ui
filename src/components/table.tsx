@@ -23,7 +23,7 @@ export interface TableProps extends Omit<React.TableHTMLAttributes<HTMLTableElem
 }
 
 export const Table = React.forwardRef<HTMLTableElement, TableProps>(({ head, empty, emptyMessage = "Nenhum registro no filtro atual.", caption, busy, title, summary, note, className, children, ...props }, ref) => (
-  <div className="flex w-full flex-col gap-4 overflow-x-auto rounded-16 border border-border-default bg-surface-card p-5 font-sans">
+  <div className="flex w-full flex-col gap-4 relative overflow-x-auto rounded-16 border border-border-default bg-surface-card p-5 font-sans">
     {(title || summary) && (
       <div className="flex items-baseline gap-3 text-sm">
         {title && <span className="font-semibold text-text-muted">{title}</span>}

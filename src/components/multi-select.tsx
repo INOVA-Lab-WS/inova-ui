@@ -12,6 +12,8 @@ import { Button } from "./button";
 export interface MultiSelectOption {
   value: string;
   label: string;
+  /** Supporting line under the label (12, muted), e.g. "dono: fulano". */
+  hint?: string;
 }
 export interface MultiSelectProps {
   options: MultiSelectOption[];
@@ -21,11 +23,14 @@ export interface MultiSelectProps {
   onValueChange?: (value: string[]) => void;
   /** Form field name: one hidden input per chosen value, read by FormData / server actions. */
   name?: string;
-  /** Id of a <form> elsewhere on the page that these values belong to. */
-  form?: string;
+  /** Id(s) of <form>s elsewhere on the page these values belong to: one hidden input per value per form. */
+  form?: string | string[];
   label?: React.ReactNode;
   allLabel?: string;
+  /** Trigger text when nothing is chosen. */
   placeholder?: string;
+  /** Trigger text when every option is chosen; defaults to allLabel. */
+  allSelectedLabel?: string;
   searchable?: boolean;
   noResults?: string;
   disabled?: boolean;
@@ -42,6 +47,7 @@ export function MultiSelect({
   label,
   allLabel = "Todos",
   placeholder = "Todos",
+  allSelectedLabel,
   searchable,
   noResults = "Nada encontrado.",
   disabled,
@@ -59,7 +65,7 @@ export function MultiSelect({
   const all = value.length === options.length && options.length > 0;
   const toggle = (v: string) => onValueChange(value.includes(v) ? value.filter((x) => x !== v) : [...value, v]);
   const triggerText =
-    value.length === 0 || all ? placeholder : value.length === 1 ? options.find((o) => o.value === value[0])?.label : `${value.length} selecionados`;
+    value.length === 0 ? placeholder : all ? (allSelectedLabel ?? allLabel) : value.length === 1 ? options.find((o) => o.value === value[0])?.label : `${value.length} selecionados`;
   return (
     <div className={cn("flex w-full flex-col gap-1 font-sans", className)}>
       {label && (
@@ -67,7 +73,10 @@ export function MultiSelect({
           {label}
         </label>
       )}
-      {name && value.map((v) => <input key={v} type="hidden" name={name} value={v} form={form} />)}
+      {name &&
+        (Array.isArray(form) ? form : [form]).flatMap((f) =>
+          value.map((v) => <input key={`${f ?? ""}:${v}`} type="hidden" name={name} value={v} form={f} />),
+        )}
       <Popover.Root>
         <Popover.Trigger
           id={id}
@@ -125,7 +134,16 @@ export function MultiSelect({
             {filtered.map((o) => (
               <Checkbox
                 key={o.value}
-                label={o.label}
+                label={
+                  o.hint ? (
+                    <span className="flex flex-col">
+                      <span>{o.label}</span>
+                      <span className="text-xs text-text-muted">{o.hint}</span>
+                    </span>
+                  ) : (
+                    o.label
+                  )
+                }
                 checked={value.includes(o.value)}
                 onChange={() => toggle(o.value)}
                 className="rounded-8 px-2 py-2 text-sm hover:bg-surface-control"

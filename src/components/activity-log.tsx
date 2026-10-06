@@ -8,11 +8,13 @@ export interface ActivityLogEntry extends Omit<ActivityLogRowProps, "className">
 export interface ActivityLogProps extends React.HTMLAttributes<HTMLDivElement> {
   entries?: ActivityLogEntry[];
   state?: "loading" | "unavailable" | "empty" | "populated";
+  /** Custom message for the empty state. */
+  emptyMessage?: React.ReactNode;
 }
 
 const MESSAGES = { loading: "Carregando edições…", unavailable: "O registro de edições não está disponível agora.", empty: "Nenhuma edição registrada." };
 
-export const ActivityLog = React.forwardRef<HTMLDivElement, ActivityLogProps>(({ entries = [], state, className, ...props }, ref) => {
+export const ActivityLog = React.forwardRef<HTMLDivElement, ActivityLogProps>(({ entries = [], state, emptyMessage, className, ...props }, ref) => {
   const s = state ?? (entries.length ? "populated" : "empty");
   const days: [string, ActivityLogEntry[]][] = [];
   for (const e of entries) {
@@ -22,7 +24,7 @@ export const ActivityLog = React.forwardRef<HTMLDivElement, ActivityLogProps>(({
   return (
     <div ref={ref} className={cn("flex flex-col gap-4 font-sans", className)} {...props}>
       {s !== "populated" ? (
-        <p role="status" className="py-4 text-sm text-text-muted">{MESSAGES[s]}</p>
+        <p role="status" className="py-4 text-sm text-text-muted">{s === "empty" && emptyMessage !== undefined ? emptyMessage : MESSAGES[s]}</p>
       ) : (
         days.map(([day, rows]) => (
           <section key={day} className="flex flex-col gap-1">

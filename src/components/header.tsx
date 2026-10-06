@@ -15,6 +15,7 @@ export function ChocolateMenuIcon(props: React.SVGAttributes<SVGSVGElement>) {
 /**
  * Header · Figma "header". 56px bar: apps-menu button on the left, product logo centred, optional right slot.
  * sticky: fixed to the top with the page surface at 95% and a blur, so content scrolls under it.
+ * The iPhone top safe area (--inova-safe-area-top) is added above the 56px bar, like the fullscreen Menu.
  */
 export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   viewport?: "mobile" | "tablet" | "desktop";
@@ -56,7 +57,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
       <header
         ref={ref}
         className={cn(
-          "relative flex h-14 w-full items-center gap-3 border-b border-border-default px-4",
+          "relative box-content flex h-14 w-full items-center gap-3 border-b border-border-default px-4 pt-[var(--inova-safe-area-top)]",
           sticky && "sticky top-0 z-30 bg-surface-page/95 backdrop-blur-[8px]",
           className,
         )}
@@ -74,7 +75,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
             <ChocolateMenuIcon />
           </button>
         )}
-        <div className="pointer-events-none absolute left-1/2 flex -translate-x-1/2 items-center [&>*]:pointer-events-auto">
+        <div className="pointer-events-none absolute bottom-0 left-1/2 flex h-14 -translate-x-1/2 items-center [&>*]:pointer-events-auto">
           {logo ?? <LogoAmbientAI type="wordmark" title="AmbientAI" />}
         </div>
         <div className="ml-auto flex items-center">{right}</div>

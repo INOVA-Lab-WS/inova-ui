@@ -10,20 +10,27 @@ import { cn } from "../lib/cn";
 export interface ActivityLogRowProps extends React.HTMLAttributes<HTMLLIElement> {
   time: string;
   author: string;
-  action: string;
-  note?: string;
+  /** What was done; rich content allowed (code, bold target). */
+  action: React.ReactNode;
+  note?: React.ReactNode;
   /** Glyph for who acted (person, admin, service logo). Default: Shield. */
   icon?: React.ReactNode;
+  /** Replaces the whole 24px disc, e.g. <Avatar size="small" variant="app" src=… />. */
+  avatar?: React.ReactNode;
+  /** Result on the right, usually a Badge (ok, recusado, erro). */
+  result?: React.ReactNode;
 }
 
-export const ActivityLogRow = React.forwardRef<HTMLLIElement, ActivityLogRowProps>(({ time, author, action, note, icon, className, ...props }, ref) => (
+export const ActivityLogRow = React.forwardRef<HTMLLIElement, ActivityLogRowProps>(({ time, author, action, note, icon, avatar, result, className, ...props }, ref) => (
   <li ref={ref} className={cn("flex gap-3 p-3 font-sans", className)} {...props}>
     <span className="w-12 shrink-0 text-sm tabular-nums text-text-muted md:w-13">{time}</span>
     <span className="flex min-w-0 flex-1 flex-col gap-1 md:flex-row md:gap-3">
       <span className="flex items-center gap-2 md:w-45 md:shrink-0">
-        <span aria-hidden className="flex size-6 shrink-0 items-center justify-center rounded-pill border border-border-default bg-surface-card text-text-muted [&_svg]:size-4">
-          {icon ?? <Shield />}
-        </span>
+        {avatar ?? (
+          <span aria-hidden className="flex size-6 shrink-0 items-center justify-center rounded-pill border border-border-default bg-surface-card text-text-muted [&_svg]:size-4">
+            {icon ?? <Shield />}
+          </span>
+        )}
         <span className="truncate text-sm font-semibold text-text-primary">{author}</span>
       </span>
       <span className="flex min-w-0 flex-col">
@@ -31,6 +38,7 @@ export const ActivityLogRow = React.forwardRef<HTMLLIElement, ActivityLogRowProp
         {note && <span className="text-xs text-text-muted">{note}</span>}
       </span>
     </span>
+    {result && <span className="ml-auto shrink-0 self-start">{result}</span>}
   </li>
 ));
 ActivityLogRow.displayName = "ActivityLogRow";

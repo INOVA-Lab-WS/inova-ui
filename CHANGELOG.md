@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.4 · 2026-10-06
+
+- **`Header` (#30):** reserva a área segura do topo do iPhone (PWA com barra de status translúcida); a barra fica com 56px abaixo dela.
+- **`Overlay` (#32):** `role="alertdialog"` no diálogo e `initialFocus` / `onOpenAutoFocus` para o foco começar onde o app quiser (ex.: no Cancelar).
+- **`MultiSelect` (#34):** `form` aceita uma lista de formulários; "todos" usa `allSelectedLabel`, diferente do vazio; `hint` sob o rótulo de cada opção.
+- **`AccordionItem` (#35, #37):** `keepMounted` mantém o conteúdo (e os campos) quando fechado; hover, pressionado e foco reagem só ao título do próprio item.
+- **`ActivityLog` (#36):** por linha, `avatar` e `result` (selo à direita), `action` e `note` com conteúdo rico; `emptyMessage` no componente.
+- **`ActionMenuItem` (#38):** `asChild` com o `Link` do app, ícone dentro dele.
+- **`Table` (#39):** o invólucro com rolagem tem `relative`, e textos só para leitor de tela não alargam mais a página.
+
 ## 0.6.3 · 2026-10-06
 
 - `Chip iconOnly`: chip sem rótulo, quadrado (32 no small, 40 no medium), com `aria-label`. Na biblioteca, a propriedade `show-label` do `chip` passou a funcionar em todas as 50 variantes (antes não estava ligada a nenhuma). No `generation-board`, mostrar produtos, baixar e ampliar ficam só com ícone; "Registrar pedido" mantém o rótulo.

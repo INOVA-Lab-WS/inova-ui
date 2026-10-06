@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as Primitive from "@radix-ui/react-dropdown-menu";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { cn } from "../lib/cn";
 
 /**
@@ -35,9 +36,10 @@ export interface ActionMenuItemProps extends React.ComponentPropsWithoutRef<type
 }
 
 export const ActionMenuItem = React.forwardRef<React.ElementRef<typeof Primitive.Item>, ActionMenuItemProps>(
-  ({ className, icon, tone = "default", children, ...props }, ref) => (
+  ({ className, icon, tone = "default", asChild, children, ...props }, ref) => (
     <Primitive.Item
       ref={ref}
+      asChild={asChild}
       className={cn(
         "flex h-10 cursor-default items-center gap-2 rounded-8 px-3 text-sm outline-none transition-colors select-none [&_svg]:size-4",
         "data-[highlighted]:bg-surface-control-hover active:bg-chip-pressed",
@@ -48,8 +50,18 @@ export const ActionMenuItem = React.forwardRef<React.ElementRef<typeof Primitive
       )}
       {...props}
     >
-      {icon}
-      <span className="min-w-0 flex-1 truncate">{children}</span>
+      {asChild ? (
+        // With asChild the app's Link becomes the item; the icon goes inside it.
+        <Slot>
+          {icon}
+          <Slottable>{children}</Slottable>
+        </Slot>
+      ) : (
+        <>
+          {icon}
+          <span className="min-w-0 flex-1 truncate">{children}</span>
+        </>
+      )}
     </Primitive.Item>
   ),
 );

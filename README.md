@@ -60,10 +60,11 @@ flowchart LR
 
 ## 📦 Instalar num projeto
 
-**1. Dependência.** Público no npm, sem token nem `.npmrc`. O projeto precisa de React 19 e Tailwind 4.
+**1. Dependência.** Público no npm, sem token nem `.npmrc`. O projeto precisa de React 19, **Tailwind 4
+(obrigatório)** e `lucide-react` 1.x (o pacote usa a cópia do app).
 
 ```bash
-npm install @inova-lab-ws/ui
+npm install @inova-lab-ws/ui lucide-react
 ```
 
 **2. Tema.** No CSS global, e nenhum outro tema:
@@ -73,14 +74,26 @@ npm install @inova-lab-ws/ui
 @source "../node_modules/@inova-lab-ws/ui/dist";
 ```
 
-**3. Usar.**
+**3. Fontes.** Com `next/font`, declare as variáveis `--font-inter`, `--font-instrument-serif` e
+`--font-roboto-mono`; o tema lê essas variáveis antes do nome da família.
+
+**4. Usar.**
 
 ```tsx
 import { Button, Alert, Toast, ToastViewport } from "@inova-lab-ws/ui";
 
 <Button variant="primary">Salvar pedido</Button>
 <Alert tone="warning" title="Dados de exemplo">Ainda não há eventos reais neste servidor.</Alert>
+
+// Botão que leva a outra página
+<Button asChild><Link href="/novo">Adicionar</Link></Button>
 ```
+
+**Página montada no servidor:** os componentes são código de navegador. Para dar o visual do pacote a um elemento
+numa página do servidor, use `import { buttonVariants, cn } from "@inova-lab-ws/ui/variants";`.
+
+**Projeto sem Tailwind:** instale `tailwindcss` e `@tailwindcss/postcss`, crie `postcss.config.mjs`, importe o tema e
+isole o CSS antigo numa camada (`@import "./legacy.css" layer(components);`). O passo a passo está na skill INOVA UI.
 
 <a id="componentes"></a>
 
@@ -234,7 +247,7 @@ npx figma connect parse   # valida o Code Connect
 | `assets/` | o logo do INOVA UI |
 
 **Publicar o pacote:** criar uma release no GitHub com a versão do `package.json`; o workflow `publish.yml`
-publica no GitHub Packages. **Publicar o Code Connect:** `FIGMA_ACCESS_TOKEN=… npx figma connect publish`
+publica no npm público com proveniência (trusted publishing, sem token). **Publicar o Code Connect:** `FIGMA_ACCESS_TOKEN=… npx figma connect publish`
 (exige plano Organization ou Enterprise no Figma).
 
 <a id="skill"></a>

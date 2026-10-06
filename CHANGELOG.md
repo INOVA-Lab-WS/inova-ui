@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.2 · 2026-10-05
+
+- `Chip` aceita `asChild`: a aba que é página vira link (`<Chip asChild appearance="filled" count={24}><Link href=…>Todos</Link></Chip>`), com ícone e contagem dentro dele.
+
 ## 0.4.1 · 2026-10-05
 
 - `Badge` ganha a variante `error`: vermelho claro (`status-error-bg` e `status-error-fg`), no mesmo formato de `warning`, para erro que não é alarme (#7).

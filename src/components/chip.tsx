@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { X } from "lucide-react";
 import { cn } from "../lib/cn";
 
@@ -34,13 +35,17 @@ export interface ChipProps
   icon?: React.ReactNode;
   count?: number;
   onRemove?: () => void;
+  /** Render the child element (e.g. a framework Link) with the chip look; icon and count still render inside it. */
+  asChild?: boolean;
 }
 
 export const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
-  ({ className, appearance, size, icon, count, onRemove, children, type = "button", ...props }, ref) => (
-    <button ref={ref} type={type} className={cn(chipVariants({ appearance, size }), className)} {...props}>
+  ({ className, appearance, size, icon, count, onRemove, asChild, children, type = "button", ...props }, ref) => {
+    const Comp = asChild ? Slot : "button";
+    return (
+    <Comp ref={ref} {...(asChild ? {} : { type })} className={cn(chipVariants({ appearance, size }), className)} {...props}>
       {icon}
-      {children}
+      <Slottable>{children}</Slottable>
       {count !== undefined && <span className="tabular-nums">{count}</span>}
       {onRemove && (
         <span
@@ -56,7 +61,8 @@ export const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
           <X aria-hidden />
         </span>
       )}
-    </button>
-  ),
+    </Comp>
+    );
+  },
 );
 Chip.displayName = "Chip";

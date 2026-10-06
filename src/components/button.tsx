@@ -12,7 +12,7 @@ export const buttonVariants = cva(
   [
     "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-12 font-sans font-medium text-base",
     "transition-colors outline-none select-none",
-    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary focus-visible:ring-3 focus-visible:ring-border-focus/50",
     "disabled:pointer-events-none disabled:bg-surface-disabled disabled:text-text-disabled",
     "[&_svg]:size-5 [&_svg]:shrink-0",
   ],

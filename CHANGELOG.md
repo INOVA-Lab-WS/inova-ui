@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.1 · 2026-10-06
+
+- **Um vermelho de erro só (decisão do Gabriel):** `status-error-fg` passa a ser o `danger` (#C23A2B), o mesmo de campos, checkbox, badge, alert e toast. Na biblioteca, `color/status/error-fg` virou apelido de `color/danger`.
+- **Foco do botão preto em todas as variantes (decisão do Gabriel):** contorno preto de 2px e anel interno de 3px em `border-focus` a 50%, como o desenho da biblioteca; primary e ink deixaram o contorno branco.
+
 ## 0.6.0 · 2026-10-06
 
 **Badge redesenhado (decisão do Gabriel):** `color` (green, red, yellow, blue, beige, disabled) x `tone` (dark, light), com ou sem ícone, igual à biblioteca. Os nomes antigos de `variant` continuam funcionando e viram o par correspondente (`default` → green dark, `secondary` → green light, `outline`/`muted`/`native-*` → beige light ou o claro da cor, `warning` → yellow light, `destructive` → red dark, `error` → red light).

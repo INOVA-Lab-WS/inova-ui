@@ -20,7 +20,11 @@ interface BaseLogoProps extends Omit<React.SVGAttributes<SVGSVGElement>, "type" 
   title?: string;
 }
 
-function LogoSvg({ name, title, className, ...props }: BaseLogoProps & { name: string }) {
+// Default heights from the library: the symbol fills the 20px logo slot of the rail and the header;
+// wordmark and mark sit at 14px, as in the header. Width follows the drawing. Override with className.
+const logoHeight = (type: string) => (type === "symbol" ? "h-5 w-auto" : "h-3.5 w-auto");
+
+function LogoSvg({ name, title, className, size, ...props }: BaseLogoProps & { name: string; size: string }) {
   const svg = useLogoSvg(name);
   if (!svg) return null;
   return (
@@ -31,7 +35,7 @@ function LogoSvg({ name, title, className, ...props }: BaseLogoProps & { name: s
       role={title ? "img" : undefined}
       aria-label={title}
       aria-hidden={title ? undefined : true}
-      className={cn("block h-auto shrink-0", className)}
+      className={cn("block shrink-0", size, className)}
       dangerouslySetInnerHTML={{ __html: svg.body }}
       {...props}
     />
@@ -45,7 +49,7 @@ export interface LogoAmbientAIProps extends BaseLogoProps {
 }
 export function LogoAmbientAI({ type = "wordmark", color = "black", ...props }: LogoAmbientAIProps) {
   const c = type === "symbol" ? (color === "green" ? "green" : "black") : color === "white" ? "white" : "black";
-  return <LogoSvg name={`ambientai-${type}-${c}`} {...props} />;
+  return <LogoSvg name={`ambientai-${type}-${c}`} size={logoHeight(type)} {...props} />;
 }
 
 /** Logo Gate · Figma "logo-gate". */
@@ -56,7 +60,7 @@ export interface LogoGateProps extends BaseLogoProps {
 export function LogoGate({ type = "wordmark", color = "black", ...props }: LogoGateProps) {
   const c =
     type === "symbol" ? (color === "green" ? "green" : "black") : type === "mark" ? (color === "white" ? "white" : "black") : color;
-  return <LogoSvg name={`gate-${type}-${c}`} {...props} />;
+  return <LogoSvg name={`gate-${type}-${c}`} size={logoHeight(type)} {...props} />;
 }
 
 /** Logo Forma Lab · Figma "logo-forma-lab". The symbol only exists in lime. */
@@ -66,12 +70,12 @@ export interface LogoFormaLabProps extends BaseLogoProps {
 }
 export function LogoFormaLab({ type = "wordmark", color = "black", ...props }: LogoFormaLabProps) {
   const c = type === "symbol" ? "lime" : color === "white" ? "white" : "black";
-  return <LogoSvg name={`forma-lab-${type}-${c}`} {...props} />;
+  return <LogoSvg name={`forma-lab-${type}-${c}`} size={logoHeight(type)} {...props} />;
 }
 
 /** Logo INOVA UI · Figma "logo-inova-ui". Symbol in lime. */
 export function LogoInovaUI(props: BaseLogoProps) {
-  return <LogoSvg name="inova-ui-symbol-lime" {...props} />;
+  return <LogoSvg name="inova-ui-symbol-lime" size={logoHeight("symbol")} {...props} />;
 }
 
 /** Logo placeholder · Figma "logo-placeholder". 96x24 slot marker for a product logo still to come. */

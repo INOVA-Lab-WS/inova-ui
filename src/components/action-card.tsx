@@ -19,7 +19,8 @@ export const actionCardVariants = cva(
       context: {
         suggestion: "rounded-16 bg-surface-card px-4 py-3 hover:bg-surface-control-hover [&_svg]:text-green-primary",
         refined: "rounded-16 bg-surface-card px-4 py-3 hover:bg-surface-control-hover",
-        rail: "flex-col justify-center gap-1 rounded-12 px-2 py-2 text-xs font-medium text-text-inactive hover:bg-surface-control-hover [&_svg]:size-5",
+        // rail: the background (hover, selected) lives on the 56x40 icon box only; the label sits below it, 12/600.
+        rail: "group/rail w-14 flex-col justify-center gap-1 rounded-16 text-xs font-semibold text-text-inactive [&_svg]:size-5",
         menu: "rounded-12 px-3 py-3 font-medium hover:bg-surface-control-hover [&_svg]:size-5",
       },
       selected: {
@@ -29,7 +30,7 @@ export const actionCardVariants = cva(
     },
     compoundVariants: [
       { context: "refined", selected: true, className: "bg-surface-selected" },
-      { context: "rail", selected: true, className: "bg-surface-selected text-text-primary" },
+      { context: "rail", selected: true, className: "text-text-primary" },
       { context: "menu", selected: true, className: "bg-surface-selected" },
     ],
     defaultVariants: { context: "suggestion", selected: false },
@@ -47,18 +48,31 @@ export interface ActionCardProps
 export const ActionCard = React.forwardRef<HTMLButtonElement, ActionCardProps>(
   ({ className, context, selected, icon, asChild, children, type = "button", ...props }, ref) => {
     const cls = cn(actionCardVariants({ context, selected }), className);
+    const iconNode =
+      context === "rail" ? (
+        <span
+          className={cn(
+            "flex h-10 w-14 items-center justify-center rounded-16 transition-colors",
+            selected ? "bg-surface-selected" : "group-hover/rail:bg-surface-muted",
+          )}
+        >
+          {icon}
+        </span>
+      ) : (
+        icon
+      );
     if (asChild) {
       return (
         <Slot ref={ref} aria-current={selected ? "page" : undefined} className={cls} {...props}>
-          {icon}
+          {iconNode}
           <Slottable>{children}</Slottable>
         </Slot>
       );
     }
     return (
       <button ref={ref} type={type} aria-current={selected ? "page" : undefined} className={cls} {...props}>
-        {icon}
-        <span className="min-w-0 flex-1 truncate">{children}</span>
+        {iconNode}
+        <span className={cn("min-w-0 truncate", context === "rail" ? "max-w-full text-center leading-4" : "flex-1")}>{children}</span>
       </button>
     );
   },

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.7 · 2026-10-05
+
+- **Logos com tamanho padrão (#17):** o símbolo tem 20px de altura (o espaço de logo do trilho e do cabeçalho), wordmark e mark têm 14px; a largura segue o desenho. `className` muda o tamanho.
+- **`ActionCard context="rail"` igual ao Figma (#19):** o fundo de hover e de selecionado fica só na caixa de 56×40 em volta do ícone; o rótulo vai embaixo, fora dela, em 12/600.
+- **`Menu presentation="fullscreen"` fecha (#20):** barra de 64px no topo com a logo centralizada e o X à direita (`onClose`, `closeLabel` = "Fechar menu"); Esc chama `onClose`; o 1º item da navegação recebe o foco ao abrir.
+
 ## 0.4.6 · 2026-10-05
 
 - `Avatar`: se a foto (`src`) não carregar, mostra a inicial. A foto é só a que a pessoa enviou no app, nunca a do provedor de login (#16).

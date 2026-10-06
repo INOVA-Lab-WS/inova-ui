@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.5 · 2026-10-05
+
+- `ConnectorCard`: os metadados vão ao fim do cartão (`mt-auto`, cartão `h-full`), e os rodapés de uma mesma linha da grade ficam alinhados (#13).
+- `ActionCard` aceita `asChild`: o item do trilho lateral (`context="rail"`, ícone sobre rótulo) e do menu móvel (`context="menu"`) vira o `Link` do app (#14).
+
 ## 0.4.4 · 2026-10-05
 
 - `Accordion`: hover e pressionado pintam o cartão inteiro, como na biblioteca publicada (antes só a faixa do título).

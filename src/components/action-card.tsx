@@ -1,10 +1,12 @@
 import * as React from "react";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../lib/cn";
 
 /**
  * ActionCard · Figma "action-card". One tappable row with an icon and a label.
- * context: suggestion (white card, 16px radius), refined, rail (vertical rail item), menu (menu list item).
+ * context: suggestion (white card, 16px radius), refined, rail (vertical rail item: icon over a short label),
+ * menu (mobile menu list item: icon beside the label). With asChild the app's Link becomes the item.
  */
 export const actionCardVariants = cva(
   [
@@ -38,20 +40,27 @@ export interface ActionCardProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof actionCardVariants> {
   icon?: React.ReactNode;
+  /** Render the child element (e.g. a framework Link) as the item; the icon goes inside it. */
+  asChild?: boolean;
 }
 
 export const ActionCard = React.forwardRef<HTMLButtonElement, ActionCardProps>(
-  ({ className, context, selected, icon, children, type = "button", ...props }, ref) => (
-    <button
-      ref={ref}
-      type={type}
-      aria-current={selected ? "page" : undefined}
-      className={cn(actionCardVariants({ context, selected }), className)}
-      {...props}
-    >
-      {icon}
-      <span className="min-w-0 flex-1 truncate">{children}</span>
-    </button>
-  ),
+  ({ className, context, selected, icon, asChild, children, type = "button", ...props }, ref) => {
+    const cls = cn(actionCardVariants({ context, selected }), className);
+    if (asChild) {
+      return (
+        <Slot ref={ref} aria-current={selected ? "page" : undefined} className={cls} {...props}>
+          {icon}
+          <Slottable>{children}</Slottable>
+        </Slot>
+      );
+    }
+    return (
+      <button ref={ref} type={type} aria-current={selected ? "page" : undefined} className={cls} {...props}>
+        {icon}
+        <span className="min-w-0 flex-1 truncate">{children}</span>
+      </button>
+    );
+  },
 );
 ActionCard.displayName = "ActionCard";

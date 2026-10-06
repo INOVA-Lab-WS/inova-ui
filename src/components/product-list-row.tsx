@@ -3,6 +3,8 @@ import { cn } from "../lib/cn";
 
 /**
  * ProductListRow · Figma "product-list-row". Media 56x56 (image, color swatch or icon) + category, name, metadata.
+ * kind="card" (default: environment, scene, photo, paint, zone) is a white card with a border; kind="catalog" is the
+ * catalog list row, with no card (16px top and bottom), as in the library.
  */
 export interface ProductListRowProps extends React.HTMLAttributes<HTMLElement> {
   src?: string;
@@ -17,15 +19,17 @@ export interface ProductListRowProps extends React.HTMLAttributes<HTMLElement> {
   href?: string;
   /** Trailing slot (button, chevron). */
   action?: React.ReactNode;
+  kind?: "card" | "catalog";
 }
 
-export function ProductListRow({ src, alt = "", swatch, icon, category, name, metadata, href, action, className, ...props }: ProductListRowProps) {
+export function ProductListRow({ src, alt = "", swatch, icon, category, name, metadata, href, action, kind = "card", className, ...props }: ProductListRowProps) {
   const Comp = (href ? "a" : "div") as React.ElementType;
   return (
     <Comp
       href={href}
       className={cn(
-        "flex items-center gap-3 rounded-16 border border-border-default bg-surface-card p-2 font-sans",
+        "flex items-center gap-3 rounded-16 font-sans",
+        kind === "catalog" ? "py-4" : "border border-border-default bg-surface-card p-2",
         href && "outline-none transition-colors hover:bg-surface-control-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
         className,
       )}

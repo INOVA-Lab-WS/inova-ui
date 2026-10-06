@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.2 · 2026-10-06
+
+- `ProductListRow kind="catalog"`: a linha do catálogo sem cartão (só 16 em cima e embaixo), como na biblioteca (decisão do Gabriel). As outras continuam como cartão (`kind="card"`, padrão).
+
 ## 0.6.1 · 2026-10-06
 
 - **Um vermelho de erro só (decisão do Gabriel):** `status-error-fg` passa a ser o `danger` (#C23A2B), o mesmo de campos, checkbox, badge, alert e toast. Na biblioteca, `color/status/error-fg` virou apelido de `color/danger`.

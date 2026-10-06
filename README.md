@@ -155,6 +155,7 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 | `RoleRadio` | `role-radio` |
 | `Toggle` | `toggle` |
 | `MultiSelect` | `multi-select` |
+| `Select` | `input` (com chevron) |
 | `DateRangePicker · DateRangeDay` | `date-range-picker` |
 | `LoginForm` | `login-form` |
 | `CopyField` | `copy-field` |

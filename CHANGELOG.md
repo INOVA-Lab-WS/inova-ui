@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.9 · 2026-10-06
+
+- **`Header` (#21):** logo centralizada, como no Figma; ícone do botão de menu é o `chocolate-menu` da biblioteca (`ChocolateMenuIcon`), não mais o `LayoutGrid` do item "Apps"; `menuExpanded` (vira `aria-expanded`) e `menuButtonRef` para o app devolver o foco; `sticky` fixa no topo com `surface-page` a 95% e desfoque.
+- **`ProfileMenu` (#22):** nome e e-mail quebram linha em vez de cortar com reticências; o painel não passa da largura da tela.
+- **`Select` (#23):** seleção simples com o visual do `Input` (a biblioteca juntou o select no input, com o chevron à direita). É o `<select>` nativo: `label`, `help`, `error`, `placeholder`, `name`/`defaultValue` para formulário comum e `value`/`onChange` para uso controlado.
+- **`MultiSelect` (#24):** `name` (1 campo escondido por valor), `defaultValue` para uso não controlado e `form` para um formulário em outro lugar da página.
+- **`linkClassName` (#27):** estilo de link de texto, em `@inova-lab-ws/ui` e em `@inova-lab-ws/ui/variants`, para `<a>`, `Link` e `<button>` com cara de link.
+
 ## 0.4.8 · 2026-10-05
 
 - **`ProfileMenu` (#18):** o menu da pessoa, desenhado na INOVA Lab Library (`profile-menu`). O avatar abre um painel com avatar grande, nome e e-mail, as ações do app (filhos, como `ActionMenuItem`) e "Sair" por último (`onSignOut`, ou `signOut` para trocar o item). Esc, clique fora e as setas vêm do `DropdownMenu` do Radix.

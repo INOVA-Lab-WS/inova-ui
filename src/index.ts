@@ -58,3 +58,6 @@ export { ConnectorCard, connectorCardClassName, type ConnectorCardProps } from "
 export { CopyField, type CopyFieldProps } from "./components/copy-field";
 export { PageHeader, type PageHeaderProps } from "./components/page-header";
 export { ProfileMenu, type ProfileMenuProps } from "./components/profile-menu";
+export { Select, type SelectProps } from "./components/select";
+export { linkClassName } from "./components/link";
+export { ChocolateMenuIcon } from "./components/header";

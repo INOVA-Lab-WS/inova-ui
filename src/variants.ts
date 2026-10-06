@@ -9,3 +9,4 @@ export { actionCardVariants } from "./components/action-card";
 export { historyThumbnailVariants } from "./components/history-thumbnail";
 export { connectorCardClassName } from "./components/connector-card";
 export { pillTabClassName } from "./components/pill-tab";
+export { linkClassName } from "./components/link";

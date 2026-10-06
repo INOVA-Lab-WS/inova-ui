@@ -15,8 +15,14 @@ export interface MultiSelectOption {
 }
 export interface MultiSelectProps {
   options: MultiSelectOption[];
-  value: string[];
-  onValueChange: (value: string[]) => void;
+  /** Controlled value. Omit it and use defaultValue to let the component keep its own state. */
+  value?: string[];
+  defaultValue?: string[];
+  onValueChange?: (value: string[]) => void;
+  /** Form field name: one hidden input per chosen value, read by FormData / server actions. */
+  name?: string;
+  /** Id of a <form> elsewhere on the page that these values belong to. */
+  form?: string;
   label?: React.ReactNode;
   allLabel?: string;
   placeholder?: string;
@@ -28,8 +34,11 @@ export interface MultiSelectProps {
 
 export function MultiSelect({
   options,
-  value,
-  onValueChange,
+  value: controlled,
+  defaultValue = [],
+  onValueChange: onChange,
+  name,
+  form,
   label,
   allLabel = "Todos",
   placeholder = "Todos",
@@ -38,6 +47,12 @@ export function MultiSelect({
   disabled,
   className,
 }: MultiSelectProps) {
+  const [own, setOwn] = React.useState<string[]>(defaultValue);
+  const value = controlled ?? own;
+  const onValueChange = (v: string[]) => {
+    if (controlled === undefined) setOwn(v);
+    onChange?.(v);
+  };
   const [query, setQuery] = React.useState("");
   const id = React.useId();
   const filtered = query ? options.filter((o) => o.label.toLowerCase().includes(query.toLowerCase())) : options;
@@ -52,6 +67,7 @@ export function MultiSelect({
           {label}
         </label>
       )}
+      {name && value.map((v) => <input key={v} type="hidden" name={name} value={v} form={form} />)}
       <Popover.Root>
         <Popover.Trigger
           id={id}

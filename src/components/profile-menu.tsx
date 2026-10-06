@@ -51,15 +51,15 @@ export function ProfileMenu({
           align={align}
           sideOffset={8}
           className={cn(
-            "z-50 flex w-64 flex-col rounded-12 border border-border-default bg-surface-card p-1 font-sans shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1)]",
+            "z-50 flex w-64 max-w-[calc(100vw-2rem)] flex-col rounded-12 border border-border-default bg-surface-card p-1 font-sans shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1)]",
             className,
           )}
         >
           <Primitive.Label className="flex items-center gap-3 p-3">
             <Avatar name={name} src={avatarSrc} size="large" aria-hidden />
             <span className="flex min-w-0 flex-1 flex-col">
-              <span className="truncate text-sm font-semibold text-text-primary">{name}</span>
-              {email && <span className="truncate text-xs text-text-muted">{email}</span>}
+              <span className="text-sm font-semibold break-words text-text-primary">{name}</span>
+              {email && <span className="text-xs break-all text-text-muted">{email}</span>}
             </span>
           </Primitive.Label>
           {children && (

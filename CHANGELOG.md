@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.6.0 · 2026-10-06
+
+**Badge redesenhado (decisão do Gabriel):** `color` (green, red, yellow, blue, beige, disabled) x `tone` (dark, light), com ou sem ícone, igual à biblioteca. Os nomes antigos de `variant` continuam funcionando e viram o par correspondente (`default` → green dark, `secondary` → green light, `outline`/`muted`/`native-*` → beige light ou o claro da cor, `warning` → yellow light, `destructive` → red dark, `error` → red light).
+
+**Auditoria do código contra a INOVA Lab Library** (cerca de 60 componentes, o Figma vale). Corrigido no código:
+- **Formulário:** `Input`, `Select`, `Textarea`, `MultiSelect` e `DateRangePicker` com padding 12 também no celular; foco com borda `border-focus` e anel de 3px; erro em `surface-danger`. `Checkbox` com check de 12px, `Radio` com ponto de 10px, `Toggle` com o círculo a 4px da borda, `RoleRadio` com raio 16 e selecionada em semibold.
+- **Indicadores e ações:** destrutivo do `Button` sem mudança de opacidade; texto do chip `ink`/`action` em semibold; ícone do `Avatar` de app em 16/20; `Alert` e `Toast` com padding 12.
+- **Navegação e estrutura:** `ActionCard` (suggestion, refined e menu) com as medidas e cores do Figma; `Header` esconde o botão de menu no desktop; `NavigationTabBar` usa o chip puro; `PillTab` com raio 16 e inativo em regular; foco do `ConnectorCard` por dentro; hover e pressionado destrutivos do `ActionMenu` em vermelho claro.
+- **Overlay:** raio 24 e borda de 1px em todas as apresentações, padding 24 no diálogo e na gaveta.
+- **Dados:** `MetricTile` (stat, variant e count) com padding, pesos e tamanhos do Figma e marcador de cor opcional (`markerClassName`); `ProgressReadout` refeito como no Figma (percentual e barra de 100×4 em branco, para ficar sobre imagem); `Table` com raio 16, padding 20 e `title`, `summary` e `note` opcionais; células com 8 de padding vertical e 12 entre colunas; `ActivityLogRow` com disco e ícone (`icon`), autor em 14 semibold; `DistributionChart` em 14 com `chart-series2`.
+- **Conversa:** `FeedbackPrompt`, `InputCard` (medidas do desktop), `ListeningBanner` (sem canto próprio), `Thumbnail` (hover com borda verde) e `UserMessage` (padding 8 com foto).
+
+Pontos em que o próprio Figma parece inconsistente ficaram para o Gabriel decidir (ver a sessão).
+
 ## 0.5.3 · 2026-10-06
 
 - **`Table` (#29):** `caption` (legenda para leitor de tela, em `sr-only`) e `busy` (vira `aria-busy`). `TableCell type="row-header"` é o nome de cada linha (`<th scope="row">`, 14 semibold), igual ao novo tipo da biblioteca. `secondary` esconde a coluna abaixo de `md`.

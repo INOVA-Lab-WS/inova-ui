@@ -20,7 +20,7 @@ export interface ConnectorCardProps extends Omit<React.AnchorHTMLAttributes<HTML
 
 export const connectorCardClassName =
   "flex h-full flex-col gap-3 rounded-16 border border-border-default bg-surface-card p-4 font-sans text-left no-underline transition-[border-color,box-shadow] " +
-  "hover:border-border-neutral hover:shadow-[0_1px_2px_rgb(0_0_0/0.05)] outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary";
+  "hover:border-border-neutral hover:shadow-[0_1px_2px_rgb(0_0_0/0.05)] outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-border-focus";
 
 export const ConnectorCard = React.forwardRef<HTMLAnchorElement, ConnectorCardProps>(
   ({ className, avatar, title, description, metadata, arrow = true, asChild, children, ...props }, ref) => {

@@ -21,6 +21,12 @@ export const avatarVariants = cva(
         large: "size-14 text-lg [&_svg]:size-7",
       },
     },
+    // app: the logo or fallback icon is 16px in small and medium, 20px in large (Figma avatar variant=app).
+    compoundVariants: [
+      { variant: "app", size: "small", className: "[&_svg]:size-4" },
+      { variant: "app", size: "medium", className: "[&_svg]:size-4" },
+      { variant: "app", size: "large", className: "[&_svg]:size-5" },
+    ],
     defaultVariants: { variant: "person", size: "medium" },
   },
 );

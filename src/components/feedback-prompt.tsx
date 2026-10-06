@@ -16,12 +16,12 @@ const FOCUS = "outline-none focus-visible:outline-2 focus-visible:outline-offset
 export function FeedbackPrompt({ prompt, icon, onOpen, onDismiss, dismissLabel = "Dispensar", className, ...props }: FeedbackPromptProps) {
   return (
     <div className={cn("flex h-10 items-center gap-1 rounded-16 bg-surface-card pl-1 pr-1 font-sans", className)} {...props}>
-      <button type="button" onClick={onOpen} className={cn("flex min-w-0 flex-1 items-center gap-3 rounded-12 px-3 py-2 text-left text-sm text-text-primary hover:bg-surface-control-hover [&_svg]:size-4 [&_svg]:shrink-0", FOCUS)}>
+      <button type="button" onClick={onOpen} className={cn("flex min-w-0 flex-1 items-center gap-3 rounded-16 px-3 py-2 text-left text-sm text-text-primary hover:bg-surface-muted [&_svg]:size-4 [&_svg]:shrink-0", FOCUS)}>
         {icon ?? <MessageCircleHeart aria-hidden />}
         <span className="truncate">{prompt}</span>
       </button>
       {onDismiss && (
-        <button type="button" aria-label={dismissLabel} onClick={onDismiss} className={cn("flex size-8 shrink-0 items-center justify-center rounded-pill text-text-muted hover:bg-surface-control-hover [&_svg]:size-4", FOCUS)}>
+        <button type="button" aria-label={dismissLabel} onClick={onDismiss} className={cn("flex size-8 shrink-0 items-center justify-center rounded-pill text-text-muted hover:bg-surface-muted [&_svg]:size-4", FOCUS)}>
           <X aria-hidden />
         </button>
       )}

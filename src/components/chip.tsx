@@ -17,8 +17,8 @@ export const chipVariants = cva(
         filled: "bg-surface-control text-text-primary hover:bg-surface-control-hover active:bg-chip-pressed",
         outline: "border border-chip-outline text-text-primary hover:bg-surface-control-hover active:bg-chip-pressed",
         ghost: "text-text-primary hover:bg-surface-control-hover active:bg-chip-pressed",
-        ink: "bg-surface-ink-translucent text-text-on-ink backdrop-blur-[8px] hover:bg-surface-ink-translucent-hover active:bg-surface-ink-translucent-hover",
-        action: "bg-surface-ink text-text-on-ink hover:bg-surface-ink-hover active:bg-surface-ink-hover",
+        ink: "bg-surface-ink-translucent font-semibold text-text-on-ink backdrop-blur-[8px] hover:bg-surface-ink-translucent-hover active:bg-surface-ink-translucent-hover",
+        action: "bg-surface-ink font-semibold text-text-on-ink hover:bg-surface-ink-hover active:bg-surface-ink-hover",
       },
       size: {
         small: "h-8 px-3 text-xs [&_svg]:size-4",

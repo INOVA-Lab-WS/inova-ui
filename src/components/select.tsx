@@ -33,8 +33,8 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           className={cn(
             "relative flex h-14 items-center rounded-12 border bg-surface-card lg:h-12",
             "border-border-default shadow-[0_1px_2px_rgb(0_0_0/0.05)] transition-colors",
-            "hover:border-border-strong focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-text-primary",
-            error && "border-status-error-fg",
+            "hover:border-border-strong focus-within:border-border-focus focus-within:outline-3 focus-within:outline-border-focus/50",
+            error && "border-surface-danger outline-3 outline-surface-danger/20 focus-within:border-surface-danger focus-within:outline-surface-danger/20",
             disabled && "bg-surface-disabled text-text-disabled shadow-none hover:border-border-default",
           )}
         >
@@ -45,7 +45,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             aria-invalid={error ? true : undefined}
             aria-describedby={[errorId, helpId].filter(Boolean).join(" ") || undefined}
             className={cn(
-              "h-full w-full appearance-none truncate rounded-12 bg-transparent pr-10 pl-4 text-base text-text-primary outline-none lg:pl-3 lg:text-sm",
+              "h-full w-full appearance-none truncate rounded-12 bg-transparent pr-10 pl-3 text-base text-text-primary outline-none lg:text-sm",
               "disabled:cursor-not-allowed",
               className,
             )}
@@ -54,10 +54,10 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             {placeholder !== undefined && <option value="">{placeholder}</option>}
             {children}
           </select>
-          <ChevronDown aria-hidden className="pointer-events-none absolute right-4 size-4 text-text-muted lg:right-3" />
+          <ChevronDown aria-hidden className="pointer-events-none absolute right-3 size-4 text-text-muted" />
         </div>
         {error && (
-          <p id={errorId} className="text-xs text-status-error-fg">
+          <p id={errorId} className="text-xs text-surface-danger">
             {error}
           </p>
         )}

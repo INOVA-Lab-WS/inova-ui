@@ -32,7 +32,7 @@ export const InputCard = React.forwardRef<HTMLTextAreaElement, InputCardProps>(
   ) => {
     const canSend = value.trim().length > 0 || (photos?.length ?? 0) > 0;
     return (
-      <div className={cn("flex flex-col gap-6 rounded-24 bg-surface-card p-5 font-sans", containerClassName)}>
+      <div className={cn("flex flex-col gap-6 rounded-24 bg-surface-card p-5 font-sans lg:gap-4 lg:p-4", containerClassName)}>
         {photos && photos.length > 0 && (
           <div className="flex gap-2">
             {photos.map((p, i) => (
@@ -65,7 +65,7 @@ export const InputCard = React.forwardRef<HTMLTextAreaElement, InputCardProps>(
               onSend?.();
             }
           }}
-          className={cn("w-full resize-none bg-transparent text-base text-text-primary outline-none placeholder:text-text-muted", className)}
+          className={cn("w-full resize-none bg-transparent text-base text-text-primary lg:py-2 lg:text-xs outline-none placeholder:text-text-muted", className)}
           {...props}
         />
         <div className="flex items-center justify-between gap-2">

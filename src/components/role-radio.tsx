@@ -19,17 +19,17 @@ export interface RoleRadioProps {
 export function RoleRadio({ label, name, options, value, onValueChange, error, className }: RoleRadioProps) {
   const errorId = React.useId();
   return (
-    <fieldset className={cn("flex flex-col gap-2 font-sans", className)} aria-describedby={error ? errorId : undefined}>
-      {label && <legend className="mb-2 text-sm font-medium text-text-primary">{label}</legend>}
-      <div className="flex gap-2">
+    <fieldset className={cn("flex flex-col gap-1 font-sans", className)} aria-describedby={error ? errorId : undefined}>
+      {label && <legend className="mb-1 text-sm font-medium text-text-primary">{label}</legend>}
+      <div className="flex flex-wrap gap-1">
         {options.map((o) => (
           <label
             key={o.value}
             className={cn(
-              "inline-flex h-9 cursor-pointer items-center rounded-pill px-3 text-sm font-medium transition-colors",
+              "inline-flex h-9 cursor-pointer items-center rounded-16 px-3 text-sm transition-colors",
               "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-text-primary",
-              value === o.value ? "bg-surface-selected text-text-primary" : "text-text-muted hover:bg-surface-control",
-              error && "ring-1 ring-status-error-fg",
+              value === o.value ? "bg-surface-selected font-semibold text-text-primary" : "text-text-inactive hover:bg-surface-control",
+              error && "ring-1 ring-surface-danger",
             )}
           >
             <input type="radio" className="sr-only" name={name} value={o.value} checked={value === o.value} onChange={() => onValueChange?.(o.value)} />
@@ -38,7 +38,7 @@ export function RoleRadio({ label, name, options, value, onValueChange, error, c
         ))}
       </div>
       {error && (
-        <p id={errorId} className="text-xs text-status-error-fg">
+        <p id={errorId} className="text-xs text-surface-danger">
           {error}
         </p>
       )}

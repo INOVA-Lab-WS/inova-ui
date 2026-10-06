@@ -34,7 +34,7 @@ export const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(
           )}
           {...props}
         >
-          <span className={cn("size-5 rounded-pill bg-surface-card shadow-sm transition-transform", on ? "translate-x-[22px]" : "translate-x-0.5")} />
+          <span className={cn("size-5 rounded-pill bg-surface-card shadow-sm transition-transform", on ? "translate-x-5" : "translate-x-1")} />
         </button>
         {label}
       </label>

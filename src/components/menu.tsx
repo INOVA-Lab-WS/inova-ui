@@ -60,7 +60,7 @@ export const Menu = React.forwardRef<HTMLElement, MenuProps>(
         {rail && logo && <Divider className="w-8" />}
         <div ref={navRef} className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", rail ? "items-center gap-3" : "gap-2 p-4")}>{navigation}</div>
         {showFooter && footer && (
-          <div className={cn("shrink-0 font-sans text-xs text-text-muted", rail ? "text-center" : "px-4 py-4")}>{footer}</div>
+          <div className={cn("shrink-0 font-sans text-xs font-semibold text-text-muted", rail ? "text-center" : "px-4 py-4")}>{footer}</div>
         )}
       </nav>
     );

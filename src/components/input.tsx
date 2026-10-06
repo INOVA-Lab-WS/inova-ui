@@ -29,10 +29,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <div
           className={cn(
-            "flex h-14 items-center gap-2 rounded-12 border bg-surface-card px-4 lg:h-12 lg:px-3",
+            "flex h-14 items-center gap-2 rounded-12 border bg-surface-card px-3 lg:h-12",
             "border-border-default shadow-[0_1px_2px_rgb(0_0_0/0.05)] transition-colors",
-            "hover:border-border-strong focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-text-primary",
-            error && "border-status-error-fg",
+            "hover:border-border-strong focus-within:border-border-focus focus-within:outline-3 focus-within:outline-border-focus/50",
+            error && "border-surface-danger outline-3 outline-surface-danger/20 focus-within:border-surface-danger focus-within:outline-surface-danger/20",
             disabled && "bg-surface-disabled text-text-disabled shadow-none hover:border-border-default",
             "[&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-text-muted",
           )}
@@ -54,7 +54,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {rightIcon}
         </div>
         {error && (
-          <p id={errorId} className="text-xs text-status-error-fg">
+          <p id={errorId} className="text-xs text-surface-danger">
             {error}
           </p>
         )}

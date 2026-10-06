@@ -8,9 +8,9 @@ import { cn } from "../lib/cn";
  */
 export const pillTabClassName = (selected?: boolean) =>
   cn(
-    "inline-flex h-9 items-center rounded-pill px-3 font-sans text-sm whitespace-nowrap no-underline transition-colors outline-none",
+    "inline-flex h-9 items-center gap-1 rounded-16 px-3 font-sans text-sm whitespace-nowrap no-underline transition-colors outline-none",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
-    selected ? "bg-surface-selected font-semibold text-text-primary" : "font-medium text-text-muted hover:bg-surface-control",
+    selected ? "bg-surface-selected font-semibold text-text-primary" : "text-text-inactive hover:bg-surface-muted",
   );
 
 export interface PillTabProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

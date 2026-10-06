@@ -69,7 +69,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
             aria-label={menuLabel}
             aria-expanded={menuExpanded}
             onClick={onMenuClick}
-            className="inline-flex size-8 items-center justify-center rounded-8 text-text-primary outline-none hover:bg-surface-control-hover focus-visible:outline-2 focus-visible:outline-text-primary [&_svg]:size-5"
+            className={cn("inline-flex size-8 items-center justify-center rounded-8 text-text-primary outline-none hover:bg-surface-control-hover focus-visible:outline-2 focus-visible:outline-text-primary [&_svg]:size-5", viewport === "desktop" && "hidden")}
           >
             <ChocolateMenuIcon />
           </button>

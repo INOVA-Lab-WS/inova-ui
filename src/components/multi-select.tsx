@@ -73,7 +73,7 @@ export function MultiSelect({
           id={id}
           disabled={disabled}
           className={cn(
-            "flex h-14 w-full items-center gap-2 rounded-12 border border-border-default bg-surface-card px-4 text-left text-base lg:h-12 lg:px-3 lg:text-sm",
+            "flex h-14 w-full items-center gap-2 rounded-12 border border-border-default bg-surface-card px-3 text-left text-base lg:h-12 lg:text-sm",
             "shadow-[0_1px_2px_rgb(0_0_0/0.05)] hover:border-border-strong",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
             "disabled:bg-surface-disabled disabled:text-text-disabled",

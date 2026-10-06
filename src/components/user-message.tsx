@@ -23,7 +23,7 @@ export interface UserMessageProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function UserMessage({ photos, audio, children, className, ...props }: UserMessageProps) {
   return (
-    <div className={cn("ml-auto flex max-w-[85%] flex-col gap-2 rounded-24 bg-green-secondary px-4 py-3 font-sans text-sm text-green-secondary-foreground", className)} {...props}>
+    <div className={cn("ml-auto flex max-w-[85%] flex-col gap-2 rounded-24 bg-green-secondary font-sans text-sm text-green-secondary-foreground", photos && photos.length > 0 ? "p-2" : "px-4 py-3", className)} {...props}>
       {photos && photos.length > 0 && (
         <div className="flex gap-1 overflow-x-auto">
           {photos.map((p, i) => (

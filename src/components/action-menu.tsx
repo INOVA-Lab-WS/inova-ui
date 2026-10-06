@@ -43,7 +43,7 @@ export const ActionMenuItem = React.forwardRef<React.ElementRef<typeof Primitive
         "data-[highlighted]:bg-surface-control-hover active:bg-chip-pressed",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
         "data-[disabled]:pointer-events-none data-[disabled]:text-text-disabled",
-        tone === "danger" ? "text-status-error-fg" : "text-text-primary",
+        tone === "danger" ? "text-status-error-fg data-[highlighted]:bg-status-error-bg active:bg-status-error-bg" : "text-text-primary",
         className,
       )}
       {...props}

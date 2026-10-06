@@ -23,7 +23,7 @@ export const buttonVariants = cva(
         outline: "bg-surface-control text-text-primary hover:bg-surface-control-hover active:bg-surface-control-hover",
         ghost: "bg-transparent text-text-primary hover:bg-surface-control active:bg-surface-control disabled:bg-transparent",
         ink: "bg-surface-ink-translucent text-text-on-ink backdrop-blur-[8px] hover:bg-surface-ink-translucent-hover active:bg-surface-ink-translucent-hover",
-        destructive: "bg-surface-danger text-text-on-action hover:opacity-90 active:opacity-90",
+        destructive: "bg-surface-danger text-text-on-action",
       },
       size: {
         responsive: "h-14 px-4 lg:h-12 lg:px-3",

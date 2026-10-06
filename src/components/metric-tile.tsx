@@ -13,23 +13,27 @@ export interface MetricTileProps extends React.HTMLAttributes<HTMLDivElement> {
   caption?: string;
   /** Help text shown on the "i" trigger. */
   help?: string;
+  /** layout="variant": colour of the 10px category marker (a bg-* class). Default chart-category1. */
+  markerClassName?: string;
 }
 
-export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ label, value, layout = "stat", caption, help, className, ...props }, ref) => {
+export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ label, value, layout = "stat", caption, help, markerClassName, className, ...props }, ref) => {
+  const stat = layout === "stat";
   const measured = value !== null && value !== undefined;
   const shown = !measured ? "Não medido" : typeof value === "number" ? new Intl.NumberFormat("pt-BR").format(value) : value;
   return (
-    <div ref={ref} className={cn("relative flex flex-col gap-2 rounded-16 border border-border-default bg-surface-card p-4 font-sans", className)} {...props}>
-      <span className="pr-8 text-xs text-text-muted">{label}</span>
+    <div ref={ref} className={cn("relative flex flex-col rounded-16 border border-border-default bg-surface-card font-sans", stat ? "gap-1 p-5" : "p-4", className)} {...props}>
+      {layout === "variant" && <span aria-hidden className={cn("mb-2 size-2.5 rounded-pill", markerClassName ?? "bg-chart-category1")} />}
+      <span className={cn("pr-6 text-xs text-text-muted", stat && "font-medium uppercase")}>{label}</span>
       {help && (
         <Tooltip text={help}  placement="top-end">
           <button type="button" aria-label={help} className="absolute right-3 top-3 flex size-6 items-center justify-center rounded-pill focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-border-focus">
-            <Info aria-hidden className="size-4 text-text-muted" />
+            <Info aria-hidden className="size-3.5 text-text-muted" />
           </button>
         </Tooltip>
       )}
-      <span className={cn("tabular-nums", !measured ? "text-sm text-text-muted" : layout === "count" ? "text-xl font-semibold text-text-primary" : "text-2xl font-semibold text-text-primary")}>{shown}</span>
-      {caption && <span className={cn("text-xs", layout === "variant" ? "text-text-accent" : "text-text-muted")}>{caption}</span>}
+      <span className={cn("tabular-nums", !measured ? "text-sm text-text-muted" : stat ? "text-2xl font-bold text-text-primary" : "text-xl font-bold text-text-primary")}>{shown}</span>
+      {caption && <span className="text-xs text-text-muted">{caption}</span>}
     </div>
   );
 });

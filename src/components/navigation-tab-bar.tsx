@@ -32,7 +32,6 @@ export const NavigationTabBar = React.forwardRef<HTMLDivElement, NavigationTabBa
             aria-selected={active}
             size="small"
             appearance={active ? "filled" : "ghost"}
-            className={active ? "bg-surface-selected" : "text-text-inactive"}
             onClick={() => onValueChange?.(tab.value)}
           >
             {tab.label}

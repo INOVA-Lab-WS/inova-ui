@@ -25,12 +25,12 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               "peer size-5 appearance-none rounded-4 border border-border-strong bg-surface-card transition-colors",
               "checked:border-surface-action checked:bg-surface-action",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
-              invalid && "border-status-error-fg",
-              "disabled:border-border-neutral disabled:bg-surface-disabled",
+              invalid && "border-surface-danger",
+              "disabled:border-border-strong disabled:bg-surface-disabled",
             )}
             {...props}
           />
-          <Check aria-hidden className="pointer-events-none absolute inset-0 m-auto size-4 text-text-on-action opacity-0 peer-checked:opacity-100" />
+          <Check aria-hidden className="pointer-events-none absolute inset-0 m-auto size-3 text-text-on-action opacity-0 peer-checked:opacity-100" />
         </span>
         {label}
       </label>

@@ -23,7 +23,7 @@ export function Toast({ kind = "success", children, className, ...props }: Toast
     <div
       role={kind === "error" ? "alert" : "status"}
       className={cn(
-        "pointer-events-auto flex items-center gap-3 rounded-16 px-4 py-3 font-sans text-sm font-medium text-text-primary",
+        "pointer-events-auto flex items-center gap-3 rounded-16 p-3 font-sans text-sm font-medium text-text-primary",
         "shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1),0_4px_6px_-4px_rgb(0_0_0/0.1)]",
         cls,
         className,

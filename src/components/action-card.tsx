@@ -17,11 +17,11 @@ export const actionCardVariants = cva(
   {
     variants: {
       context: {
-        suggestion: "rounded-16 bg-surface-card px-4 py-3 hover:bg-surface-control-hover [&_svg]:text-green-primary",
-        refined: "rounded-16 bg-surface-card px-4 py-3 hover:bg-surface-control-hover",
+        suggestion: "h-10 rounded-16 bg-surface-card px-4 hover:bg-surface-accent lg:h-9 lg:text-xs [&_svg]:text-green-primary",
+        refined: "gap-3 rounded-12 bg-surface-card px-5 py-4 text-base font-semibold hover:bg-surface-control-hover [&_svg]:size-6",
         // rail: the background (hover, selected) lives on the 56x40 icon box only; the label sits below it, 12/600.
         rail: "group/rail w-14 flex-col justify-center gap-1 rounded-16 text-xs font-semibold text-text-inactive [&_svg]:size-5",
-        menu: "rounded-12 px-3 py-3 font-medium hover:bg-surface-control-hover [&_svg]:size-5",
+        menu: "gap-2 rounded-16 p-4 text-base font-semibold text-text-inactive hover:bg-surface-muted [&_svg]:size-5",
       },
       selected: {
         true: "",
@@ -31,7 +31,7 @@ export const actionCardVariants = cva(
     compoundVariants: [
       { context: "refined", selected: true, className: "bg-surface-selected" },
       { context: "rail", selected: true, className: "text-text-primary" },
-      { context: "menu", selected: true, className: "bg-surface-selected" },
+      { context: "menu", selected: true, className: "bg-surface-selected text-text-primary" },
     ],
     defaultVariants: { context: "suggestion", selected: false },
   },

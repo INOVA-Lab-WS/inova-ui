@@ -29,17 +29,17 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           aria-invalid={error ? true : undefined}
           aria-describedby={[errorId, helpId].filter(Boolean).join(" ") || undefined}
           className={cn(
-            "min-h-32 w-full resize-y rounded-12 border border-border-default bg-surface-card px-4 py-3 text-base text-text-primary lg:min-h-28 lg:px-3 lg:text-sm",
+            "min-h-32 w-full resize-y rounded-12 border border-border-default bg-surface-card p-3 text-base text-text-primary lg:min-h-28 lg:text-sm",
             "shadow-[0_1px_2px_rgb(0_0_0/0.05)] outline-none transition-colors placeholder:text-text-muted",
-            "hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
-            error && "border-status-error-fg",
+            "hover:border-border-strong focus-visible:border-border-focus focus-visible:outline-3 focus-visible:outline-border-focus/50",
+            error && "border-surface-danger outline-3 outline-surface-danger/20",
             "disabled:cursor-not-allowed disabled:bg-surface-disabled disabled:text-text-disabled disabled:shadow-none",
             className,
           )}
           {...props}
         />
         {error && (
-          <p id={errorId} className="text-xs text-status-error-fg">
+          <p id={errorId} className="text-xs text-surface-danger">
             {error}
           </p>
         )}

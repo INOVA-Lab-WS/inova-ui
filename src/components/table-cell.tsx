@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../lib/cn";
 
 /** Table cell · Figma "table / cell": header (column), row-header (the row's name, <th scope="row">), body or numeric. */
-const cellVariants = cva("px-3 py-3 text-sm", {
+const cellVariants = cva("py-2 pr-3 text-sm last:pr-0", {
   variants: {
     type: {
       header: "text-xs font-semibold text-text-muted",

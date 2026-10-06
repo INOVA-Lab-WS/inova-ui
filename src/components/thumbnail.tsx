@@ -25,7 +25,7 @@ export function Thumbnail({ src, alt = "", swatch, caption, metadata, fallback, 
       aria-disabled={unavailable || undefined}
       className={cn(
         "flex w-32 shrink-0 flex-col rounded-16 border border-border-default bg-surface-card p-1 font-sans",
-        href && "outline-none transition-colors hover:bg-surface-control-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
+        href && "outline-none transition-colors hover:border-green-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
         unavailable && "opacity-60",
         className,
       )}

@@ -4,7 +4,7 @@ import { CircleAlert, CircleCheck, CircleX, Info } from "lucide-react";
 import { cn } from "../lib/cn";
 
 /** Alert · Figma "alert". Inline notice aligned with Gate's Notice: no outline, tinted background. */
-const alertVariants = cva("flex items-start gap-3 rounded-16 px-4 py-3 font-sans", {
+const alertVariants = cva("flex items-start gap-3 rounded-16 p-3 font-sans", {
   variants: {
     tone: {
       information: "bg-status-info-bg text-status-info-fg",

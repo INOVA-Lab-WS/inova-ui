@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0 · 2026-10-06
+
+- **`Card` (#25):** a caixa branca vazia da biblioteca (`card`): borda de 1px, raio 12, padding 16, conteúdo livre. `interactive` (ou `asChild` com um `Link`) liga hover (borda mais forte e sombra quase invisível) e foco. `cardClassName` também em `@inova-lab-ws/ui/variants`.
+- **`Avatar variant="app"` (#26):** logo de app ou serviço no círculo, fundo branco e borda de 1px; sem logo, o ícone de pacote cinza. O `Avatar` de pessoa segue: inicial, ícone ou a foto que a própria pessoa enviou (`variant=photo` na biblioteca).
+
 ## 0.4.9 · 2026-10-06
 
 - **`Header` (#21):** logo centralizada, como no Figma; ícone do botão de menu é o `chocolate-menu` da biblioteca (`ChocolateMenuIcon`), não mais o `LayoutGrid` do item "Apps"; `menuExpanded` (vira `aria-expanded`) e `menuButtonRef` para o app devolver o foco; `sticky` fixa no topo com `surface-page` a 95% e desfoque.

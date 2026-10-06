@@ -61,3 +61,4 @@ export { ProfileMenu, type ProfileMenuProps } from "./components/profile-menu";
 export { Select, type SelectProps } from "./components/select";
 export { linkClassName } from "./components/link";
 export { ChocolateMenuIcon } from "./components/header";
+export { Card, cardClassName, type CardProps } from "./components/card";

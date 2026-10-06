@@ -108,7 +108,7 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 | `Badge` | `badge` |
 | `Spinner` | `spinner` |
 | `Tooltip · TooltipProvider` | `tooltip` |
-| `Avatar` | `avatar` |
+| `Avatar` (pessoa: inicial, ícone ou foto; `variant="app"`: logo de serviço) | `avatar` |
 | `BotAvatar` | `bot-avatar` |
 | `Divider` | `divider` |
 | `Alert` | `alert` |
@@ -130,6 +130,7 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 | :--- | :--- |
 | `Header` | `header` |
 | `TopArea` | `top-area` |
+| `Card` | `card` |
 | `PageHeader` | `page-header` |
 | `Accordion · AccordionItem` | `accordion` |
 

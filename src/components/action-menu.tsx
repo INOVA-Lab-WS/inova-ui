@@ -20,7 +20,7 @@ export const ActionMenuContent = React.forwardRef<
       align={align}
       sideOffset={sideOffset}
       className={cn(
-        "z-50 flex min-w-48 flex-col rounded-12 border border-border-default bg-surface-card p-1 font-sans shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1)]",
+        "z-50 flex min-w-50 flex-col rounded-12 border border-border-default bg-surface-card p-1 font-sans shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1)]",
         className,
       )}
       {...props}
@@ -58,5 +58,5 @@ ActionMenuItem.displayName = "ActionMenuItem";
 export const ActionMenuSeparator = React.forwardRef<
   React.ElementRef<typeof Primitive.Separator>,
   React.ComponentPropsWithoutRef<typeof Primitive.Separator>
->(({ className, ...props }, ref) => <Primitive.Separator ref={ref} className={cn("my-1 h-px bg-border-default", className)} {...props} />);
+>(({ className, ...props }, ref) => <Primitive.Separator ref={ref} className={cn("h-px bg-border-default", className)} {...props} />);
 ActionMenuSeparator.displayName = "ActionMenuSeparator";

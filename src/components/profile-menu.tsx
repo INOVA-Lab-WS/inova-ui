@@ -64,11 +64,11 @@ export function ProfileMenu({
           </Primitive.Label>
           {children && (
             <>
-              <ActionMenuSeparator className="my-0" />
+              <ActionMenuSeparator />
               {children}
             </>
           )}
-          <ActionMenuSeparator className="my-0" />
+          <ActionMenuSeparator />
           {signOut ?? (
             <ActionMenuItem icon={<LogOut aria-hidden />} onSelect={onSignOut}>
               {signOutLabel}

@@ -1,6 +1,6 @@
 {
   "name": "@inova-lab-ws/ui",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "INOVA Lab UI: os componentes, tokens e logos da INOVA Lab Library em React. Fonte única para AmbientAI, Gate e todo produto novo do INOVA Lab.",
   "type": "module",
   "license": "UNLICENSED",

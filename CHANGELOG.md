@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.2 · 2026-10-06
+
+- `ActionMenu` igual ao ajuste do Gabriel na biblioteca: itens de 192px de largura (painel com no mínimo 200px, padding 4) e divisor colado aos itens, sem margem.
+
 ## 0.5.1 · 2026-10-06
 
 - **`bot-avatar` saiu da biblioteca:** o avatar do assistente é o `avatar` com o símbolo da marca. No código, `<Avatar size="small" name="AmbientAI" icon={<LogoAmbientAI type="mark" color="white" />} />`. O `BotAvatar` continua exportado, marcado como obsoleto, e agora usa o `Avatar` por dentro.

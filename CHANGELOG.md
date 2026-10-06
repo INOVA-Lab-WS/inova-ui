@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.6 · 2026-10-05
+
+- `Avatar`: se a foto (`src`) não carregar, mostra a inicial. A foto é só a que a pessoa enviou no app, nunca a do provedor de login (#16).
+
 ## 0.4.5 · 2026-10-05
 
 - `ConnectorCard`: os metadados vão ao fim do cartão (`mt-auto`, cartão `h-full`), e os rodapés de uma mesma linha da grade ficam alinhados (#13).

@@ -28,7 +28,7 @@ export const AccordionItem = React.forwardRef<React.ElementRef<typeof Primitive.
       className={cn(
         "overflow-hidden rounded-16 border border-border-default bg-surface-card transition-colors",
         // hover, pressed and focus react to the item's own trigger only, never to buttons or fields inside the content
-        "has-[>h3>button:hover:not(:disabled)]:bg-surface-control-hover has-[>h3>button:active:not(:disabled)]:bg-chip-pressed",
+        "has-[>h3>button:hover:not(:disabled)]:bg-surface-muted has-[>h3>button:active:not(:disabled)]:bg-surface-selected",
         "has-[>h3>button:focus-visible]:outline-2 has-[>h3>button:focus-visible]:outline-offset-2 has-[>h3>button:focus-visible]:outline-text-primary",
         className,
       )}

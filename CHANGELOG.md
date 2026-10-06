@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.2 · 2026-10-06
+
+- **`AccordionItem`:** estados iguais à biblioteca. Hover em `surface-muted` e pressionado em `surface-selected` (antes `surface-control-hover` e `chip-pressed`).
+
 ## 0.7.1 · 2026-10-06
 
 - **`Rating previousValue` (pedido do Forma Lab):** a nota do ciclo anterior em cinza neutro; a atual fica por cima e a anterior aparece onde passa dela. O leitor de tela lê as 2 ("3 de 5, ciclo anterior 2 de 5"), também em `readOnly`. Sem `previousValue`, nada muda.

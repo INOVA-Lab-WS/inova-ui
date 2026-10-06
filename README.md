@@ -148,7 +148,7 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 
 | Componente | No Figma |
 | :--- | :--- |
-| `Button` | `button` |
+| `Button` (`destructive-ghost` para remoção secundária) | `button` |
 | `Input` | `input` |
 | `Textarea` | `textarea` |
 | `Checkbox` | `checkbox` |
@@ -160,6 +160,7 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 | `DateRangePicker · DateRangeDay` | `date-range-picker` |
 | `LoginForm` | `login-form` |
 | `CopyField` | `copy-field` |
+| `Code` · `codeClassName` | `code` |
 
 **Overlay**
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.5 · 2026-10-06
+
+- **`Button variant="destructive-ghost"` (#31):** ação destrutiva secundária, texto vermelho sem fundo e vermelho claro no hover e no pressionado, para "Excluir" ou "Remover" ao lado da ação principal. Desenhada e aprovada na biblioteca.
+- **`Code` e `codeClassName` (#33):** código no meio do texto (mono 12, fundo `surface-muted`, raio 4, 4 nas laterais, altura de linha 20). `codeClassName` também em `@inova-lab-ws/ui/variants`.
+
 ## 0.6.4 · 2026-10-06
 
 - **`Header` (#30):** reserva a área segura do topo do iPhone (PWA com barra de status translúcida); a barra fica com 56px abaixo dela.

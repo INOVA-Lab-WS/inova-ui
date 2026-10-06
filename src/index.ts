@@ -62,3 +62,4 @@ export { Select, type SelectProps } from "./components/select";
 export { linkClassName } from "./components/link";
 export { ChocolateMenuIcon } from "./components/header";
 export { Card, cardClassName, type CardProps } from "./components/card";
+export { Code, codeClassName } from "./components/code";

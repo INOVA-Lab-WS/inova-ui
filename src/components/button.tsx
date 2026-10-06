@@ -24,6 +24,8 @@ export const buttonVariants = cva(
         ghost: "bg-transparent text-text-primary hover:bg-surface-control active:bg-surface-control disabled:bg-transparent",
         ink: "bg-surface-ink-translucent text-text-on-ink backdrop-blur-[8px] hover:bg-surface-ink-translucent-hover active:bg-surface-ink-translucent-hover",
         destructive: "bg-surface-danger text-text-on-action",
+        /** Secondary removal next to the main action: red text, no background, light red on hover. */
+        "destructive-ghost": "bg-transparent text-surface-danger hover:bg-status-error-bg active:bg-status-error-bg disabled:bg-transparent",
       },
       size: {
         responsive: "h-14 px-4 lg:h-12 lg:px-3",

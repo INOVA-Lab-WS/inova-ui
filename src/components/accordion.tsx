@@ -24,7 +24,9 @@ export const AccordionItem = React.forwardRef<React.ElementRef<typeof Primitive.
     <Primitive.Item
       ref={ref}
       className={cn(
-        "overflow-hidden rounded-16 border border-border-default bg-surface-card",
+        "overflow-hidden rounded-16 border border-border-default bg-surface-card transition-colors",
+        // hover and pressed color the whole card, like the library
+        "has-[button:hover:not(:disabled)]:bg-surface-control-hover has-[button:active:not(:disabled)]:bg-chip-pressed",
         // focus ring outside the card, like the button
         "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-text-primary",
         className,
@@ -34,8 +36,7 @@ export const AccordionItem = React.forwardRef<React.ElementRef<typeof Primitive.
       <Primitive.Header className="m-0">
         <Primitive.Trigger
           className={cn(
-            "group flex w-full items-center gap-3 p-4 text-left outline-none transition-colors",
-            "hover:bg-surface-control-hover active:bg-chip-pressed",
+            "group flex w-full items-center gap-3 p-4 text-left outline-none",
             "disabled:pointer-events-none",
           )}
         >

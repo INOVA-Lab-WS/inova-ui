@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.4 · 2026-10-05
+
+- `Accordion`: hover e pressionado pintam o cartão inteiro, como na biblioteca publicada (antes só a faixa do título).
+
 ## 0.4.3 · 2026-10-05
 
 - `ConnectorCard`: seta à direita do título (`arrow`, ligada por padrão), como na biblioteca (#12); `asChild` implementado: o `Link` do app, como único filho, recebe o visual e o conteúdo e navega sem recarregar a página (#11).

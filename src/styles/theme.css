@@ -75,6 +75,7 @@
   --inova-color-chart-category3: #e39f08;
   --inova-color-chart-category4: #8a5fc9;
   --inova-color-chart-category5: #09acba;
+  --inova-color-rating-filled: #e39f08;
   --inova-radius-0: 0px;
   --inova-radius-4: 4px;
   --inova-radius-8: 8px;
@@ -135,6 +136,23 @@
   --inova-font-sans: var(--font-inter, "Inter"), ui-sans-serif, system-ui, sans-serif;
   --inova-font-serif: var(--font-instrument-serif, "Instrument Serif"), ui-serif, Georgia, serif;
   --inova-font-mono: var(--font-roboto-mono, "Roboto Mono"), ui-monospace, monospace;
+  --inova-motion-duration-fast: 150ms;
+  --inova-motion-duration-exit: 200ms;
+  --inova-motion-duration-base: 250ms;
+  --inova-motion-duration-slow: 500ms;
+  --inova-motion-duration-image: 700ms;
+  --inova-motion-duration-sweep: 2800ms;
+  --inova-motion-duration-toast-visible: 2600ms;
+  --inova-motion-easing-enter: cubic-bezier(0.32, 0.72, 0, 1);
+  --inova-motion-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --inova-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --inova-motion-easing-linear: linear;
+  --inova-grid-columns: 4;
+  --inova-grid-gutter: 16px;
+  --inova-grid-margin: 16px;
+  --inova-nav-width: 0px;
+  --inova-content-max-width: none;
+  --inova-nav-width-collapsed: 64px;
 }
 
 @theme inline {
@@ -211,6 +229,7 @@
   --color-chart-category3: var(--inova-color-chart-category3);
   --color-chart-category4: var(--inova-color-chart-category4);
   --color-chart-category5: var(--inova-color-chart-category5);
+  --color-rating-filled: var(--inova-color-rating-filled);
   --radius-0: var(--inova-radius-0);
   --radius-4: var(--inova-radius-4);
   --radius-8: var(--inova-radius-8);
@@ -238,8 +257,46 @@
   --font-sans: var(--inova-font-sans);
   --font-serif: var(--inova-font-serif);
   --font-mono: var(--inova-font-mono);
+  --ease-enter: var(--inova-motion-easing-enter);
+  --ease-exit: var(--inova-motion-easing-exit);
+  --ease-standard: var(--inova-motion-easing-standard);
+  --breakpoint-tablet: 48rem;
+  --breakpoint-desktop: 64rem;
+  --breakpoint-wide: 90rem;
 }
 
+@media (min-width: 768px) {
+  :root {
+    --inova-grid-columns: 8;
+    --inova-grid-gutter: 16px;
+    --inova-grid-margin: 24px;
+    --inova-nav-width: 64px;
+    --inova-content-max-width: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --inova-grid-columns: 12;
+    --inova-grid-gutter: 24px;
+    --inova-grid-margin: 32px;
+    --inova-nav-width: 240px;
+    --inova-content-max-width: none;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --inova-grid-columns: 12;
+    --inova-grid-gutter: 24px;
+    --inova-grid-margin: 40px;
+    --inova-nav-width: 240px;
+    --inova-content-max-width: 1280px;
+  }
+}
+
+@keyframes inova-menu-in { from { opacity: 0; transform: translateX(-24px) } to { opacity: 1; transform: none } }
+@keyframes inova-menu-out { from { opacity: 1; transform: none } to { opacity: 0; transform: translateX(-24px) } }
 @keyframes inova-fade-in { from { opacity: 0 } to { opacity: 1 } }
 @keyframes inova-fade-out { from { opacity: 1 } to { opacity: 0 } }
 @keyframes inova-drawer-in { from { transform: translateX(calc(100% + 16px)) } to { transform: translateX(0) } }

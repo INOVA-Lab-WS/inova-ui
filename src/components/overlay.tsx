@@ -9,7 +9,7 @@ import { Button } from "./button";
  * Overlay · Figma "overlay". presentation: dialog (centered, compact 448 / wide 480),
  * drawer (right side, 560, 16px inset) or bottom-sheet (mobile, floating 12px inset, radius 24, drag handle).
  * responsive: bottom-sheet below lg (1024px) and drawer from lg, as the skill asks. Every presentation animates in and out
- * over 500ms (panel in its direction, scrim fades), respecting reduced motion; onExitComplete fires after the exit.
+ * in motion.duration.base and out in motion.duration.exit, with the enter and exit easings (panel in its direction, scrim fades), respecting reduced motion; onExitComplete fires after the exit.
  * Scrim: bg-surface-scrim + 8px backdrop blur. Slots: title/description (header), children (body), footer.
  */
 export type OverlayPresentation = "dialog" | "drawer" | "bottom-sheet" | "responsive";
@@ -46,8 +46,8 @@ function useIsDesktop() {
   return desktop;
 }
 
-const anim = "duration-500 motion-reduce:animate-none";
-const scrimAnim = "data-[state=open]:animate-[inova-fade-in_500ms_ease-out] data-[state=closed]:animate-[inova-fade-out_500ms_ease-in] motion-reduce:animate-none";
+const anim = "duration-[var(--inova-motion-duration-base)] motion-reduce:animate-none";
+const scrimAnim = "data-[state=open]:animate-[inova-fade-in_var(--inova-motion-duration-base)_var(--inova-motion-easing-enter)] data-[state=closed]:animate-[inova-fade-out_var(--inova-motion-duration-exit)_var(--inova-motion-easing-exit)] motion-reduce:animate-none";
 
 const scrim = "fixed inset-0 z-50 bg-surface-scrim backdrop-blur-[8px]";
 const surface = "flex flex-col rounded-24 border border-border-default bg-surface-page font-sans text-text-primary shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1),0_4px_6px_-4px_rgb(0_0_0/0.1)] outline-none";
@@ -118,8 +118,8 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
           className={cn(
             anim,
             drawer
-              ? "data-[state=open]:animate-[inova-drawer-in_500ms_ease-out] data-[state=closed]:animate-[inova-drawer-out_500ms_ease-in]"
-              : "data-[state=open]:animate-[inova-dialog-in_500ms_ease-out] data-[state=closed]:animate-[inova-dialog-out_500ms_ease-in]",
+              ? "data-[state=open]:animate-[inova-drawer-in_var(--inova-motion-duration-base)_var(--inova-motion-easing-enter)] data-[state=closed]:animate-[inova-drawer-out_var(--inova-motion-duration-exit)_var(--inova-motion-easing-exit)]"
+              : "data-[state=open]:animate-[inova-dialog-in_var(--inova-motion-duration-base)_var(--inova-motion-easing-enter)] data-[state=closed]:animate-[inova-dialog-out_var(--inova-motion-duration-exit)_var(--inova-motion-easing-exit)]",
             surface,
             "fixed z-50",
             drawer

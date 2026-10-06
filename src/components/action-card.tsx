@@ -5,8 +5,8 @@ import { cn } from "../lib/cn";
 
 /**
  * ActionCard · Figma "action-card". One tappable row with an icon and a label.
- * context: suggestion (white card, 16px radius), refined, rail (vertical rail item: icon over a short label),
- * menu (mobile menu list item: icon beside the label). With asChild the app's Link becomes the item.
+ * context: suggestion (white card, 16px radius), rail (vertical rail item: icon over a short label),
+ * menu (menu list item: icon beside the label, in the open menu and the fullscreen menu). With asChild the app's Link becomes the item.
  */
 export const actionCardVariants = cva(
   [
@@ -18,8 +18,7 @@ export const actionCardVariants = cva(
     variants: {
       context: {
         suggestion: "h-10 rounded-16 bg-surface-card px-4 hover:bg-surface-accent lg:h-9 lg:text-xs [&_svg]:text-green-primary",
-        refined: "gap-3 rounded-12 bg-surface-card px-5 py-4 text-base font-semibold hover:bg-surface-control-hover [&_svg]:size-6",
-        // rail: the background (hover, selected) lives on the 56x40 icon box only; the label sits below it, 12/600.
+        // rail: the background (hover, selected) lives on the 40x40 icon box only; the label sits below it, 12/600.
         rail: "group/rail w-14 flex-col justify-center gap-1 rounded-16 text-xs font-semibold text-text-inactive [&_svg]:size-5",
         menu: "gap-2 rounded-16 p-4 text-base font-semibold text-text-inactive hover:bg-surface-muted [&_svg]:size-5",
       },
@@ -29,7 +28,6 @@ export const actionCardVariants = cva(
       },
     },
     compoundVariants: [
-      { context: "refined", selected: true, className: "bg-surface-selected" },
       { context: "rail", selected: true, className: "text-text-primary" },
       { context: "menu", selected: true, className: "bg-surface-selected text-text-primary" },
     ],
@@ -52,7 +50,7 @@ export const ActionCard = React.forwardRef<HTMLButtonElement, ActionCardProps>(
       context === "rail" ? (
         <span
           className={cn(
-            "flex h-10 w-14 items-center justify-center rounded-16 transition-colors",
+            "flex size-10 items-center justify-center rounded-16 transition-colors",
             selected ? "bg-surface-selected" : "group-hover/rail:bg-surface-muted",
           )}
         >

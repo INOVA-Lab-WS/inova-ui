@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
 import { Avatar } from "./avatar";
-import { LogoAmbientAI } from "./logos";
+import { LogoPlaceholder } from "./logos";
 
 /** The library's "chocolate-menu" icon (3x3 dots), used by the header to open the apps menu. */
 export function ChocolateMenuIcon(props: React.SVGAttributes<SVGSVGElement>) {
@@ -14,12 +14,14 @@ export function ChocolateMenuIcon(props: React.SVGAttributes<SVGSVGElement>) {
 
 /**
  * Header · Figma "header". 56px bar: apps-menu button on the left, product logo centred, optional right slot.
+ * The logo is a slot (Figma property "logo"): each product passes its own brand, scaled by height to 12px
+ * so it never distorts; the default is the agnostic LogoPlaceholder.
  * sticky: fixed to the top with the page surface at 95% and a blur, so content scrolls under it.
  * The iPhone top safe area (--inova-safe-area-top) is added above the 56px bar, like the fullscreen Menu.
  */
 export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   viewport?: "mobile" | "tablet" | "desktop";
-  /** Product logo, centred; defaults to the AmbientAI wordmark. */
+  /** Product logo, centred and 12px high (an svg is scaled by height). Defaults to LogoPlaceholder. */
   logo?: React.ReactNode;
   leadingAction?: React.ReactNode;
   onMenuClick?: () => void;
@@ -75,8 +77,8 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
             <ChocolateMenuIcon />
           </button>
         )}
-        <div className="pointer-events-none absolute bottom-0 left-1/2 flex h-14 -translate-x-1/2 items-center [&>*]:pointer-events-auto">
-          {logo ?? <LogoAmbientAI type="wordmark" title="AmbientAI" />}
+        <div className="pointer-events-none absolute bottom-0 left-1/2 flex h-14 -translate-x-1/2 items-center [&>*]:pointer-events-auto [&>svg]:h-3 [&>svg]:w-auto">
+          {logo ?? <LogoPlaceholder />}
         </div>
         <div className="ml-auto flex items-center">{right}</div>
       </header>

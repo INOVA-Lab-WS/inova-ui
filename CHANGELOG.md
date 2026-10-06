@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.3 · 2026-10-06
+
+- **`Table` (#29):** `caption` (legenda para leitor de tela, em `sr-only`) e `busy` (vira `aria-busy`). `TableCell type="row-header"` é o nome de cada linha (`<th scope="row">`, 14 semibold), igual ao novo tipo da biblioteca. `secondary` esconde a coluna abaixo de `md`.
+- **`TableCell type="body"`** passa a 14 medium, como no Figma (antes saía regular).
+- **`Overlay` (#28):** `presentation="responsive"` é folha de baixo abaixo de `lg` (1024px) e gaveta lateral a partir de `lg`. Gaveta e diálogo animam a entrada e a saída em 500 ms (painel na sua direção, véu com fade), respeitando o movimento reduzido. `onExitComplete` avisa quando a saída terminou. A folha de baixo ganhou `repositionInputs={false}`, como a skill pede.
+
 ## 0.5.2 · 2026-10-06
 
 - `ActionMenu` igual ao ajuste do Gabriel na biblioteca: itens de 192px de largura (painel com no mínimo 200px, padding 4) e divisor colado aos itens, sem margem.

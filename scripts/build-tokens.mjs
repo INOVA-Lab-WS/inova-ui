@@ -51,6 +51,13 @@ ${lines.join("\n")}
 ${theme.map(px).join("\n")}
 }
 
+@keyframes inova-fade-in { from { opacity: 0 } to { opacity: 1 } }
+@keyframes inova-fade-out { from { opacity: 1 } to { opacity: 0 } }
+@keyframes inova-drawer-in { from { transform: translateX(calc(100% + 16px)) } to { transform: translateX(0) } }
+@keyframes inova-drawer-out { from { transform: translateX(0) } to { transform: translateX(calc(100% + 16px)) } }
+@keyframes inova-dialog-in { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: none } }
+@keyframes inova-dialog-out { from { opacity: 1; transform: none } to { opacity: 0; transform: translateY(16px) } }
+
 html {
   background-color: var(--inova-color-surface-canvas-bottom);
   background-image: linear-gradient(to top, var(--inova-color-surface-canvas-bottom) 0%, var(--inova-color-surface-canvas-top) 42%);

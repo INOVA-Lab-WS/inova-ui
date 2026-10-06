@@ -8,9 +8,11 @@ import { Button } from "./button";
 /**
  * Overlay · Figma "overlay". presentation: dialog (centered, compact 448 / wide 480),
  * drawer (right side, 560, 16px inset) or bottom-sheet (mobile, floating 12px inset, radius 24, drag handle).
+ * responsive: bottom-sheet below lg (1024px) and drawer from lg, as the skill asks. Every presentation animates in and out
+ * over 500ms (panel in its direction, scrim fades), respecting reduced motion; onExitComplete fires after the exit.
  * Scrim: bg-surface-scrim + 8px backdrop blur. Slots: title/description (header), children (body), footer.
  */
-export type OverlayPresentation = "dialog" | "drawer" | "bottom-sheet";
+export type OverlayPresentation = "dialog" | "drawer" | "bottom-sheet" | "responsive";
 
 export interface OverlayProps {
   open?: boolean;
@@ -23,7 +25,24 @@ export interface OverlayProps {
   hideClose?: boolean;
   children?: React.ReactNode;
   className?: string;
+  /** Called once the exit animation has finished (e.g. to change the URL after the panel is gone). */
+  onExitComplete?: () => void;
 }
+
+function useIsDesktop() {
+  const [desktop, setDesktop] = React.useState(false);
+  React.useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const on = () => setDesktop(mq.matches);
+    on();
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
+  return desktop;
+}
+
+const anim = "duration-500 motion-reduce:animate-none";
+const scrimAnim = "data-[state=open]:animate-[inova-fade-in_500ms_ease-out] data-[state=closed]:animate-[inova-fade-out_500ms_ease-in] motion-reduce:animate-none";
 
 const scrim = "fixed inset-0 z-50 bg-surface-scrim backdrop-blur-[8px]";
 const surface = "flex flex-col bg-surface-page font-sans text-text-primary shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1),0_4px_6px_-4px_rgb(0_0_0/0.1)] outline-none";
@@ -50,10 +69,12 @@ function Header({ title, description, hideClose, Close, handle }: { title?: Reac
   );
 }
 
-export function Overlay({ open, onOpenChange, presentation = "dialog", size = "compact", title, description, footer, hideClose, children, className }: OverlayProps) {
+export function Overlay({ open, onOpenChange, presentation: requested = "dialog", size = "compact", title, description, footer, hideClose, children, className, onExitComplete }: OverlayProps) {
+  const desktop = useIsDesktop();
+  const presentation = requested === "responsive" ? (desktop ? "drawer" : "bottom-sheet") : requested;
   if (presentation === "bottom-sheet") {
     return (
-      <VaulDrawer.Root open={open} onOpenChange={onOpenChange}>
+      <VaulDrawer.Root open={open} onOpenChange={onOpenChange} repositionInputs={false} onAnimationEnd={(o) => !o && onExitComplete?.()}>
         <VaulDrawer.Portal>
           <VaulDrawer.Overlay className={scrim} />
           <VaulDrawer.Content className={cn(surface, "fixed inset-x-3 bottom-3 z-50 max-h-[calc(100dvh-24px)] rounded-24", className)}>
@@ -75,9 +96,16 @@ export function Overlay({ open, onOpenChange, presentation = "dialog", size = "c
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className={scrim} />
+        <DialogPrimitive.Overlay className={cn(scrim, scrimAnim)} />
         <DialogPrimitive.Content
+          onAnimationEnd={(e) => {
+            if (e.currentTarget.dataset.state === "closed") onExitComplete?.();
+          }}
           className={cn(
+            anim,
+            drawer
+              ? "data-[state=open]:animate-[inova-drawer-in_500ms_ease-out] data-[state=closed]:animate-[inova-drawer-out_500ms_ease-in]"
+              : "data-[state=open]:animate-[inova-dialog-in_500ms_ease-out] data-[state=closed]:animate-[inova-dialog-out_500ms_ease-in]",
             surface,
             "fixed z-50",
             drawer

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.4 · 2026-10-07
+
+- **`ActionCard context="menu"`:** 56px de altura no celular e 48px a partir de 1024px, com 12px nas laterais, como as variantes `menu-mobile` e `menu-desktop` da biblioteca (antes 16px em volta, cerca de 56px em qualquer tela).
+
 ## 0.7.3 · 2026-10-06
 
 - **Fundo da página no formato do menu:** o gradiente do `<html>` vai de `surface-canvas-bottom` na base a `surface-canvas-top` no topo, igual ao `Menu`, e fica preso à altura da tela (`background-attachment: fixed`). Antes ele cobria o documento inteiro e parava em 42%, então numa página mais longa que a tela a área visível ficava chapada ao lado do menu em gradiente.

@@ -20,7 +20,8 @@ export const actionCardVariants = cva(
         suggestion: "h-10 rounded-16 bg-surface-card px-4 hover:bg-surface-accent lg:h-9 lg:text-xs [&_svg]:text-green-primary",
         // rail: the background (hover, selected) lives on the 40x40 icon box only; the label sits below it, 12/600.
         rail: "group/rail w-14 flex-col justify-center gap-1 rounded-16 text-xs font-semibold text-text-inactive [&_svg]:size-5",
-        menu: "gap-2 rounded-16 p-4 text-base font-semibold text-text-inactive hover:bg-surface-muted [&_svg]:size-5",
+        // menu: 56px high on mobile (fullscreen menu) and 48px from desktop (open side menu), 12px sides, as in Figma.
+        menu: "h-14 gap-2 rounded-16 px-3 text-base font-semibold text-text-inactive hover:bg-surface-muted desktop:h-12 [&_svg]:size-5",
       },
       selected: {
         true: "",

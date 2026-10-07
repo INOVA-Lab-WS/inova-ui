@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.5 · em preparação
+
+- **`Menu` lembra se está aberto ou fechado:** no `sidebar` não controlado, a escolha fica salva no navegador (`localStorage`, chave `storageKey`, padrão `"inova-menu-expanded"`), e por isso sobrevive à troca de página e ao recarregar. Antes, cada página montava o menu de novo e ele voltava aberto. `storageKey={null}` desliga; com `expanded` controlado, quem guarda é o app.
+
 ## 0.7.4 · 2026-10-07
 
 - **`ActionCard context="menu"`:** 56px de altura no celular e 48px a partir de 1024px, com 12px nas laterais, como as variantes `menu-mobile` e `menu-desktop` da biblioteca (antes 16px em volta, cerca de 56px em qualquer tela).

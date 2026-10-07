@@ -37,6 +37,11 @@ export interface MenuProps extends Omit<React.HTMLAttributes<HTMLElement>, "chil
   expanded?: boolean;
   /** sidebar: initial state when not controlled. */
   defaultExpanded?: boolean;
+  /**
+   * sidebar, uncontrolled: where the open/closed choice is remembered in the browser (localStorage), so it survives
+   * page changes and reloads. Default "inova-menu-expanded"; null turns it off. Ignored when expanded is controlled.
+   */
+  storageKey?: string | null;
   onExpandedChange?: (expanded: boolean) => void;
   expandLabel?: string;
   collapseLabel?: string;
@@ -73,6 +78,7 @@ export const Menu = React.forwardRef<HTMLElement, MenuProps>(
       label = "Menu principal",
       expanded: expandedProp,
       defaultExpanded = true,
+      storageKey = "inova-menu-expanded",
       onExpandedChange,
       expandLabel = "Abrir menu",
       collapseLabel = "Recolher menu",
@@ -90,8 +96,22 @@ export const Menu = React.forwardRef<HTMLElement, MenuProps>(
     const desktop = useMinWidth(1024);
     const [expandedState, setExpandedState] = React.useState(defaultExpanded);
     const expanded = expandedProp ?? expandedState;
+    const remember = expandedProp === undefined && sidebar && !!storageKey;
+    // Read the remembered choice after mount (the server cannot see localStorage), so a new page keeps it.
+    React.useEffect(() => {
+      if (!remember) return;
+      try {
+        const saved = window.localStorage.getItem(storageKey!);
+        if (saved === "true" || saved === "false") setExpandedState(saved === "true");
+      } catch {}
+    }, [remember, storageKey]);
     const setExpanded = (next: boolean) => {
       if (expandedProp === undefined) setExpandedState(next);
+      if (remember) {
+        try {
+          window.localStorage.setItem(storageKey!, String(next));
+        } catch {}
+      }
       onExpandedChange?.(next);
     };
     // sidebar is collapsed on tablet (and on the server render) and follows the toggle from desktop up.

@@ -16,6 +16,10 @@ export { NavigationTabBar, defaultNavigationTabs, type NavigationTab, type Navig
 export { TopArea, type TopAreaProps } from "./components/top-area";
 export { Rating, type RatingProps } from "./components/rating";
 export { Slider, type SliderProps } from "./components/slider";
+export { EmptyState, EmptyMark, type EmptyStateProps } from "./components/empty-state";
+export { ScrollArea, type ScrollAreaProps } from "./components/scroll-area";
+export { Eyebrow, eyebrowClassName, type EyebrowProps } from "./components/eyebrow";
+export { ImageViewer, ImageViewerAction, type ImageViewerProps, type ImageViewerImage } from "./components/image-viewer";
 export { Menu, PageGrid, type MenuProps, type MenuPresentation } from "./components/menu";
 export { LogoAmbientAI, LogoGate, LogoFormaLab, LogoInovaUI, LogoPlaceholder, type LogoAmbientAIProps, type LogoGateProps, type LogoFormaLabProps } from "./components/logos";
 export { Checkbox, type CheckboxProps } from "./components/checkbox";

@@ -40,6 +40,14 @@ theme.push("  --font-sans: var(--inova-font-sans);", "  --font-serif: var(--inov
 const px = (s) => s.replace(/: (\d+);$/, ": $1px;");
 const lines = vars.map((l) => (/--inova-(radius|spacing)/.test(l) ? px(l) : l));
 
+// shadow, layer and tracking (Figma: shadow/* effect styles, layer collection, font/tracking/*).
+for (const [k, v] of Object.entries(t.shadow)) if (!k.startsWith("$")) { lines.push(`  --inova-shadow-${k}: ${v};`); theme.push(`  --shadow-${k}: var(--inova-shadow-${k});`); }
+for (const [k, v] of Object.entries(t.layer)) if (!k.startsWith("$")) lines.push(`  --inova-layer-${k}: ${v};`);
+for (const [k, v] of Object.entries(t.font.tracking)) { lines.push(`  --inova-tracking-${k}: ${v};`); theme.push(`  --tracking-${k}: var(--inova-tracking-${k});`); }
+const layerUtilities = Object.keys(t.layer).filter((k) => !k.startsWith("$")).map((k) => `@utility z-${k} {\n  z-index: var(--inova-layer-${k});\n}`).join("\n");
+// thin scrollbar used by ScrollArea, and a utility to hide it on side-scrolling rails
+const scrollUtilities = `@utility scrollbar-none {\n  scrollbar-width: none;\n  &::-webkit-scrollbar { display: none; }\n}`;
+
 // motion: durations (ms) and easings; Tailwind gets --ease-enter/exit/standard for ease-* utilities.
 for (const [k, v] of Object.entries(t.motion.duration)) lines.push(`  --inova-motion-duration-${k}: ${v}ms;`);
 for (const [k, v] of Object.entries(t.motion.easing)) {
@@ -76,6 +84,10 @@ ${theme.map(px).join("\n")}
 }
 
 ${layoutCss}
+
+${layerUtilities}
+
+${scrollUtilities}
 
 @keyframes inova-menu-in { from { opacity: 0; transform: translateX(-24px) } to { opacity: 1; transform: none } }
 @keyframes inova-menu-out { from { opacity: 1; transform: none } to { opacity: 0; transform: translateX(-24px) } }

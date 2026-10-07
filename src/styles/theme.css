@@ -136,6 +136,20 @@
   --inova-font-sans: var(--font-inter, "Inter"), ui-sans-serif, system-ui, sans-serif;
   --inova-font-serif: var(--font-instrument-serif, "Instrument Serif"), ui-serif, Georgia, serif;
   --inova-font-mono: var(--font-roboto-mono, "Roboto Mono"), ui-monospace, monospace;
+  --inova-shadow-control: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --inova-shadow-raised: 0 1px 3px 0 rgb(0 0 0 / 0.10), 0 4px 6px -1px rgb(0 0 0 / 0.10);
+  --inova-shadow-overlay: 0 10px 15px -3px rgb(0 0 0 / 0.10), 0 4px 6px -4px rgb(0 0 0 / 0.10);
+  --inova-shadow-action-glow: 0 4px 8px 0 rgb(59 156 74 / 0.20);
+  --inova-layer-base: 0;
+  --inova-layer-raised: 10;
+  --inova-layer-header: 30;
+  --inova-layer-overlay: 50;
+  --inova-layer-popover: 60;
+  --inova-layer-toast: 100;
+  --inova-layer-splash: 1000;
+  --inova-tracking-tight: -0.01em;
+  --inova-tracking-normal: 0em;
+  --inova-tracking-wide: 0.05em;
   --inova-motion-duration-fast: 150ms;
   --inova-motion-duration-exit: 200ms;
   --inova-motion-duration-base: 250ms;
@@ -257,6 +271,13 @@
   --font-sans: var(--inova-font-sans);
   --font-serif: var(--inova-font-serif);
   --font-mono: var(--inova-font-mono);
+  --shadow-control: var(--inova-shadow-control);
+  --shadow-raised: var(--inova-shadow-raised);
+  --shadow-overlay: var(--inova-shadow-overlay);
+  --shadow-action-glow: var(--inova-shadow-action-glow);
+  --tracking-tight: var(--inova-tracking-tight);
+  --tracking-normal: var(--inova-tracking-normal);
+  --tracking-wide: var(--inova-tracking-wide);
   --ease-enter: var(--inova-motion-easing-enter);
   --ease-exit: var(--inova-motion-easing-exit);
   --ease-standard: var(--inova-motion-easing-standard);
@@ -293,6 +314,33 @@
     --inova-nav-width: 240px;
     --inova-content-max-width: 1280px;
   }
+}
+
+@utility z-base {
+  z-index: var(--inova-layer-base);
+}
+@utility z-raised {
+  z-index: var(--inova-layer-raised);
+}
+@utility z-header {
+  z-index: var(--inova-layer-header);
+}
+@utility z-overlay {
+  z-index: var(--inova-layer-overlay);
+}
+@utility z-popover {
+  z-index: var(--inova-layer-popover);
+}
+@utility z-toast {
+  z-index: var(--inova-layer-toast);
+}
+@utility z-splash {
+  z-index: var(--inova-layer-splash);
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 }
 
 @keyframes inova-menu-in { from { opacity: 0; transform: translateX(-24px) } to { opacity: 1; transform: none } }

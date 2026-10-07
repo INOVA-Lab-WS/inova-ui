@@ -11,7 +11,7 @@ export const cardClassName = (interactive?: boolean, className?: string) =>
   cn(
     "block rounded-12 border border-border-default bg-surface-card p-4 font-sans text-text-primary",
     interactive &&
-      "cursor-pointer no-underline transition-[border-color,box-shadow] hover:border-border-neutral hover:shadow-[0_1px_2px_rgb(0_0_0/0.05)] outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
+      "cursor-pointer no-underline transition-[border-color,box-shadow] hover:border-border-neutral hover:shadow-control outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
     className,
   );
 

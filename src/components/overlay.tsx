@@ -49,8 +49,8 @@ function useIsDesktop() {
 const anim = "duration-[var(--inova-motion-duration-base)] motion-reduce:animate-none";
 const scrimAnim = "data-[state=open]:animate-[inova-fade-in_var(--inova-motion-duration-base)_var(--inova-motion-easing-enter)] data-[state=closed]:animate-[inova-fade-out_var(--inova-motion-duration-exit)_var(--inova-motion-easing-exit)] motion-reduce:animate-none";
 
-const scrim = "fixed inset-0 z-50 bg-surface-scrim backdrop-blur-[8px]";
-const surface = "flex flex-col rounded-24 border border-border-default bg-surface-page font-sans text-text-primary shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1),0_4px_6px_-4px_rgb(0_0_0/0.1)] outline-none";
+const scrim = "fixed inset-0 z-overlay bg-surface-scrim backdrop-blur-[8px]";
+const surface = "flex flex-col rounded-24 border border-border-default bg-surface-page font-sans text-text-primary shadow-overlay outline-none";
 
 function Header({ title, description, hideClose, Close, handle }: { title?: React.ReactNode; description?: React.ReactNode; hideClose?: boolean; Close: React.ElementType; handle?: boolean }) {
   if (!title && !description && hideClose && !handle) return null;
@@ -83,7 +83,7 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
       <VaulDrawer.Root open={open} onOpenChange={onOpenChange} repositionInputs={false} onAnimationEnd={(o) => !o && onExitComplete?.()}>
         <VaulDrawer.Portal>
           <VaulDrawer.Overlay className={scrim} />
-          <VaulDrawer.Content className={cn(surface, "fixed inset-x-3 bottom-3 z-50 max-h-[calc(100dvh-24px)]", className)}>
+          <VaulDrawer.Content className={cn(surface, "fixed inset-x-3 bottom-3 z-overlay max-h-[calc(100dvh-24px)]", className)}>
             <Header
               handle
               hideClose={hideClose}
@@ -121,7 +121,7 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
               ? "data-[state=open]:animate-[inova-drawer-in_var(--inova-motion-duration-base)_var(--inova-motion-easing-enter)] data-[state=closed]:animate-[inova-drawer-out_var(--inova-motion-duration-exit)_var(--inova-motion-easing-exit)]"
               : "data-[state=open]:animate-[inova-dialog-in_var(--inova-motion-duration-base)_var(--inova-motion-easing-enter)] data-[state=closed]:animate-[inova-dialog-out_var(--inova-motion-duration-exit)_var(--inova-motion-easing-exit)]",
             surface,
-            "fixed z-50",
+            "fixed z-overlay",
             drawer
               ? cn("top-4 right-4 bottom-4", size === "wide" ? "w-[560px]" : "w-[358px]", "max-w-[calc(100vw-32px)]")
               : cn("top-1/2 left-1/2 max-h-[calc(100dvh-32px)] -translate-x-1/2 -translate-y-1/2", size === "wide" ? "w-[480px]" : "w-[448px]", "max-w-[calc(100vw-32px)]"),

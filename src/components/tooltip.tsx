@@ -30,7 +30,7 @@ export function Tooltip({ text, children, placement = "top-center", delayDuratio
             align={align}
             sideOffset={4}
             className={cn(
-              "z-50 w-56 rounded-8 bg-surface-ink px-3 py-2 font-sans text-xs text-text-on-ink shadow-lg",
+              "z-popover w-56 rounded-8 bg-surface-ink px-3 py-2 font-sans text-xs text-text-on-ink shadow-raised",
               className,
             )}
           >

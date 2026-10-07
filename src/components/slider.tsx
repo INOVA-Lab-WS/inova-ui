@@ -88,7 +88,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             className={cn(
               "absolute size-5 -translate-x-1/2 rounded-pill border-[1.5px] bg-surface-card outline-none transition-colors",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
-              disabled ? "border-surface-disabled" : "border-border-strong shadow-sm hover:border-2 hover:border-text-primary",
+              disabled ? "border-surface-disabled" : "border-border-strong shadow-control hover:border-2 hover:border-text-primary",
             )}
             style={{ left: `${pct}%` }}
           />

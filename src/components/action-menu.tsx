@@ -21,7 +21,7 @@ export const ActionMenuContent = React.forwardRef<
       align={align}
       sideOffset={sideOffset}
       className={cn(
-        "z-50 flex min-w-50 flex-col rounded-12 border border-border-default bg-surface-card p-1 font-sans shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1)]",
+        "z-popover flex min-w-50 flex-col rounded-12 border border-border-default bg-surface-card p-1 font-sans shadow-raised",
         className,
       )}
       {...props}

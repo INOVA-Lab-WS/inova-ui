@@ -50,3 +50,36 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ l
   );
 });
 MetricTile.displayName = "MetricTile";
+
+/**
+ * MetricTileGroup · the "Grupo de métricas" section of the metric-tile doc. Below 1024px: one row that scrolls
+ * sideways with snap at each tile, 144px tiles, bleeding to the screen edge with the grid margin and no bar, the
+ * last tile cut to show there is more. From 1024px: a grid of columns (2 to 6) with the grid gutter.
+ * role="list"; wrap each MetricTile in an item (the group does it).
+ */
+export interface MetricTileGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+  columns?: 2 | 3 | 4 | 5 | 6;
+}
+
+const COLS = { 2: "desktop:grid-cols-2", 3: "desktop:grid-cols-3", 4: "desktop:grid-cols-4", 5: "desktop:grid-cols-5", 6: "desktop:grid-cols-6" } as const;
+
+export function MetricTileGroup({ columns = 4, className, children, ...props }: MetricTileGroupProps) {
+  return (
+    <div
+      role="list"
+      className={cn(
+        "scrollbar-none -mx-[var(--inova-grid-margin)] flex snap-x snap-mandatory scroll-px-[var(--inova-grid-margin)] gap-3 overflow-x-auto px-[var(--inova-grid-margin)]",
+        "desktop:mx-0 desktop:grid desktop:gap-[var(--inova-grid-gutter)] desktop:overflow-visible desktop:px-0",
+        COLS[columns],
+        className,
+      )}
+      {...props}
+    >
+      {React.Children.map(children, (child) => (
+        <div role="listitem" className="w-36 shrink-0 snap-start desktop:w-auto">
+          {child}
+        </div>
+      ))}
+    </div>
+  );
+}

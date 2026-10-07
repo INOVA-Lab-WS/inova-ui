@@ -13,3 +13,4 @@ export { linkClassName } from "./components/link";
 export { cardClassName } from "./components/card";
 export { codeClassName } from "./components/code";
 export { skeletonVariants } from "./components/skeleton";
+export { eyebrowClassName } from "./components/eyebrow";

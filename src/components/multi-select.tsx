@@ -91,7 +91,7 @@ export function MultiSelect({
           aria-describedby={[error ? `${id}-error` : "", help ? `${id}-help` : ""].filter(Boolean).join(" ") || undefined}
           className={cn(
             "flex h-14 w-full items-center gap-2 rounded-12 border border-border-default bg-surface-card px-3 text-left text-base lg:h-12 lg:text-sm",
-            "shadow-[0_1px_2px_rgb(0_0_0/0.05)] hover:border-border-strong",
+            "shadow-control hover:border-border-strong",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
             "disabled:bg-surface-disabled disabled:text-text-disabled",
             error && "border-surface-danger",
@@ -117,7 +117,7 @@ export function MultiSelect({
           <Popover.Content
             align="start"
             sideOffset={4}
-            className="z-50 flex w-[var(--radix-popover-trigger-width)] flex-col gap-1 rounded-12 border border-border-default bg-surface-card p-2 font-sans shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1)]"
+            className="z-popover flex w-[var(--radix-popover-trigger-width)] flex-col gap-1 rounded-12 border border-border-default bg-surface-card p-2 font-sans shadow-raised"
           >
             {searchable && (
               <div className="mb-1 flex h-10 items-center gap-2 rounded-8 border border-border-default px-3">

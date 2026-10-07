@@ -32,7 +32,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         <div
           className={cn(
             "relative flex h-14 items-center rounded-12 border bg-surface-card lg:h-12",
-            "border-border-default shadow-[0_1px_2px_rgb(0_0_0/0.05)] transition-colors",
+            "border-border-default shadow-control transition-colors",
             "hover:border-border-strong focus-within:border-border-focus focus-within:outline-3 focus-within:outline-border-focus/50",
             error && "border-surface-danger outline-3 outline-surface-danger/20 focus-within:border-surface-danger focus-within:outline-surface-danger/20",
             disabled && "bg-surface-disabled text-text-disabled shadow-none hover:border-border-default",

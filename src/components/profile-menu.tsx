@@ -51,7 +51,7 @@ export function ProfileMenu({
           align={align}
           sideOffset={8}
           className={cn(
-            "z-50 flex w-64 max-w-[calc(100vw-2rem)] flex-col rounded-12 border border-border-default bg-surface-card p-1 font-sans shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1)]",
+            "z-popover flex w-64 max-w-[calc(100vw-2rem)] flex-col rounded-12 border border-border-default bg-surface-card p-1 font-sans shadow-raised",
             className,
           )}
         >

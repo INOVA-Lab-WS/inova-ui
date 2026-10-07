@@ -60,7 +60,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
         ref={ref}
         className={cn(
           "relative flex h-[calc(3.5rem+var(--inova-safe-area-top))] w-full items-center gap-3 border-b border-border-default px-4 pt-[var(--inova-safe-area-top)]",
-          sticky && "sticky top-0 z-30 bg-surface-page/95 backdrop-blur-[8px]",
+          sticky && "sticky top-0 z-header bg-surface-page/95 backdrop-blur-[8px]",
           className,
         )}
         {...props}

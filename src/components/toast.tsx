@@ -24,7 +24,7 @@ export function Toast({ kind = "success", children, className, ...props }: Toast
       role={kind === "error" ? "alert" : "status"}
       className={cn(
         "pointer-events-auto flex items-center gap-3 rounded-16 p-3 font-sans text-sm font-medium text-text-primary",
-        "shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1),0_4px_6px_-4px_rgb(0_0_0/0.1)]",
+        "shadow-raised",
         cls,
         className,
       )}
@@ -40,7 +40,7 @@ export function ToastViewport({ className, ...props }: React.HTMLAttributes<HTML
   return (
     <div
       className={cn(
-        "pointer-events-none fixed inset-x-3 top-[calc(var(--inova-safe-area-top)+12px)] z-[60] flex flex-col items-stretch gap-2",
+        "pointer-events-none fixed inset-x-3 top-[calc(var(--inova-safe-area-top)+12px)] z-toast flex flex-col items-stretch gap-2",
         "lg:inset-x-0 lg:top-4 lg:items-center",
         className,
       )}

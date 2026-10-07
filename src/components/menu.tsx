@@ -163,7 +163,7 @@ export const Menu = React.forwardRef<HTMLElement, MenuProps>(
             }
           }}
           className={cn(
-            "fixed inset-0 z-40 flex w-full flex-col bg-linear-to-t from-surface-canvas-bottom to-surface-canvas-top motion-reduce:animate-none",
+            "fixed inset-0 z-overlay flex w-full flex-col bg-linear-to-t from-surface-canvas-bottom to-surface-canvas-top motion-reduce:animate-none",
             open ? "animate-[inova-menu-in_var(--inova-motion-duration-base)_var(--inova-motion-easing-enter)]" : "animate-[inova-menu-out_var(--inova-motion-duration-exit)_var(--inova-motion-easing-exit)_forwards]",
             className,
           )}

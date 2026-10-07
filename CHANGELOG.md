@@ -1,6 +1,16 @@
 # Changelog
 
-## 0.7.5 · em preparação
+## 0.8.0 · em preparação
+
+- **`ImageViewer` (#52):** galeria em tela cheia com as regras do visualizador do AmbientAI: fundo do chip ink (translúcido e desfocado), controles em vidro, contador "2 / 5" e setas só com 2 ou mais imagens, navegação em loop, terços da tela, deslizar, arrastar para baixo para fechar, toque duplo 2x, pinça até 4x, Esc e setas, foco preso e devolvido, troca anunciada. `ImageViewerAction` para as ações de baixo. Salvar a imagem continua no app.
+- **`EmptyState` (#51):** ícone num selo, título, apoio e ação, `compact` ou `page`, `announce` para `role="status"`. `EmptyMark` para célula vazia.
+- **`MetricTileGroup` (#53):** a faixa de métricas, junto do `MetricTile`: rola de lado com encaixe no celular e vira grade de 2 a 6 colunas a partir de 1024px.
+- **`ScrollArea` (#54):** barra fina que aparece ao rolar; utilitário `scrollbar-none` para faixas de lado.
+- **Sombras (#56):** `shadow-control`, `shadow-raised`, `shadow-overlay`, `shadow-action-glow` (`--inova-shadow-*`). Os componentes não têm mais sombra solta; menus e popovers passam para `raised`, um pouco mais leve que antes.
+- **Camadas (#57):** `z-base`, `z-raised`, `z-header`, `z-overlay`, `z-popover`, `z-toast`, `z-splash` (`--inova-layer-*`). Os componentes usam as classes; menus, seletores e dicas ficam em `z-popover` (60), acima dos overlays.
+- **Caixa alta (#58):** `tracking-tight`, `tracking-normal`, `tracking-wide`; `Eyebrow` e `eyebrowClassName`.
+
+## 0.7.5 · ainda não publicada
 
 - **`Menu` lembra se está aberto ou fechado:** no `sidebar` não controlado, a escolha fica salva no navegador (`localStorage`, chave `storageKey`, padrão `"inova-menu-expanded"`), e por isso sobrevive à troca de página e ao recarregar. Antes, cada página montava o menu de novo e ele voltava aberto. `storageKey={null}` desliga; com `expanded` controlado, quem guarda é o app.
 

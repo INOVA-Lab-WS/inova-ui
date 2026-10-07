@@ -106,14 +106,14 @@ export function DateRangePicker({ value, onValueChange, presets = defaultDatePre
           id={id}
           className={cn(
             "flex h-14 w-full items-center gap-2 rounded-16 border border-border-default bg-surface-card px-3 text-left text-base lg:h-12 lg:text-sm",
-            "shadow-[0_1px_2px_rgb(0_0_0/0.05)] hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
+            "shadow-control hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
           )}
         >
           <CalendarDays className="size-4 text-text-muted" aria-hidden />
           <span className="min-w-0 flex-1 truncate text-text-primary">{trigger}</span>
         </Popover.Trigger>
         <Popover.Portal>
-          <Popover.Content align="start" sideOffset={4} className="z-50 flex w-80 flex-col gap-3 rounded-16 lg:w-88 border border-border-default bg-surface-card p-3 font-sans shadow-[0_10px_15px_-3px_rgb(0_0_0/0.1)]">
+          <Popover.Content align="start" sideOffset={4} className="z-popover flex w-80 flex-col gap-3 rounded-16 lg:w-88 border border-border-default bg-surface-card p-3 font-sans shadow-raised">
             <div className="flex flex-wrap gap-2">
               {presets.map((p) => (
                 <Chip

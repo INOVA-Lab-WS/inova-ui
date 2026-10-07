@@ -1,0 +1,3 @@
+/* For apps without Tailwind: Tailwind plus the INOVA theme. */
+@import "tailwindcss";
+@import "./theme.css";

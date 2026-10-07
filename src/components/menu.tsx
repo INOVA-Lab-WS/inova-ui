@@ -1,5 +1,7 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
+import { useMinWidth } from "../lib/hooks";
+import { BREAKPOINTS } from "../lib/breakpoints";
 import { PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { Divider } from "./divider";
 import { Button } from "./button";
@@ -54,18 +56,6 @@ export interface MenuProps extends Omit<React.HTMLAttributes<HTMLElement>, "chil
   closeLabel?: string;
 }
 
-function useMinWidth(px: number) {
-  const [matches, setMatches] = React.useState(false);
-  React.useEffect(() => {
-    const mq = window.matchMedia(`(min-width: ${px}px)`);
-    const on = () => setMatches(mq.matches);
-    on();
-    mq.addEventListener("change", on);
-    return () => mq.removeEventListener("change", on);
-  }, [px]);
-  return matches;
-}
-
 export const Menu = React.forwardRef<HTMLElement, MenuProps>(
   (
     {
@@ -93,7 +83,7 @@ export const Menu = React.forwardRef<HTMLElement, MenuProps>(
   ) => {
     const fullscreen = presentation === "fullscreen";
     const sidebar = presentation === "sidebar";
-    const desktop = useMinWidth(1024);
+    const desktop = useMinWidth(BREAKPOINTS.desktop);
     const [expandedState, setExpandedState] = React.useState(defaultExpanded);
     const expanded = expandedProp ?? expandedState;
     const remember = expandedProp === undefined && sidebar && !!storageKey;

@@ -238,7 +238,7 @@ export function ImageViewer({
             </>
           )}
           <div
-            className="relative flex size-full touch-none select-none items-center justify-center overflow-hidden"
+            className="relative flex size-full touch-none select-none items-center justify-center overflow-hidden px-3 tablet:px-0"
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}

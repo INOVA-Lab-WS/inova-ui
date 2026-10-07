@@ -14,3 +14,5 @@ export { cardClassName } from "./components/card";
 export { codeClassName } from "./components/code";
 export { skeletonVariants } from "./components/skeleton";
 export { eyebrowClassName } from "./components/eyebrow";
+export { inovaMergeConfig } from "./lib/cn";
+export { BREAKPOINTS } from "./lib/breakpoints";

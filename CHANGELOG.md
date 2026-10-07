@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.0 · em preparação
+
+- **Tema sem Tailwind dentro (#60):** `theme.css` não importa mais o Tailwind (que entrava 2 vezes no app) e já traz `@source "./"`. **O app agora faz `@import "tailwindcss";` antes de `@import "@inova-lab-ws/ui/theme.css";`** e pode tirar o `@source` para `node_modules`. Sem Tailwind no app: `theme-standalone.css`.
+- **`cn` conhece o tema (#61):** montado com `extendTailwindMerge` e os nomes da biblioteca (tamanhos de texto com `chart-axis`, raios, sombras, camadas, tracking). `text-text-muted text-chart-axis` mantém a cor. `inovaMergeConfig` exportado para o app montar o próprio `cn`. `tailwind-merge` passa para a versão 3. Teste em `scripts/test-cn.mjs`, rodando no `check`.
+- **Teclado no celular (#49):** `KeyboardInsetProvider` / `useKeyboardInset` gravam `--inova-kb-inset` e `--inova-visual-viewport-height`. A folha de baixo do `Overlay` fica 12px acima do teclado, cabe na altura visível e rola o campo focado dentro dela, sem animar com movimento reduzido.
+- **Fila de avisos (#50):** `ToastProvider` e `useToast().show({ kind, message, duration })` → id, `dismiss(id)`. Até 3 visíveis, os mais antigos saem primeiro; tempo padrão do token `toast-visible`; erro fica até fechar; o relógio pausa com o ponteiro ou o foco em cima; clicar fecha.
+- **Quebras de tela no código (#55):** `useBreakpoint()` (`mobile`, `tablet`, `desktop`, `wide`), `useMediaQuery`, `useMinWidth`, `usePointerCoarse` e `BREAKPOINTS`, gerados dos mesmos tokens do CSS e seguros para renderização no servidor. `Overlay` e `Menu` usam o mesmo hook.
+- **`ImageViewer` no celular:** 12px de margem nas laterais da imagem, como na biblioteca.
+
 ## 0.8.0 · 2026-10-07
 
 - **`ImageViewer` (#52):** galeria em tela cheia com as regras do visualizador do AmbientAI: fundo do chip ink (translúcido e desfocado), controles em vidro, contador "2 / 5" e setas só com 2 ou mais imagens, navegação em loop, terços da tela, deslizar, arrastar para baixo para fechar, toque duplo 2x, pinça até 4x, Esc e setas, foco preso e devolvido, troca anunciada. `ImageViewerAction` para as ações de baixo. Salvar a imagem continua no app.

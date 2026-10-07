@@ -67,11 +67,23 @@ flowchart LR
 npm install @inova-lab-ws/ui lucide-react
 ```
 
-**2. Tema.** No CSS global, e nenhum outro tema:
+**2. Tema.** No CSS global, o Tailwind primeiro e o tema depois, e nenhum outro tema. O tema já aponta para os
+componentes (`@source`), então o app não precisa acertar o caminho de `node_modules`:
 
 ```css
+@import "tailwindcss";
 @import "@inova-lab-ws/ui/theme.css";
-@source "../node_modules/@inova-lab-ws/ui/dist";
+```
+
+Sem Tailwind no app, use `@import "@inova-lab-ws/ui/theme-standalone.css";`, que já traz o Tailwind.
+
+**2b. Na raiz do app** (uma vez): `KeyboardInsetProvider`, para a folha de baixo ficar acima do teclado no celular, e
+`ToastProvider`, para chamar `useToast().show({ kind, message })` de qualquer tela.
+
+```tsx
+<KeyboardInsetProvider>
+  <ToastProvider>{children}</ToastProvider>
+</KeyboardInsetProvider>
 ```
 
 **3. Fontes.** Com `next/font`, declare as variáveis `--font-inter`, `--font-instrument-serif` e

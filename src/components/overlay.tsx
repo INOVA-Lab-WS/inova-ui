@@ -3,11 +3,14 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Drawer as VaulDrawer } from "vaul";
 import { X } from "lucide-react";
 import { cn } from "../lib/cn";
+import { useMinWidth } from "../lib/hooks";
+import { BREAKPOINTS } from "../lib/breakpoints";
 import { Button } from "./button";
 
 /**
  * Overlay · Figma "overlay". presentation: dialog (centered, compact 448 / wide 480),
  * drawer (right side, 560, 16px inset) or bottom-sheet (mobile, floating 12px inset, radius 24, drag handle).
+ * The bottom sheet sits above the on-screen keyboard when KeyboardInsetProvider is mounted (#49).
  * responsive: bottom-sheet below lg (1024px) and drawer from lg, as the skill asks. Every presentation animates in and out
  * in motion.duration.base and out in motion.duration.exit, with the enter and exit easings (panel in its direction, scrim fades), respecting reduced motion; onExitComplete fires after the exit.
  * Scrim: bg-surface-scrim + 8px backdrop blur. Slots: title/description (header), children (body), footer.
@@ -32,18 +35,6 @@ export interface OverlayProps {
   onOpenAutoFocus?: (event: Event) => void;
   /** Called once the exit animation has finished (e.g. to change the URL after the panel is gone). */
   onExitComplete?: () => void;
-}
-
-function useIsDesktop() {
-  const [desktop, setDesktop] = React.useState(false);
-  React.useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const on = () => setDesktop(mq.matches);
-    on();
-    mq.addEventListener("change", on);
-    return () => mq.removeEventListener("change", on);
-  }, []);
-  return desktop;
 }
 
 const anim = "duration-[var(--inova-motion-duration-base)] motion-reduce:animate-none";
@@ -76,14 +67,29 @@ function Header({ title, description, hideClose, Close, handle }: { title?: Reac
 }
 
 export function Overlay({ open, onOpenChange, presentation: requested = "dialog", size = "compact", title, description, footer, hideClose, children, className, onExitComplete, role, initialFocus, onOpenAutoFocus }: OverlayProps) {
-  const desktop = useIsDesktop();
+  const desktop = useMinWidth(BREAKPOINTS.desktop);
   const presentation = requested === "responsive" ? (desktop ? "drawer" : "bottom-sheet") : requested;
   if (presentation === "bottom-sheet") {
     return (
       <VaulDrawer.Root open={open} onOpenChange={onOpenChange} repositionInputs={false} onAnimationEnd={(o) => !o && onExitComplete?.()}>
         <VaulDrawer.Portal>
           <VaulDrawer.Overlay className={scrim} />
-          <VaulDrawer.Content className={cn(surface, "fixed inset-x-3 bottom-3 z-overlay max-h-[calc(100dvh-24px)]", className)}>
+          <VaulDrawer.Content
+            className={cn(
+              surface,
+              // Above the on-screen keyboard (KeyboardInsetProvider measures it): 12px above it, and no taller than
+              // the visible area minus the top safe area. Without the provider, the old 12px and 100dvh apply.
+              "fixed inset-x-3 bottom-[calc(var(--inova-kb-inset,0px)+12px)] z-overlay max-h-[calc(var(--inova-visual-viewport-height,100dvh)-var(--inova-safe-area-top)-24px)]",
+              className,
+            )}
+            onFocus={(e) => {
+              // Keep the focused field visible inside the sheet, scrolling the sheet and not the page behind it.
+              const el = e.target as HTMLElement;
+              if (el.matches("input, textarea, select, [contenteditable]")) {
+                window.setTimeout(() => el.scrollIntoView({ block: "nearest", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }), 250);
+              }
+            }}
+          >
             <Header
               handle
               hideClose={hideClose}

@@ -88,7 +88,8 @@ ${layoutCss}
 
 html {
   background-color: var(--inova-color-surface-canvas-bottom);
-  background-image: linear-gradient(to top, var(--inova-color-surface-canvas-bottom) 0%, var(--inova-color-surface-canvas-top) 42%);
+  background-image: linear-gradient(to top, var(--inova-color-surface-canvas-bottom), var(--inova-color-surface-canvas-top));
+  background-attachment: fixed;
   color: var(--inova-color-text-primary);
   font-family: var(--inova-font-sans);
 }

@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.0 · em preparação
+## 0.9.0 · 2026-10-07
 
 - **Tema sem Tailwind dentro (#60):** `theme.css` não importa mais o Tailwind (que entrava 2 vezes no app) e já traz `@source "./"`. **O app agora faz `@import "tailwindcss";` antes de `@import "@inova-lab-ws/ui/theme.css";`** e pode tirar o `@source` para `node_modules`. Sem Tailwind no app: `theme-standalone.css`.
 - **`cn` conhece o tema (#61):** montado com `extendTailwindMerge` e os nomes da biblioteca (tamanhos de texto com `chart-axis`, raios, sombras, camadas, tracking). `text-text-muted text-chart-axis` mantém a cor. `inovaMergeConfig` exportado para o app montar o próprio `cn`. `tailwind-merge` passa para a versão 3. Teste em `scripts/test-cn.mjs`, rodando no `check`.

@@ -34,7 +34,11 @@ export interface OverlayProps {
   className?: string;
   /** dialog only: "alertdialog" for short destructive confirmations (announced as an alert). */
   role?: "dialog" | "alertdialog";
-  /** dialog and drawer: where focus starts when it opens (e.g. the Cancel button). */
+  /**
+   * Where focus starts when it opens (e.g. the Cancel button, or the first field). All presentations; on the bottom sheet
+   * (#78) it is the only way to focus on open (without it the sheet opens with nothing focused, as before), and on a
+   * phone a focused field raises the keyboard.
+   */
   initialFocus?: React.RefObject<HTMLElement | null>;
   onOpenAutoFocus?: (event: Event) => void;
   /** Called once the exit animation has finished (e.g. to change the URL after the panel is gone). */
@@ -127,7 +131,7 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
   const presentation = requested === "responsive" ? (desktop ? "drawer" : "bottom-sheet") : requested;
   if (presentation === "bottom-sheet") {
     return (
-      <VaulDrawer.Root open={open} onOpenChange={onOpenChange} repositionInputs={false} onAnimationEnd={(o) => !o && onExitComplete?.()}>
+      <VaulDrawer.Root open={open} onOpenChange={onOpenChange} repositionInputs={false} autoFocus={!!initialFocus} onAnimationEnd={(o) => !o && onExitComplete?.()}>
         <VaulDrawer.Portal>
           <VaulDrawer.Overlay className={scrim} />
           <VaulDrawer.Content
@@ -143,6 +147,13 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
               "max-h-[calc(var(--inova-visual-viewport-height,100dvh)-var(--inova-safe-area-top)-var(--inova-sheet-top-gap,72px)-12px-max(0px,var(--inova-safe-area-bottom,0px)-var(--inova-kb-inset,0px)))]",
               className,
             )}
+            onOpenAutoFocus={(e) => {
+              onOpenAutoFocus?.(e);
+              if (!e.defaultPrevented && initialFocus?.current) {
+                e.preventDefault();
+                initialFocus.current.focus({ preventScroll: true });
+              }
+            }}
             onFocus={(e) => keepFieldInSheet(e.target as HTMLElement)}
           >
             <Header

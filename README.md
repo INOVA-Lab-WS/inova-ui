@@ -77,6 +77,21 @@ componentes (`@source`), então o app não precisa acertar o caminho de `node_mo
 
 Sem Tailwind no app, use `@import "@inova-lab-ws/ui/theme-standalone.css";`, que já traz o Tailwind.
 
+> [!WARNING]
+> **O tema muda o tamanho do texto do app inteiro (#59).** A biblioteca usa a escala 4/8 nos nomes padrão do Tailwind,
+> então, no momento em que o app importa o tema, toda tela que ainda usa estas classes muda de tamanho:
+>
+> | Classe | Tailwind | Com o tema |
+> | :--- | ---: | ---: |
+> | `text-lg` | 18px | 20px |
+> | `text-xl` | 20px | 24px |
+> | `text-2xl` | 24px | 32px |
+> | `text-3xl` | 30px | 40px |
+> | `text-4xl` | 36px | 48px |
+>
+> `text-xs`, `text-sm` e `text-base` não mudam. Antes de importar, liste os usos no app:
+> `grep -rnE "text-(lg|xl|[234]xl)\b" app components src`.
+
 **2b. Na raiz do app** (uma vez): `KeyboardInsetProvider`, para a folha de baixo ficar acima do teclado no celular, e
 `ToastProvider`, para chamar `useToast().show({ kind, message })` de qualquer tela.
 

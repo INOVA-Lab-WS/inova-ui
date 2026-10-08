@@ -10,9 +10,9 @@ import { Spinner } from "./spinner";
  * the "phrase + percent + bar" readout; regenerating keeps the previous image under it), ready (image).
  * With no image under the loading layer (first generation), the readout is dark (text/primary, tone="on-surface") with the
  * spinning loader, so it reads on the light surface (#63). Over a previous image it stays white.
- * Actions are passed as `actions` and render over the image, all in one row at the bottom, aligned right, 12px from
- * the edges, in the order given (#85, Figma): "Registrar pedido" first (chip `appearance="ink" size="medium"` with its
- * label), then products, download and enlarge (icon-only chips with `aria-label`). Nothing sits at the top of the photo.
+ * Actions sit over the image in one row at the bottom, 12px from the edges (#85, Figma): `actionsLeading` on the left
+ * (the labelled "Registrar pedido" chip, `appearance="ink" size="medium"`), `actions` on the right (products, download,
+ * enlarge: icon-only chips with `aria-label`). Nothing sits at the top of the photo.
  */
 export interface GenerationBoardProps extends React.HTMLAttributes<HTMLDivElement> {
   state?: "empty" | "loading" | "ready" | "regenerating";
@@ -34,8 +34,10 @@ export interface GenerationBoardProps extends React.HTMLAttributes<HTMLDivElemen
    */
   onImageClick?: () => void;
   imageLabel?: string;
-  /** Every action of the stage, in order, left to right: the labelled order action first, then the icon actions (#85). */
+  /** Icon actions, grouped on the right of the bottom row (products, download, enlarge). */
   actions?: React.ReactNode;
+  /** Labelled action on the left of the bottom row, e.g. the "Registrar pedido" chip (#85). */
+  actionsLeading?: React.ReactNode;
 }
 
 export function GenerationBoard({
@@ -50,6 +52,7 @@ export function GenerationBoard({
   onImageClick,
   imageLabel = "Ampliar imagem",
   actions,
+  actionsLeading,
   className,
   ...props
 }: GenerationBoardProps) {
@@ -100,7 +103,12 @@ export function GenerationBoard({
           </div>
         </div>
       )}
-      {actions && state !== "empty" && <div className="absolute inset-x-3 bottom-3 flex min-w-0 justify-end gap-2">{actions}</div>}
+      {(actions || actionsLeading) && state !== "empty" && (
+        <div className="absolute inset-x-3 bottom-3 flex min-w-0 items-center justify-between gap-2">
+          <div className="flex min-w-0 gap-2">{actionsLeading}</div>
+          <div className="flex shrink-0 gap-2">{actions}</div>
+        </div>
+      )}
     </div>
   );
 }

@@ -22,6 +22,11 @@ export interface GenerationBoardProps extends React.HTMLAttributes<HTMLDivElemen
   loadingPhrase?: React.ReactNode;
   /** 0 to 100. */
   progress?: number;
+  /**
+   * How the image sits in the stage (#64). "cover" (default, as the Figma): fills the stage in every direction, keeping the
+   * proportion, cropping what overflows. "contain": the whole image, with empty bands (the behaviour up to 0.9.0).
+   */
+  fit?: "cover" | "contain";
   actions?: React.ReactNode;
 }
 
@@ -33,6 +38,7 @@ export function GenerationBoard({
   emptySubtitle,
   loadingPhrase,
   progress,
+  fit = "cover",
   actions,
   className,
   ...props
@@ -57,7 +63,7 @@ export function GenerationBoard({
       )}
       {(state === "ready" || state === "regenerating") && src && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={alt} className="size-full object-contain" />
+        <img src={src} alt={alt} className={cn("size-full", fit === "contain" ? "object-contain" : "object-cover")} />
       )}
       {busy && (
         // Same effect for the first generation and for a regeneration (Figma initial-loading = regenerating).

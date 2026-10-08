@@ -11,7 +11,8 @@ import { Button } from "./button";
  * Overlay · Figma "overlay". presentation: dialog (centered, compact 448 / wide 480),
  * drawer (right side, 560, 16px inset) or bottom-sheet (mobile, floating 12px inset, radius 24, drag handle).
  * The bottom sheet sits above the on-screen keyboard when KeyboardInsetProvider is mounted (#49), below the top safe area
- * plus --inova-sheet-top-gap and above the bottom safe area (#65).
+ * plus --inova-sheet-top-gap and above the bottom safe area (#65). With the keyboard open it shrinks to the visible area
+ * and only its body scrolls to the focused field; the page and the sheet are not pushed up (#71).
  * responsive: bottom-sheet below lg (1024px) and drawer from lg, as the skill asks. Every presentation animates in and out
  * in motion.duration.base and out in motion.duration.exit, with the enter and exit easings (panel in its direction, scrim fades), respecting reduced motion; onExitComplete fires after the exit.
  * Scrim: bg-surface-scrim + 8px backdrop blur. Slots: title/description (header), children (body), footer.
@@ -67,6 +68,49 @@ function Header({ title, description, hideClose, Close, handle }: { title?: Reac
   );
 }
 
+/**
+ * Keyboard in the bottom sheet (#71). When a field inside the sheet takes focus, iOS Safari pans the visual viewport and
+ * `scrollIntoView` scrolls every ancestor, the window included, so the whole fixed sheet went up with the keyboard.
+ * Instead: undo any pan of the page (back to where it was), wait for the keyboard to settle (visualViewport resize, or 350ms), then scroll only
+ * the sheet's body (data-inova-sheet-body) so the field sits inside it. The sheet itself shrinks through
+ * --inova-visual-viewport-height and stays 12px above the keyboard through --inova-kb-inset (KeyboardInsetProvider).
+ */
+function keepFieldInSheet(el: HTMLElement) {
+  if (typeof window === "undefined" || !el.matches("input, textarea, select, [contenteditable]")) return;
+  const body = el.closest<HTMLElement>("[data-inova-sheet-body]");
+  const vv = window.visualViewport;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Where the page was before the focus: the pan is undone back to it, never to the top of a scrolled page.
+  const x = window.scrollX;
+  const y = window.scrollY;
+  const unpan = () => {
+    if (window.scrollY !== y || (vv && vv.offsetTop > 0)) window.scrollTo(x, y);
+  };
+  const reveal = () => {
+    unpan();
+    if (!body || document.activeElement !== el) return;
+    const b = body.getBoundingClientRect();
+    const f = el.getBoundingClientRect();
+    const margin = 16;
+    let delta = 0;
+    if (f.bottom > b.bottom - margin) delta = f.bottom - (b.bottom - margin);
+    else if (f.top < b.top + margin) delta = f.top - (b.top + margin);
+    if (delta) body.scrollTo({ top: body.scrollTop + delta, behavior: reduced ? "auto" : "smooth" });
+  };
+  unpan();
+  let done = false;
+  const run = () => {
+    if (done) return;
+    done = true;
+    vv?.removeEventListener("resize", run);
+    window.requestAnimationFrame(reveal);
+  };
+  vv?.addEventListener("resize", run);
+  vv?.addEventListener("scroll", unpan);
+  window.setTimeout(run, 350);
+  el.addEventListener("blur", () => vv?.removeEventListener("scroll", unpan), { once: true });
+}
+
 export function Overlay({ open, onOpenChange, presentation: requested = "dialog", size = "compact", title, description, footer, hideClose, children, className, onExitComplete, role, initialFocus, onOpenAutoFocus }: OverlayProps) {
   const desktop = useMinWidth(BREAKPOINTS.desktop);
   const presentation = requested === "responsive" ? (desktop ? "drawer" : "bottom-sheet") : requested;
@@ -88,13 +132,7 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
               "max-h-[calc(var(--inova-visual-viewport-height,100dvh)-var(--inova-safe-area-top)-var(--inova-sheet-top-gap,72px)-12px-max(0px,var(--inova-safe-area-bottom,0px)-var(--inova-kb-inset,0px)))]",
               className,
             )}
-            onFocus={(e) => {
-              // Keep the focused field visible inside the sheet, scrolling the sheet and not the page behind it.
-              const el = e.target as HTMLElement;
-              if (el.matches("input, textarea, select, [contenteditable]")) {
-                window.setTimeout(() => el.scrollIntoView({ block: "nearest", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }), 250);
-              }
-            }}
+            onFocus={(e) => keepFieldInSheet(e.target as HTMLElement)}
           >
             <Header
               handle
@@ -103,7 +141,7 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
               title={title && <VaulDrawer.Title className="text-lg font-semibold">{title}</VaulDrawer.Title>}
               description={description && <VaulDrawer.Description className="text-xs text-text-muted">{description}</VaulDrawer.Description>}
             />
-            <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 pt-2 pb-4">{children}</div>
+            <div data-inova-sheet-body="" className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-4 pt-2 pb-4">{children}</div>
             {footer && <div className="flex flex-col gap-2 p-4">{footer}</div>}
           </VaulDrawer.Content>
         </VaulDrawer.Portal>

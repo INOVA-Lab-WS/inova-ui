@@ -6,6 +6,7 @@ import { Button } from "./button";
 /**
  * InputCard · Figma "input-card". White card: optional photo slots, the textarea, and the controls row.
  * The right action is "speak" while empty and "send" once there is text or a photo.
+ * Speak is the green action pill (Button variant="action" size="compact"), as in the library (#67).
  */
 export interface InputCardPhoto {
   src: string;
@@ -81,7 +82,7 @@ export const InputCard = React.forwardRef<HTMLTextAreaElement, InputCardProps>(
               <ArrowUp aria-hidden />
             </Button>
           ) : (
-            <Button {...speakProps}>
+            <Button variant="action" size="compact" {...speakProps}>
               <AudioLines aria-hidden />
               {speakLabel}
             </Button>

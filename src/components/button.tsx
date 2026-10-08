@@ -7,6 +7,8 @@ import { cn } from "../lib/cn";
  * Button · Figma "button" (INOVA Lab Library).
  * Height 56px on mobile and 48px from the lg breakpoint (viewport=mobile/desktop in Figma).
  * Icon-only: pass `aria-label` and a single icon as children with `iconOnly`.
+ * `variant="action"` + `size="compact"`: the green action pill (surface/action, 40px on mobile and 32px from lg, 16px icon),
+ * as the Falar button of the input-card (Figma variant=action, size=compact).
  */
 export const buttonVariants = cva(
   [
@@ -26,11 +28,15 @@ export const buttonVariants = cva(
         destructive: "bg-surface-danger text-text-on-action",
         /** Secondary removal next to the main action: red text, no background, light red on hover. */
         "destructive-ghost": "bg-transparent text-surface-danger hover:bg-status-error-bg active:bg-status-error-bg disabled:bg-transparent",
+        /** Green action pill (Figma variant=action): the voice "Falar" button. Hover and pressed add the action glow. */
+        action: "rounded-pill bg-surface-action text-text-on-action hover:shadow-action-glow active:shadow-action-glow",
       },
       size: {
         responsive: "h-14 px-4 lg:h-12 lg:px-3",
         mobile: "h-14 px-4",
         desktop: "h-12 px-3",
+        /** Figma size=compact: 40px on mobile, 32px from lg, padding 12, 16px icon. */
+        compact: "h-10 px-3 lg:h-8 [&_svg]:size-4",
       },
       iconOnly: { true: "px-0", false: "" },
     },
@@ -38,6 +44,7 @@ export const buttonVariants = cva(
       { iconOnly: true, size: "responsive", className: "w-14 lg:w-12" },
       { iconOnly: true, size: "mobile", className: "w-14" },
       { iconOnly: true, size: "desktop", className: "w-12" },
+      { iconOnly: true, size: "compact", className: "w-10 lg:w-8" },
     ],
     defaultVariants: { variant: "primary", size: "responsive", iconOnly: false },
   },

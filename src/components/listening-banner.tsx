@@ -2,7 +2,11 @@ import * as React from "react";
 import { cn } from "../lib/cn";
 import { Waveform } from "./waveform";
 
-/** ListeningBanner · Figma "listening-banner". Shown above the composer while recording. */
+/**
+ * ListeningBanner · Figma "listening-banner". Shown above the composer while recording (#68):
+ * the waveform on the left at 16px, "Ouvindo…" (14 semibold) on the right, on surface/shell, no corners of its own
+ * (the Composer shell clips it).
+ */
 export interface ListeningBannerProps extends React.HTMLAttributes<HTMLDivElement> {
   label?: React.ReactNode;
   levels?: number[];
@@ -10,7 +14,7 @@ export interface ListeningBannerProps extends React.HTMLAttributes<HTMLDivElemen
 
 export function ListeningBanner({ label = "Ouvindo…", levels, className, ...props }: ListeningBannerProps) {
   return (
-    <div role="status" className={cn("flex items-center justify-center gap-3 bg-surface-shell px-4 py-2 font-sans text-sm font-semibold text-text-primary", className)} {...props}>
+    <div role="status" className={cn("flex items-center justify-between gap-3 bg-surface-shell px-4 py-2 font-sans text-sm font-semibold text-text-primary", className)} {...props}>
       <Waveform levels={levels} />
       <span>{label}</span>
     </div>

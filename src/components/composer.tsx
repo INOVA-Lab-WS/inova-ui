@@ -6,6 +6,7 @@ import { ListeningBanner } from "./listening-banner";
 /**
  * Composer · Figma "composer". InputCard plus what stacks above it:
  * the listening banner while recording, or the mention results while typing "@".
+ * Recording (#68): banner and card share one shell (radius 24, surface/shell, light shadow, clipped), with no gap.
  */
 export interface ComposerProps extends InputCardProps {
   recording?: boolean;
@@ -17,7 +18,7 @@ export interface ComposerProps extends InputCardProps {
 
 export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
   ({ recording, levels, mentions, wrapperClassName, ...props }, ref) => (
-    <div className={cn("flex flex-col gap-2", wrapperClassName)}>
+    <div className={cn("flex flex-col", recording ? "overflow-clip rounded-24 bg-surface-shell shadow-control" : "gap-2", wrapperClassName)}>
       {recording && <ListeningBanner levels={levels} />}
       {!recording && mentions && (
         <div role="listbox" className="flex max-h-64 flex-col overflow-y-auto rounded-16 bg-surface-card">

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.5 · 2026-10-08
+
+- **`MetricTile marker={false}` (#88):** em `layout="variant"`, tira a bolinha de cor e o espaço dela; o resto é o visual das métricas de cena. O padrão continua com a bolinha.
+- **`MetricTileGroup` com a mesma altura (#89):** as métricas de uma linha esticam até a altura da mais alta, com ou sem legenda.
+
 ## 0.10.4 · 2026-10-08
 
 - **Ações do `GenerationBoard`, correção do #85:** na linha de baixo, a ação com rótulo fica à esquerda e as de ícone ficam juntas à direita. **Prop nova `actionsLeading`** para o "Registrar pedido"; `actions` fica com produtos, baixar e ampliar.

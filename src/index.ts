@@ -32,7 +32,7 @@ export { PillTab, PillTabs, pillTabClassName, type PillTabProps, type PillTabsPr
 export { RoleRadio, type RoleRadioProps, type RoleRadioOption } from "./components/role-radio";
 export { MultiSelect, type MultiSelectProps, type MultiSelectOption } from "./components/multi-select";
 export { DateRangePicker, DateRangeDay, defaultDatePresets, type DateRange, type DateRangePreset, type DateRangePickerProps } from "./components/date-range-picker";
-export { LoginForm, type LoginFormProps } from "./components/login-form";
+export { LoginForm, type LoginFormProps, type LoginFormIdentity } from "./components/login-form";
 export { Overlay, type OverlayProps, type OverlayPresentation } from "./components/overlay";
 export * from "./components/chart-shared";
 export * from "./components/horizontal-bar-chart";

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.1 · 2026-10-08
+
+- **Gráficos com muitas barras (#73):** `BarChart` e `StackedBarChart` nunca passam do cartão. As barras encolhem para caber, e o espaço entre elas diminui com mais de 12 e de 24 barras. Os rótulos do eixo aparecem de tanto em tanto, para nenhum ser cortado ("02/…", "1…"), sempre com o primeiro (alinhado à esquerda) e o último (à direita). 30 dias num celular mostram 5 datas; 24 horas mostram 0h, 3h, 6h… 23h. `labelStep` (`"auto"` por padrão, ou um número) força o passo.
+
 ## 0.10.0 · 2026-10-08
 
 Revisão do Gabriel no AmbientAI (07/10). Cada correção foi feita primeiro na INOVA Lab Library e depois no código.

@@ -56,6 +56,7 @@ export { Thumbnail, type ThumbnailProps } from "./components/thumbnail";
 export { UserMessage, type UserMessageProps, type UserMessagePhoto, type UserMessageAudio } from "./components/user-message";
 export { AssistantMessage, SummaryChips, HelpCard, type AssistantMessageProps, type SummaryChipsProps, type HelpCardProps } from "./components/assistant-message";
 export { ProductListRow, type ProductListRowProps } from "./components/product-list-row";
+export { ProductHero, type ProductHeroProps } from "./components/product-hero";
 export { Composer, type ComposerProps } from "./components/composer";
 export { InputCard, type InputCardProps, type InputCardPhoto } from "./components/input-card";
 export { ListeningBanner, type ListeningBannerProps } from "./components/listening-banner";

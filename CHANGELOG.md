@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.7 · 2026-10-08
+
+- **`LoginForm` com a pessoa verificada (#93):** `identity={{ name, email, avatarSrc }}` troca o campo pelo avatar (foto ou inicial), nome e e-mail; o botão fica no mesmo lugar. No celular, o vidro com desfoque continua, com nome e e-mail em branco. Props novas: `submitLabel` (padrão "Iniciar"), `disabled` e `alert` (aviso acima). Sem "Não é você?".
+
 ## 0.10.6 · 2026-10-08
 
 - **Toda métrica da página com a mesma altura (#91):** `MetricTile` tem no mínimo 136px (`--inova-size-metric-tile`, Figma `size/metric-tile`) em qualquer layout, com ou sem bolinha e legenda. Cabem rótulo, valor e até 2 linhas de legenda; a 3ª é cortada com reticências. Sem prop nova.

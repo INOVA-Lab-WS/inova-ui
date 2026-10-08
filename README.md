@@ -229,6 +229,7 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 | `HistoryThumbnail` | `history-thumbnail` |
 | `Thumbnail` | `thumbnail` |
 | `ProductListRow` | `product-list-row` |
+| `ProductHero` (topo da folha de detalhe do produto) | `product-hero` |
 
 <a id="tokens"></a>
 

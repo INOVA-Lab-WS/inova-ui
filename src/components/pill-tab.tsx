@@ -37,9 +37,14 @@ PillTab.displayName = "PillTab";
 export interface PillTabsProps extends React.HTMLAttributes<HTMLElement> {
   /** Tabs that are pages (PillTab asChild with links): renders a <nav> instead of a tablist. Give it an aria-label. */
   navigation?: boolean;
+  /**
+   * Figma pill-tabs width=full (#79): the group takes the whole width and each pill shares it equally, label centered
+   * (e.g. the language choice in the profile menu). Default false: each pill hugs its label and the row scrolls sideways.
+   */
+  fullWidth?: boolean;
 }
 
-export function PillTabs({ className, navigation, ...props }: PillTabsProps) {
-  const cls = cn("flex items-center gap-1 overflow-x-auto", className);
+export function PillTabs({ className, navigation, fullWidth, ...props }: PillTabsProps) {
+  const cls = cn("flex items-center gap-1", fullWidth ? "w-full [&>*]:min-w-0 [&>*]:flex-1 [&>*]:justify-center" : "overflow-x-auto", className);
   return navigation ? <nav className={cls} {...props} /> : <div role="tablist" className={cls} {...props} />;
 }

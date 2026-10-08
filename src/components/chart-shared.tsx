@@ -128,3 +128,85 @@ export function ChartAxisLabels({ labels, step }: { labels: string[]; step?: num
     </div>
   );
 }
+
+/**
+ * Hover and keyboard focus on bars (#77, Figma state=tooltip-visible): one bar is active at a time; the chart is one
+ * tab stop and the arrows, Home and End move between bars. Spread `bar(i)` on each bar slot.
+ */
+export function useActiveBar(count: number) {
+  const [active, setActive] = React.useState<number | null>(null);
+  const [focusIndex, setFocusIndex] = React.useState(0);
+  const refs = React.useRef<(HTMLElement | null)[]>([]);
+  const move = (to: number) => {
+    const i = Math.max(0, Math.min(count - 1, to));
+    setFocusIndex(i);
+    refs.current[i]?.focus();
+  };
+  const bar = (i: number) => ({
+    ref: (el: HTMLElement | null) => {
+      refs.current[i] = el;
+    },
+    tabIndex: i === focusIndex ? 0 : -1,
+    onMouseEnter: () => setActive(i),
+    onMouseLeave: () => setActive((a) => (a === i ? null : a)),
+    onFocus: () => {
+      setActive(i);
+      setFocusIndex(i);
+    },
+    onBlur: () => setActive((a) => (a === i ? null : a)),
+    onKeyDown: (e: React.KeyboardEvent) => {
+      const k = e.key;
+      if (k === "ArrowRight" || k === "ArrowDown") move(i + 1);
+      else if (k === "ArrowLeft" || k === "ArrowUp") move(i - 1);
+      else if (k === "Home") move(0);
+      else if (k === "End") move(count - 1);
+      else if (k === "Escape") setActive(null);
+      else return;
+      e.preventDefault();
+    },
+  });
+  /** Classes for bar i: the others fade to 40% while one is active. */
+  const dim = (i: number) => cn("outline-none transition-opacity motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-text-primary", active !== null && active !== i && "opacity-40");
+  return { active, bar, dim };
+}
+
+export interface ChartTooltipRow {
+  label: string;
+  value: number;
+  colorClass?: string;
+}
+
+/**
+ * The chart tooltip (Figma "tooltip" in state=tooltip-visible): the bar's label, then one line per series with its color
+ * mark and value, and the total when given. Sits above the active bar, inside the chart (aligned to the edge near the
+ * first and last bars).
+ */
+export function ChartTooltip({ index, count, title, rows, total }: { index: number; count: number; title: string; rows: ChartTooltipRow[]; total?: number }) {
+  const center = ((index + 0.5) / count) * 100;
+  const edge = index < count / 4 ? "start" : index >= count - count / 4 ? "end" : "center";
+  return (
+    <div
+      role="status"
+      className={cn(
+        "pointer-events-none absolute top-0 z-raised flex min-w-36 max-w-[80%] flex-col gap-1 rounded-8 border border-border-default bg-surface-page px-3 py-1 text-xs shadow-raised",
+        edge === "center" && "-translate-x-1/2",
+      )}
+      style={edge === "start" ? { left: 0 } : edge === "end" ? { right: 0 } : { left: `${center}%` }}
+    >
+      <span className="font-medium text-text-primary">{title}</span>
+      {rows.map((r) => (
+        <span key={r.label} className="flex items-center gap-2">
+          {r.colorClass && <span aria-hidden className={cn("size-2.5 shrink-0 rounded-4", r.colorClass)} />}
+          <span className="min-w-0 flex-1 truncate text-text-muted">{r.label}</span>
+          <span className="font-medium tabular-nums text-text-primary">{nf.format(r.value)}</span>
+        </span>
+      ))}
+      {total !== undefined && (
+        <span className="flex items-center gap-2 border-t border-border-default pt-1">
+          <span className="flex-1 text-text-muted">Total</span>
+          <span className="font-medium tabular-nums text-text-primary">{nf.format(total)}</span>
+        </span>
+      )}
+    </div>
+  );
+}

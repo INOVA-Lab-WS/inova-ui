@@ -1,6 +1,7 @@
 import figma from "@figma/code-connect";
 import { MetricTile } from "../src";
 
+// Every layout has the same minimum height (size/metric-tile, 136): no prop, all tiles on a page match (#91).
 const url = "https://www.figma.com/design/Ze0WiY6G9j2yLxKb55dDMK/INOVA-Lab-Library?node-id=378-132";
 
 figma.connect(MetricTile, url, {

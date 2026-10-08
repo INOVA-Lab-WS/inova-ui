@@ -114,7 +114,7 @@
   --inova-blur-glass: 12px;
   --inova-safe-area-top: env(safe-area-inset-top, 47px);
   --inova-safe-area-bottom: env(safe-area-inset-bottom, 0px);
-  --inova-sheet-top-gap: 72px;
+  --inova-sheet-top-gap: 16px;
   --inova-font-size-chart-axis: 10px;
   --inova-font-size-xs: 12px;
   --inova-font-size-sm: 14px;

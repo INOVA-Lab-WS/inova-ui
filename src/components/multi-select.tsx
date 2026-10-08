@@ -7,6 +7,8 @@ import { Button } from "./button";
 /**
  * MultiSelect · Figma "multi-select". Trigger with the same height as Input (56/48px), popover with
  * optional search, "Todos" option, checkbox list and "Limpar seleção (n)".
+ * The option list is at most 256px and scrolls inside; search and footer stay put. The panel never leaves the visible
+ * area: it flips up when there is no room below and shrinks to fit, 8px from the edge (#75).
  */
 export interface MultiSelectOption {
   value: string;
@@ -117,7 +119,8 @@ export function MultiSelect({
           <Popover.Content
             align="start"
             sideOffset={4}
-            className="z-popover flex w-[var(--radix-popover-trigger-width)] flex-col gap-1 rounded-12 border border-border-default bg-surface-card p-2 font-sans shadow-raised"
+            collisionPadding={8}
+            className="z-popover flex max-h-[var(--radix-popover-content-available-height)] w-[var(--radix-popover-trigger-width)] flex-col gap-1 rounded-12 border border-border-default bg-surface-card p-2 font-sans shadow-raised"
           >
             {searchable && (
               <div className="mb-1 flex h-10 items-center gap-2 rounded-8 border border-border-default px-3">
@@ -135,7 +138,7 @@ export function MultiSelect({
               role="listbox"
               aria-multiselectable="true"
               aria-label={typeof label === "string" ? label : undefined}
-              className="flex flex-col gap-1"
+              className="flex max-h-64 min-h-0 flex-col gap-1 overflow-y-auto overscroll-contain"
               onKeyDown={(e) => {
                 const items = Array.from(e.currentTarget.querySelectorAll<HTMLElement>('[role="option"]'));
                 const i = items.indexOf(document.activeElement as HTMLElement);

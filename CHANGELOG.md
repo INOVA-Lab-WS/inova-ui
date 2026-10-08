@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.3 · 2026-10-08
+
+- **Rodapé da bottom-sheet (#81):** as ações ficam lado a lado, com a mesma largura (Cancelar à esquerda, a principal à direita); uma ação só ocupa a largura toda. `footerLayout="column"` empilha como antes. **Atenção:** o padrão mudou de empilhado para lado a lado, e as ações precisam ser filhas diretas do `footer` (um fragmento, não um `div`). Diálogo e gaveta lateral não mudam.
+- **`ProductListRow` clicável (#82):** com `onClick`, vira `<button type="button">` com mãozinha, hover, foco, Enter e Espaço, como o `Thumbnail` no #62. Com `onClick` e `action`, a linha e a ação são 2 controles lado a lado.
+- **Folha de baixo mais alta (#84):** a folha alta para 16px abaixo do notch (`--inova-sheet-top-gap` de 72 para 16), cobrindo a área do cabeçalho.
+- **Ações do `GenerationBoard` embaixo, numa linha só (#85):** tudo vai em `actions`, na ordem: "Registrar pedido" (chip com rótulo) e depois produtos, baixar e ampliar (chips só com ícone). A linha fica embaixo, alinhada à direita, sem passar do quadro.
+- **`ProductHero` (#83):** o topo da folha de detalhe do produto: imagem grande quadrada (ou a cor da tinta), categoria, nome e marca com o código LM.
+
 ## 0.10.2 · 2026-10-08
 
 - **`MultiSelect` dentro da tela (#75):** a lista de opções tem no máximo 256px e rola por dentro; o painel nunca passa da área visível (vira para cima ou encolhe, com 8px de folga).

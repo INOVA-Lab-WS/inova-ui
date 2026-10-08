@@ -27,6 +27,12 @@ export interface GenerationBoardProps extends React.HTMLAttributes<HTMLDivElemen
    * proportion, cropping what overflows. "contain": the whole image, with empty bands (the behaviour up to 0.9.0).
    */
   fit?: "cover" | "contain";
+  /**
+   * Makes the image a native button (#76), e.g. to open the ImageViewer: pointer cursor, green inner border on hover
+   * (Figma state=ready-hover), focus ring. Only in ready and with `src`. `imageLabel` names it (default "Ampliar imagem").
+   */
+  onImageClick?: () => void;
+  imageLabel?: string;
   actions?: React.ReactNode;
 }
 
@@ -39,6 +45,8 @@ export function GenerationBoard({
   loadingPhrase,
   progress,
   fit = "cover",
+  onImageClick,
+  imageLabel = "Ampliar imagem",
   actions,
   className,
   ...props
@@ -61,10 +69,24 @@ export function GenerationBoard({
           {emptySubtitle && <p className="mt-1 text-sm text-text-muted">{emptySubtitle}</p>}
         </div>
       )}
-      {(state === "ready" || state === "regenerating") && src && (
+      {(state === "ready" || state === "regenerating") && src && (state === "ready" && onImageClick ? (
+        <button
+          type="button"
+          aria-label={imageLabel}
+          onClick={onImageClick}
+          className={cn(
+            "relative block size-full cursor-pointer rounded-16 outline-none",
+            "after:pointer-events-none after:absolute after:inset-0 after:rounded-16 after:border-2 after:border-transparent after:transition-colors hover:after:border-green-primary",
+            "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-text-primary",
+          )}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={src} alt={alt} className={cn("size-full", fit === "contain" ? "object-contain" : "object-cover")} />
+        </button>
+      ) : (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={src} alt={alt} className={cn("size-full", fit === "contain" ? "object-contain" : "object-cover")} />
-      )}
+      ))}
       {busy && (
         // Same effect for the first generation and for a regeneration (Figma initial-loading = regenerating).
         <div className="absolute inset-0 flex items-center justify-center bg-surface-control/70 backdrop-blur-[var(--inova-blur-glass)]">

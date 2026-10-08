@@ -27,6 +27,12 @@ export interface OverlayProps {
   title?: React.ReactNode;
   description?: React.ReactNode;
   footer?: React.ReactNode;
+  /**
+   * Bottom sheet footer (#81): "row" (default) puts the actions side by side with equal width (Cancelar left, the main
+   * action right; a single action takes the whole width); "column" stacks them. Dialog and drawer keep the actions on
+   * the right, sized to their label.
+   */
+  footerLayout?: "row" | "column";
   hideClose?: boolean;
   /** Keep the title for screen readers only (it still names the panel), e.g. a bottom sheet with its own header. */
   hideTitle?: boolean;
@@ -126,7 +132,7 @@ function keepFieldInSheet(el: HTMLElement) {
   el.addEventListener("blur", () => vv?.removeEventListener("scroll", unpan), { once: true });
 }
 
-export function Overlay({ open, onOpenChange, presentation: requested = "dialog", size = "compact", title, description, footer, hideClose, hideTitle, children, className, onExitComplete, role, initialFocus, onOpenAutoFocus }: OverlayProps) {
+export function Overlay({ open, onOpenChange, presentation: requested = "dialog", size = "compact", title, description, footer, footerLayout = "row", hideClose, hideTitle, children, className, onExitComplete, role, initialFocus, onOpenAutoFocus }: OverlayProps) {
   const desktop = useMinWidth(BREAKPOINTS.desktop);
   const presentation = requested === "responsive" ? (desktop ? "drawer" : "bottom-sheet") : requested;
   const sheetRef = React.useRef<HTMLDivElement>(null);
@@ -168,7 +174,7 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
               description={description && <VaulDrawer.Description className="text-xs text-text-muted">{description}</VaulDrawer.Description>}
             />
             <div data-inova-sheet-body="" className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-4 pt-2 pb-4">{children}</div>
-            {footer && <div className="flex flex-col gap-2 p-4">{footer}</div>}
+            {footer && <div className={cn("flex gap-2 p-4", footerLayout === "column" ? "flex-col" : "[&>*]:min-w-0 [&>*]:flex-1")}>{footer}</div>}
           </VaulDrawer.Content>
         </VaulDrawer.Portal>
       </VaulDrawer.Root>

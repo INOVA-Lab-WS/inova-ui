@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.10.0 · 2026-10-08
+
+Revisão do Gabriel no AmbientAI (07/10). Cada correção foi feita primeiro na INOVA Lab Library e depois no código.
+
+- **`Thumbnail` clicável (#62):** com `onClick`, vira `<button type="button">` com mãozinha, borda verde no hover, foco e `disabled` quando `unavailable`. Com `href` continua link; sem nenhum dos 2, continua só leitura.
+- **`GenerationBoard` carregando com contraste (#63):** sem imagem embaixo, frase, percentual e barra ficam em `text-primary` com o `Spinner` girando (de ~1,2:1 para ~14:1). Sobre a imagem anterior, continua branco. **`ProgressReadout tone`:** `"on-image"` (padrão, branco) ou `"on-surface"` (escuro, para superfície clara).
+- **`GenerationBoard fit` (#64):** `"cover"` (padrão) preenche o quadro mantendo a proporção, como no Figma; `"contain"` mostra a foto inteira, com faixas. **Atenção: o padrão mudou de contain para cover.** Quem posiciona algo sobre a foto supondo as faixas (os pinos de produto do AmbientAI) precisa recalcular ou passar `fit="contain"`.
+- **Folha de baixo no iPhone (#65):** não sobe além da área segura do topo mais 72px (`--inova-sheet-top-gap`, o cabeçalho + 16) e fica 12px acima do maior entre o teclado e a barra de início (`--inova-safe-area-bottom`).
+- **Esqueletos (#66):** os 4 gráficos em `state="loading"` desenham grade, barras e eixo em esqueleto; `ActivityLog state="loading"` desenha `skeletonRows` (padrão 3) linhas no formato da linha; `Table busy` aceita `skeletonRow="text"` (uma barra por coluna, sem círculo) e `skeletonColumns`. O padrão `skeletonRow="avatar"` é o desenho da 0.9.0. As frases de carregamento ficam para o leitor de tela.
+- **`Button variant="action"` e `size="compact"` (#67):** a pílula verde de ação (`surface-action`, texto `on-action`, 40px no celular e 32px a partir de 1024px, ícone de 16px, brilho verde no hover). O "Falar" do `InputCard` passa a ser essa pílula.
+- **Indicador de escuta (#68):** gravando, faixa e cartão do `Composer` ficam numa casca só (raio 24, `surface-shell`, sem espaço); o `ListeningBanner` põe a onda à esquerda e "Ouvindo…" à direita; o `Waveform` desenha 24 barras finas em 64x20, cortadas na caixa.
+- **Sem faixa bege embaixo da folha (#69):** o bloco que o vaul pinta abaixo da gaveta foi escondido.
+- **`ProfileMenu presentation` (#70):** `"popover"` (padrão), `"bottom-sheet"` ou `"responsive"` (gaveta abaixo de 1024px). `ActionMenuItem` e `ActionMenuSeparator` funcionam dentro da gaveta; `onSelect` roda no clique e fecha a gaveta, salvo `event.preventDefault()`. `Overlay hideTitle` deixa o título só para o leitor de tela.
+- **Teclado na folha de baixo (#71):** no foco de um campo, a página volta para onde estava se o Safari deslocou a vista, e só o corpo da folha rola até o campo, depois que o teclado assenta. A folha encolhe para a área visível. Não testado num iPhone.
+- **README (#59):** aviso de que o tema muda `text-lg` a `text-4xl` no app inteiro, com a tabela e a busca para listar os usos.
+
 ## 0.9.0 · 2026-10-07
 
 - **Tema sem Tailwind dentro (#60):** `theme.css` não importa mais o Tailwind (que entrava 2 vezes no app) e já traz `@source "./"`. **O app agora faz `@import "tailwindcss";` antes de `@import "@inova-lab-ws/ui/theme.css";`** e pode tirar o `@source` para `node_modules`. Sem Tailwind no app: `theme-standalone.css`.

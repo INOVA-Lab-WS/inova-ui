@@ -25,6 +25,8 @@ for (const [k, v] of Object.entries(t.size)) vars.push(`  --inova-size-${k}: ${v
 for (const [k, v] of Object.entries(t["border-width"])) vars.push(`  --inova-border-width-${k}: ${v}px;`);
 for (const [k, v] of Object.entries(t.effect)) vars.push(`  --inova-${k}: ${v}px;`);
 vars.push(`  --inova-safe-area-top: env(safe-area-inset-top, ${t["safe-area"]["top-fallback"]}px);`);
+vars.push(`  --inova-safe-area-bottom: env(safe-area-inset-bottom, 0px);`);
+vars.push(`  --inova-sheet-top-gap: ${t["safe-area"]["sheet-top-gap"]}px;`);
 for (const [k, v] of Object.entries(t.font.size)) {
   vars.push(`  --inova-font-size-${k}: ${v}px;`);
   theme.push(`  --text-${k}: var(--inova-font-size-${k});`);

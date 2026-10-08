@@ -10,7 +10,8 @@ import { Button } from "./button";
 /**
  * Overlay · Figma "overlay". presentation: dialog (centered, compact 448 / wide 480),
  * drawer (right side, 560, 16px inset) or bottom-sheet (mobile, floating 12px inset, radius 24, drag handle).
- * The bottom sheet sits above the on-screen keyboard when KeyboardInsetProvider is mounted (#49).
+ * The bottom sheet sits above the on-screen keyboard when KeyboardInsetProvider is mounted (#49), below the top safe area
+ * plus --inova-sheet-top-gap and above the bottom safe area (#65).
  * responsive: bottom-sheet below lg (1024px) and drawer from lg, as the skill asks. Every presentation animates in and out
  * in motion.duration.base and out in motion.duration.exit, with the enter and exit easings (panel in its direction, scrim fades), respecting reduced motion; onExitComplete fires after the exit.
  * Scrim: bg-surface-scrim + 8px backdrop blur. Slots: title/description (header), children (body), footer.
@@ -77,9 +78,11 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
           <VaulDrawer.Content
             className={cn(
               surface,
-              // Above the on-screen keyboard (KeyboardInsetProvider measures it): 12px above it, and no taller than
-              // the visible area minus the top safe area. Without the provider, the old 12px and 100dvh apply.
-              "fixed inset-x-3 bottom-[calc(var(--inova-kb-inset,0px)+12px)] z-overlay max-h-[calc(var(--inova-visual-viewport-height,100dvh)-var(--inova-safe-area-top)-24px)]",
+              // Bottom: 12px above the larger of the on-screen keyboard (KeyboardInsetProvider measures it) and the
+              // bottom safe area (home bar). Top (#65): never above the top safe area plus --inova-sheet-top-gap (72, the
+              // app header + 16). Without the provider, the keyboard inset is 0 and the height is 100dvh.
+              "fixed inset-x-3 bottom-[calc(max(var(--inova-kb-inset,0px),var(--inova-safe-area-bottom,0px))+12px)] z-overlay",
+              "max-h-[calc(var(--inova-visual-viewport-height,100dvh)-var(--inova-safe-area-top)-var(--inova-sheet-top-gap,72px)-12px-max(0px,var(--inova-safe-area-bottom,0px)-var(--inova-kb-inset,0px)))]",
               className,
             )}
             onFocus={(e) => {

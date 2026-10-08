@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.2 · 2026-10-08
+
+- **`MultiSelect` dentro da tela (#75):** a lista de opções tem no máximo 256px e rola por dentro; o painel nunca passa da área visível (vira para cima ou encolhe, com 8px de folga).
+- **`GenerationBoard onImageClick` (#76):** a foto pronta vira botão, com mãozinha, borda verde no hover e contorno no foco, para abrir o visualizador. `imageLabel` nomeia o botão (padrão "Ampliar imagem"). Sem a prop, nada muda.
+- **Hover nas barras (#77):** em `BarChart` e `StackedBarChart`, passar o mouse ou focar uma barra (Tab, setas, Home, End) destaca a barra, atenua as outras a 40% e mostra a dica com o rótulo, o valor de cada série e o total. `BarChart valueLabel` dá o nome do valor na dica.
+- **Foco na bottom-sheet (#78):** a gaveta leva o foco para dentro ao abrir (antes ele ficava no botão atrás dela). Com `initialFocus`, o campo indicado recebe o foco e o teclado sobe no celular; sem a prop, o foco vai para a própria gaveta, sem focar campo. `onOpenAutoFocus` também vale na gaveta.
+- **`PillTabs fullWidth` (#79):** o grupo ocupa a largura toda e cada pílula divide o espaço por igual, com o rótulo centralizado.
+
 ## 0.10.1 · 2026-10-08
 
 - **Gráficos com muitas barras (#73):** `BarChart` e `StackedBarChart` nunca passam do cartão. As barras encolhem para caber, e o espaço entre elas diminui com mais de 12 e de 24 barras. Os rótulos do eixo aparecem de tanto em tanto, para nenhum ser cortado ("02/…", "1…"), sempre com o primeiro (alinhado à esquerda) e o último (à direita). 30 dias num celular mostram 5 datas; 24 horas mostram 0h, 3h, 6h… 23h. `labelStep` (`"auto"` por padrão, ou um número) força o passo.

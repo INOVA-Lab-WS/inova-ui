@@ -62,11 +62,11 @@ export { ListeningBanner, type ListeningBannerProps } from "./components/listeni
 export { Waveform, type WaveformProps } from "./components/waveform";
 export { MentionResult, type MentionResultProps } from "./components/mention-result";
 export { Accordion, AccordionItem, type AccordionItemProps } from "./components/accordion";
-export { ActionMenu, ActionMenuTrigger, ActionMenuContent, ActionMenuItem, ActionMenuSeparator, type ActionMenuItemProps } from "./components/action-menu";
+export { ActionMenu, ActionMenuTrigger, ActionMenuContent, ActionMenuItem, ActionMenuSeparator, ActionMenuSheetContext, type ActionMenuItemProps } from "./components/action-menu";
 export { ConnectorCard, connectorCardClassName, type ConnectorCardProps } from "./components/connector-card";
 export { CopyField, type CopyFieldProps } from "./components/copy-field";
 export { PageHeader, type PageHeaderProps } from "./components/page-header";
-export { ProfileMenu, type ProfileMenuProps } from "./components/profile-menu";
+export { ProfileMenu, type ProfileMenuProps, type ProfileMenuPresentation } from "./components/profile-menu";
 export { Select, type SelectProps } from "./components/select";
 export { linkClassName } from "./components/link";
 export { ChocolateMenuIcon } from "./components/header";

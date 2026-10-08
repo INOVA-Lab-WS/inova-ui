@@ -28,6 +28,8 @@ export interface OverlayProps {
   description?: React.ReactNode;
   footer?: React.ReactNode;
   hideClose?: boolean;
+  /** Keep the title for screen readers only (it still names the panel), e.g. a bottom sheet with its own header. */
+  hideTitle?: boolean;
   children?: React.ReactNode;
   className?: string;
   /** dialog only: "alertdialog" for short destructive confirmations (announced as an alert). */
@@ -45,12 +47,21 @@ const scrimAnim = "data-[state=open]:animate-[inova-fade-in_var(--inova-motion-d
 const scrim = "fixed inset-0 z-overlay bg-surface-scrim backdrop-blur-[8px]";
 const surface = "flex flex-col rounded-24 border border-border-default bg-surface-page font-sans text-text-primary shadow-overlay outline-none";
 
-function Header({ title, description, hideClose, Close, handle }: { title?: React.ReactNode; description?: React.ReactNode; hideClose?: boolean; Close: React.ElementType; handle?: boolean }) {
-  if (!title && !description && hideClose && !handle) return null;
+function Header({ title, description, hideClose, Close, handle, hiddenTitle }: { title?: React.ReactNode; description?: React.ReactNode; hideClose?: boolean; Close: React.ElementType; handle?: boolean; hiddenTitle?: React.ReactNode }) {
+  if (!title && !description && hideClose && !handle) return hiddenTitle ? <>{hiddenTitle}</> : null;
+  if (!title && !description && hideClose && handle) {
+    return (
+      <div className="flex flex-col px-4 pt-4">
+        <div aria-hidden className="mx-auto mb-3 h-1 w-10 rounded-pill bg-border-neutral" />
+        {hiddenTitle}
+      </div>
+    );
+  }
   // Figma: header padding 16 on the bottom sheet, 24 on dialog and drawer; 4 below.
   return (
     <div className={cn("flex flex-col pb-1", handle ? "px-4 pt-4" : "px-6 pt-6")}>
       {handle && <div aria-hidden className="mx-auto mb-4 h-1 w-10 rounded-pill bg-border-neutral" />}
+      {hiddenTitle}
       <div className="flex items-start gap-3">
         <div className="flex min-w-0 flex-1 flex-col gap-1 pt-2.5">
           {title}
@@ -111,7 +122,7 @@ function keepFieldInSheet(el: HTMLElement) {
   el.addEventListener("blur", () => vv?.removeEventListener("scroll", unpan), { once: true });
 }
 
-export function Overlay({ open, onOpenChange, presentation: requested = "dialog", size = "compact", title, description, footer, hideClose, children, className, onExitComplete, role, initialFocus, onOpenAutoFocus }: OverlayProps) {
+export function Overlay({ open, onOpenChange, presentation: requested = "dialog", size = "compact", title, description, footer, hideClose, hideTitle, children, className, onExitComplete, role, initialFocus, onOpenAutoFocus }: OverlayProps) {
   const desktop = useMinWidth(BREAKPOINTS.desktop);
   const presentation = requested === "responsive" ? (desktop ? "drawer" : "bottom-sheet") : requested;
   if (presentation === "bottom-sheet") {
@@ -138,7 +149,8 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
               handle
               hideClose={hideClose}
               Close={VaulDrawer.Close}
-              title={title && <VaulDrawer.Title className="text-lg font-semibold">{title}</VaulDrawer.Title>}
+              title={title && !hideTitle && <VaulDrawer.Title className="text-lg font-semibold">{title}</VaulDrawer.Title>}
+              hiddenTitle={title && hideTitle && <VaulDrawer.Title className="sr-only">{title}</VaulDrawer.Title>}
               description={description && <VaulDrawer.Description className="text-xs text-text-muted">{description}</VaulDrawer.Description>}
             />
             <div data-inova-sheet-body="" className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-4 pt-2 pb-4">{children}</div>
@@ -181,7 +193,8 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
           <Header
             hideClose={hideClose}
             Close={DialogPrimitive.Close}
-            title={title && <DialogPrimitive.Title className="text-lg font-semibold">{title}</DialogPrimitive.Title>}
+            title={title && !hideTitle && <DialogPrimitive.Title className="text-lg font-semibold">{title}</DialogPrimitive.Title>}
+            hiddenTitle={title && hideTitle && <DialogPrimitive.Title className="sr-only">{title}</DialogPrimitive.Title>}
             description={description && <DialogPrimitive.Description className="text-xs text-text-muted">{description}</DialogPrimitive.Description>}
           />
           <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-6 pt-2 pb-6">{children}</div>

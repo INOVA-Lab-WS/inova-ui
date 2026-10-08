@@ -10,8 +10,9 @@ import { Spinner } from "./spinner";
  * the "phrase + percent + bar" readout; regenerating keeps the previous image under it), ready (image).
  * With no image under the loading layer (first generation), the readout is dark (text/primary, tone="on-surface") with the
  * spinning loader, so it reads on the light surface (#63). Over a previous image it stays white.
- * Actions (products, download…) are passed as `actions` and render over the image: chips `appearance="ink" size="medium"`.
- * Products, download and enlarge are icon-only (`iconOnly` + `aria-label`); "Registrar pedido" keeps its label.
+ * Actions are passed as `actions` and render over the image, all in one row at the bottom, aligned right, 12px from
+ * the edges, in the order given (#85, Figma): "Registrar pedido" first (chip `appearance="ink" size="medium"` with its
+ * label), then products, download and enlarge (icon-only chips with `aria-label`). Nothing sits at the top of the photo.
  */
 export interface GenerationBoardProps extends React.HTMLAttributes<HTMLDivElement> {
   state?: "empty" | "loading" | "ready" | "regenerating";
@@ -33,6 +34,7 @@ export interface GenerationBoardProps extends React.HTMLAttributes<HTMLDivElemen
    */
   onImageClick?: () => void;
   imageLabel?: string;
+  /** Every action of the stage, in order, left to right: the labelled order action first, then the icon actions (#85). */
   actions?: React.ReactNode;
 }
 
@@ -98,7 +100,7 @@ export function GenerationBoard({
           </div>
         </div>
       )}
-      {actions && state !== "empty" && <div className="absolute right-3 bottom-3 flex gap-2">{actions}</div>}
+      {actions && state !== "empty" && <div className="absolute inset-x-3 bottom-3 flex min-w-0 justify-end gap-2">{actions}</div>}
     </div>
   );
 }

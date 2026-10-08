@@ -16,17 +16,19 @@ export interface MetricTileProps extends React.HTMLAttributes<HTMLDivElement> {
   help?: string;
   /** layout="variant": colour of the 10px category marker (a bg-* class). Default chart-category1. */
   markerClassName?: string;
+  /** layout="variant": false hides the marker and its space, the scene-tile look without the dot (#88). Default true. */
+  marker?: boolean;
   /** While loading: the value and caption become skeletons and the tile gets aria-busy. */
   loading?: boolean;
 }
 
-export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ label, value, layout = "stat", caption, help, markerClassName, loading, className, ...props }, ref) => {
+export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ label, value, layout = "stat", caption, help, markerClassName, marker = true, loading, className, ...props }, ref) => {
   const stat = layout === "stat";
   const measured = value !== null && value !== undefined;
   const shown = !measured ? "Não medido" : typeof value === "number" ? new Intl.NumberFormat("pt-BR").format(value) : value;
   return (
     <div ref={ref} aria-busy={loading || undefined} className={cn("relative flex flex-col rounded-16 border border-border-default bg-surface-card font-sans", stat ? "gap-1 p-5" : "p-4", className)} {...props}>
-      {layout === "variant" && <span aria-hidden className={cn("mb-2 size-2.5 rounded-pill", markerClassName ?? "bg-chart-category1")} />}
+      {layout === "variant" && marker && <span aria-hidden className={cn("mb-2 size-2.5 rounded-pill", markerClassName ?? "bg-chart-category1")} />}
       <span className={cn("pr-6 text-xs text-text-muted", stat && "font-medium uppercase")}>{label}</span>
       {help && (
         <Tooltip text={help}  placement="top-end">

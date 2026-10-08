@@ -57,7 +57,8 @@ MetricTile.displayName = "MetricTile";
  * MetricTileGroup · the "Grupo de métricas" section of the metric-tile doc. Below 1024px: one row that scrolls
  * sideways with snap at each tile, 144px tiles, bleeding to the screen edge with the grid margin and no bar, the
  * last tile cut to show there is more. From 1024px: a grid of columns (2 to 6) with the grid gutter.
- * role="list"; wrap each MetricTile in an item (the group does it).
+ * role="list"; wrap each MetricTile in an item (the group does it). Tiles in a row share its height (#89): each item
+ * stretches its tile, with or without a caption.
  */
 export interface MetricTileGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   columns?: 2 | 3 | 4 | 5 | 6;
@@ -78,7 +79,7 @@ export function MetricTileGroup({ columns = 4, className, children, ...props }: 
       {...props}
     >
       {React.Children.map(children, (child) => (
-        <div role="listitem" className="w-36 shrink-0 snap-start desktop:w-auto">
+        <div role="listitem" className="flex w-36 shrink-0 snap-start desktop:w-auto [&>*]:min-w-0 [&>*]:flex-1">
           {child}
         </div>
       ))}

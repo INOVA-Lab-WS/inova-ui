@@ -5,6 +5,8 @@ figma.connect(Thumbnail, "https://www.figma.com/design/Ze0WiY6G9j2yLxKb55dDMK/IN
   props: {
     caption: figma.string("caption"),
     metadata: figma.string("metadata"),
+    unavailable: figma.enum("state", { unavailable: true }),
   },
-  example: (props) => <Thumbnail src="/produto.jpg" caption={props.caption} metadata={props.metadata} />,
+  // With onClick it renders a native <button type="button"> (pointer, hover border, focus, disabled while unavailable).
+  example: (props) => <Thumbnail src="/produto.jpg" caption={props.caption} metadata={props.metadata} unavailable={props.unavailable} onClick={() => {}} />,
 });

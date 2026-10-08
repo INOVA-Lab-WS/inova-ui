@@ -4,6 +4,8 @@ import { cn } from "../lib/cn";
 /**
  * Thumbnail · Figma "thumbnail". Product card 128x160: media (image or color swatch) + caption + metadata.
  * `unavailable` dims it; with no src and no swatch the media shows `fallback`.
+ * Clickable (#62): with `href` it is a link; with `onClick` it is a native `<button type="button">` (pointer cursor, green
+ * border on hover, focus ring, keyboard), disabled while `unavailable`. Without either it is a plain, read-only card.
  */
 export interface ThumbnailProps extends React.HTMLAttributes<HTMLElement> {
   src?: string;
@@ -18,14 +20,18 @@ export interface ThumbnailProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export function Thumbnail({ src, alt = "", swatch, caption, metadata, fallback, unavailable, href, className, ...props }: ThumbnailProps) {
-  const Comp = (href ? "a" : "div") as React.ElementType;
+  const isButton = !href && !!props.onClick;
+  const Comp = (href ? "a" : isButton ? "button" : "div") as React.ElementType;
+  const interactive = !!href || isButton;
   return (
     <Comp
       href={href}
-      aria-disabled={unavailable || undefined}
+      {...(isButton ? { type: "button", disabled: unavailable || undefined } : { "aria-disabled": unavailable || undefined })}
       className={cn(
         "flex w-32 shrink-0 flex-col rounded-16 border border-border-default bg-surface-card p-1 font-sans",
-        href && "outline-none transition-colors hover:border-green-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
+        interactive && "cursor-pointer text-left outline-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
+        interactive && !unavailable && "hover:border-green-primary",
+        isButton && "disabled:cursor-default",
         unavailable && "opacity-60",
         className,
       )}

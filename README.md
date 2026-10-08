@@ -175,7 +175,7 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 
 | Componente | No Figma |
 | :--- | :--- |
-| `Button` (`destructive-ghost` para remoção secundária) | `button` |
+| `Button` (`destructive-ghost` para remoção secundária; `action` + `size="compact"` para a pílula verde do Falar) | `button` |
 | `Input` | `input` |
 | `Textarea` | `textarea` |
 | `Checkbox` | `checkbox` |

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.4 · 2026-10-08
+
+- **Ações do `GenerationBoard`, correção do #85:** na linha de baixo, a ação com rótulo fica à esquerda e as de ícone ficam juntas à direita. **Prop nova `actionsLeading`** para o "Registrar pedido"; `actions` fica com produtos, baixar e ampliar.
+
 ## 0.10.3 · 2026-10-08
 
 - **Rodapé da bottom-sheet (#81):** as ações ficam lado a lado, com a mesma largura (Cancelar à esquerda, a principal à direita); uma ação só ocupa a largura toda. `footerLayout="column"` empilha como antes. **Atenção:** o padrão mudou de empilhado para lado a lado, e as ações precisam ser filhas diretas do `footer` (um fragmento, não um `div`). Diálogo e gaveta lateral não mudam.

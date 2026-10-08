@@ -3,6 +3,7 @@ import { StackedBarChart } from "../src";
 
 const url = "https://www.figma.com/design/Ze0WiY6G9j2yLxKb55dDMK/INOVA-Lab-Library?node-id=376-2023";
 
+// state=tooltip-visible is the hover/focus of a bar, built in (#77): highlight, tooltip per series and total.
 figma.connect(StackedBarChart, url, {
   variant: { buckets: "7" },
   props: { state: figma.enum("state", { data: "ready", "tooltip-visible": "ready", empty: "empty" }) },

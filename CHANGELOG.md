@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.6 · 2026-10-08
+
+- **Toda métrica da página com a mesma altura (#91):** `MetricTile` tem no mínimo 136px (`--inova-size-metric-tile`, Figma `size/metric-tile`) em qualquer layout, com ou sem bolinha e legenda. Cabem rótulo, valor e até 2 linhas de legenda; a 3ª é cortada com reticências. Sem prop nova.
+
 ## 0.10.5 · 2026-10-08
 
 - **`MetricTile marker={false}` (#88):** em `layout="variant"`, tira a bolinha de cor e o espaço dela; o resto é o visual das métricas de cena. O padrão continua com a bolinha.

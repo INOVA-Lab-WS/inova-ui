@@ -81,6 +81,9 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
               // Bottom: 12px above the larger of the on-screen keyboard (KeyboardInsetProvider measures it) and the
               // bottom safe area (home bar). Top (#65): never above the top safe area plus --inova-sheet-top-gap (72, the
               // app header + 16). Without the provider, the keyboard inset is 0 and the height is 100dvh.
+              // vaul paints a block of the sheet's color below a bottom drawer ([data-vaul-drawer]::after), made for
+              // drawers glued to the edge. This sheet floats 12px above it, so the block showed as a beige band (#69).
+              "after:hidden",
               "fixed inset-x-3 bottom-[calc(max(var(--inova-kb-inset,0px),var(--inova-safe-area-bottom,0px))+12px)] z-overlay",
               "max-h-[calc(var(--inova-visual-viewport-height,100dvh)-var(--inova-safe-area-top)-var(--inova-sheet-top-gap,72px)-12px-max(0px,var(--inova-safe-area-bottom,0px)-var(--inova-kb-inset,0px)))]",
               className,

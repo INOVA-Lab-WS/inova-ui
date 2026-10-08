@@ -4,7 +4,11 @@ import { cn } from "../lib/cn";
 import { Tooltip } from "./tooltip";
 import { Skeleton } from "./skeleton";
 
-/** Metric tile · Figma "metric-tile": layouts stat, variant and count, with an "i" help trigger. "Não medido" is never 0. */
+/**
+ * Metric tile · Figma "metric-tile": layouts stat, variant and count, with an "i" help trigger. "Não medido" is never 0.
+ * Height (#91): every tile is at least --inova-size-metric-tile (136px), in any layout, with or without the dot or a
+ * caption, so all tiles on a page match. It fits label, value and up to 2 caption lines (a 3rd is cut with an ellipsis).
+ */
 export interface MetricTileProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string;
   /** null or undefined renders "Não medido". */
@@ -27,7 +31,7 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ l
   const measured = value !== null && value !== undefined;
   const shown = !measured ? "Não medido" : typeof value === "number" ? new Intl.NumberFormat("pt-BR").format(value) : value;
   return (
-    <div ref={ref} aria-busy={loading || undefined} className={cn("relative flex flex-col rounded-16 border border-border-default bg-surface-card font-sans", stat ? "gap-1 p-5" : "p-4", className)} {...props}>
+    <div ref={ref} aria-busy={loading || undefined} className={cn("relative flex min-h-[var(--inova-size-metric-tile)] flex-col rounded-16 border border-border-default bg-surface-card font-sans", stat ? "gap-1 p-5" : "p-4", className)} {...props}>
       {layout === "variant" && marker && <span aria-hidden className={cn("mb-2 size-2.5 rounded-pill", markerClassName ?? "bg-chart-category1")} />}
       <span className={cn("pr-6 text-xs text-text-muted", stat && "font-medium uppercase")}>{label}</span>
       {help && (
@@ -45,7 +49,7 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ l
       ) : (
         <>
       <span className={cn("tabular-nums", !measured ? "text-sm text-text-muted" : stat ? "text-2xl font-bold text-text-primary" : "text-xl font-bold text-text-primary")}>{shown}</span>
-      {caption && <span className="text-xs text-text-muted">{caption}</span>}
+      {caption && <span className="line-clamp-2 text-xs text-text-muted">{caption}</span>}
         </>
       )}
     </div>

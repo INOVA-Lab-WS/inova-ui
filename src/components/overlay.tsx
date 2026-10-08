@@ -35,9 +35,9 @@ export interface OverlayProps {
   /** dialog only: "alertdialog" for short destructive confirmations (announced as an alert). */
   role?: "dialog" | "alertdialog";
   /**
-   * Where focus starts when it opens (e.g. the Cancel button, or the first field). All presentations; on the bottom sheet
-   * (#78) it is the only way to focus on open (without it the sheet opens with nothing focused, as before), and on a
-   * phone a focused field raises the keyboard.
+   * Where focus starts when it opens (e.g. the Cancel button, or the first field). All presentations. The bottom sheet
+   * (#78) always moves focus inside on open: to this element when given (a field raises the phone keyboard), otherwise
+   * to the sheet itself, with no field focused. Before 0.10.2 focus stayed on the trigger behind the sheet.
    */
   initialFocus?: React.RefObject<HTMLElement | null>;
   onOpenAutoFocus?: (event: Event) => void;
@@ -129,9 +129,10 @@ function keepFieldInSheet(el: HTMLElement) {
 export function Overlay({ open, onOpenChange, presentation: requested = "dialog", size = "compact", title, description, footer, hideClose, hideTitle, children, className, onExitComplete, role, initialFocus, onOpenAutoFocus }: OverlayProps) {
   const desktop = useMinWidth(BREAKPOINTS.desktop);
   const presentation = requested === "responsive" ? (desktop ? "drawer" : "bottom-sheet") : requested;
+  const sheetRef = React.useRef<HTMLDivElement>(null);
   if (presentation === "bottom-sheet") {
     return (
-      <VaulDrawer.Root open={open} onOpenChange={onOpenChange} repositionInputs={false} autoFocus={!!initialFocus} onAnimationEnd={(o) => !o && onExitComplete?.()}>
+      <VaulDrawer.Root open={open} onOpenChange={onOpenChange} repositionInputs={false} autoFocus onAnimationEnd={(o) => !o && onExitComplete?.()}>
         <VaulDrawer.Portal>
           <VaulDrawer.Overlay className={scrim} />
           <VaulDrawer.Content
@@ -147,12 +148,14 @@ export function Overlay({ open, onOpenChange, presentation: requested = "dialog"
               "max-h-[calc(var(--inova-visual-viewport-height,100dvh)-var(--inova-safe-area-top)-var(--inova-sheet-top-gap,72px)-12px-max(0px,var(--inova-safe-area-bottom,0px)-var(--inova-kb-inset,0px)))]",
               className,
             )}
+            ref={sheetRef}
             onOpenAutoFocus={(e) => {
+              // Focus always moves inside the sheet (#78): to initialFocus when given, otherwise to the sheet itself, so
+              // no field is focused and the keyboard stays down until the person taps a field.
               onOpenAutoFocus?.(e);
-              if (!e.defaultPrevented && initialFocus?.current) {
-                e.preventDefault();
-                initialFocus.current.focus({ preventScroll: true });
-              }
+              if (e.defaultPrevented) return;
+              e.preventDefault();
+              (initialFocus?.current ?? sheetRef.current)?.focus({ preventScroll: true });
             }}
             onFocus={(e) => keepFieldInSheet(e.target as HTMLElement)}
           >

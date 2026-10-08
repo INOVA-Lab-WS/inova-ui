@@ -2,11 +2,14 @@ import * as React from "react";
 import { Sparkles } from "lucide-react";
 import { cn } from "../lib/cn";
 import { ProgressReadout } from "./progress-readout";
+import { Spinner } from "./spinner";
 
 /**
  * GenerationBoard · Figma "generation-board". The stage that holds the generated image.
  * state: empty (badge + title + subtitle), loading and regenerating (the same blurred surface with the mirror sweep and
- * the white "phrase + percent + bar" readout; regenerating keeps the previous image under it), ready (image).
+ * the "phrase + percent + bar" readout; regenerating keeps the previous image under it), ready (image).
+ * With no image under the loading layer (first generation), the readout is dark (text/primary, tone="on-surface") with the
+ * spinning loader, so it reads on the light surface (#63). Over a previous image it stays white.
  * Actions (products, download…) are passed as `actions` and render over the image: chips `appearance="ink" size="medium"`.
  * Products, download and enlarge are icon-only (`iconOnly` + `aria-label`); "Registrar pedido" keeps its label.
  */
@@ -35,6 +38,8 @@ export function GenerationBoard({
   ...props
 }: GenerationBoardProps) {
   const busy = state === "loading" || state === "regenerating";
+  // Nothing under the loading layer: dark readout on the light surface, plus the spinner (Figma initial-loading).
+  const bare = state === "loading" || !src;
   return (
     <div
       aria-busy={busy || undefined}
@@ -59,8 +64,9 @@ export function GenerationBoard({
         <div className="absolute inset-0 flex items-center justify-center bg-surface-control/70 backdrop-blur-[var(--inova-blur-glass)]">
           <div className="pointer-events-none absolute inset-0 animate-pulse bg-linear-to-r from-transparent via-white/30 to-transparent motion-reduce:animate-none" aria-hidden />
           <div className="relative flex items-center gap-2 font-sans">
-            {loadingPhrase && <p className="text-sm text-text-on-ink">{loadingPhrase}</p>}
-            {progress !== undefined && <ProgressReadout label="Progresso da geração" percent={progress} />}
+            {bare && <Spinner size="small" role="presentation" aria-hidden aria-label={undefined} />}
+            {loadingPhrase && <p className={cn("text-sm", bare ? "text-text-primary" : "text-text-on-ink")}>{loadingPhrase}</p>}
+            {progress !== undefined && <ProgressReadout label="Progresso da geração" percent={progress} tone={bare ? "on-surface" : "on-image"} />}
           </div>
         </div>
       )}

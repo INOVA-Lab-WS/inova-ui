@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.9 · 2026-10-09
+
+- **LoginForm:** remove a borda decorativa interna do avatar, nome e e-mail no desktop, conforme o protótipo aprovado. Mantém a borda externa do cartão e o foco do botão.
+
 ## 0.10.8 · 2026-10-09
 
 - **Composer:** o envio usa o botão verde `action`, no tamanho `compact` (40px no celular, 32px no desktop, seta de 16px), na mesma escala do Falar.

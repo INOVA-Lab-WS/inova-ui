@@ -87,7 +87,7 @@ export function LoginForm({
           <div
             className={cn(
               "flex min-w-0 flex-1 items-center gap-3",
-              mobile ? "h-14" : "h-12 rounded-12 border border-border-default bg-surface-card px-3",
+              mobile ? "h-14" : "h-12 rounded-12 bg-surface-card px-3",
             )}
           >
             <Avatar name={identity.name} src={identity.avatarSrc} size="medium" aria-hidden />

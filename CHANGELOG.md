@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.8 · 2026-10-09
+
+- **Composer:** o envio usa o botão verde `action`, no tamanho `compact` (40px no celular, 32px no desktop, seta de 16px), na mesma escala do Falar.
+- **Texto que acompanha o conteúdo:** `InputCard` cresce com linhas digitadas, coladas e quebradas pela largura, e diminui ao apagar ou limpar. Mantém os handlers do consumidor e as refs; Enter envia, Shift+Enter quebra linha e a composição de texto não dispara o envio.
+
 ## 0.10.7 · 2026-10-08
 
 - **`LoginForm` com a pessoa verificada (#93):** `identity={{ name, email, avatarSrc }}` troca o campo pelo avatar (foto ou inicial), nome e e-mail; o botão fica no mesmo lugar. No celular, o vidro com desfoque continua, com nome e e-mail em branco. Props novas: `submitLabel` (padrão "Iniciar"), `disabled` e `alert` (aviso acima). Sem "Não é você?".

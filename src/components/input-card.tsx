@@ -6,14 +6,14 @@ import { Button } from "./button";
 /**
  * InputCard · Figma "input-card". White card: optional photo slots, the textarea, and the controls row.
  * The right action is "speak" while empty and "send" once there is text or a photo.
- * Speak is the green action pill (Button variant="action" size="compact"), as in the library (#67).
+ * Both actions use the library's green action surface. The textarea grows with its content.
  */
 export interface InputCardPhoto {
   src: string;
   alt?: string;
 }
 
-export interface InputCardProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "value" | "onChange"> {
+export interface InputCardProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "value"> {
   value: string;
   onValueChange: (value: string) => void;
   photos?: InputCardPhoto[];
@@ -28,10 +28,37 @@ export interface InputCardProps extends Omit<React.TextareaHTMLAttributes<HTMLTe
 
 export const InputCard = React.forwardRef<HTMLTextAreaElement, InputCardProps>(
   (
-    { value, onValueChange, photos, onRemovePhoto, onCamera, onSend, speakProps, speakLabel = "Falar", placeholder = "Fale segurando o botão, ou digite…", containerClassName, className, ...props },
+    { value, onValueChange, photos, onRemovePhoto, onCamera, onSend, speakProps, speakLabel = "Falar", placeholder = "Fale segurando o botão, ou digite…", containerClassName, className, onChange, onKeyDown, ...props },
     ref,
   ) => {
     const canSend = value.trim().length > 0 || (photos?.length ?? 0) > 0;
+    const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+    React.useImperativeHandle(ref, () => textareaRef.current!, []);
+
+    const resizeTextarea = React.useCallback(() => {
+      const textarea = textareaRef.current;
+      if (!textarea || textarea.clientWidth === 0) return;
+      textarea.style.height = "auto";
+      const style = getComputedStyle(textarea);
+      const padding = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
+      const border = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+      textarea.style.height = `${textarea.scrollHeight + (style.boxSizing === "border-box" ? border : -padding)}px`;
+    }, []);
+
+    React.useLayoutEffect(resizeTextarea);
+    React.useLayoutEffect(() => {
+      const textarea = textareaRef.current;
+      if (!textarea || typeof ResizeObserver === "undefined") return;
+      let previousWidth = -1;
+      const observer = new ResizeObserver(([entry]) => {
+        if (entry.contentRect.width !== previousWidth) {
+          previousWidth = entry.contentRect.width;
+          resizeTextarea();
+        }
+      });
+      observer.observe(textarea);
+      return () => observer.disconnect();
+    }, [resizeTextarea]);
     return (
       <div className={cn("flex flex-col gap-6 rounded-24 bg-surface-card p-5 font-sans lg:gap-4 lg:p-4", containerClassName)}>
         {photos && photos.length > 0 && (
@@ -55,18 +82,22 @@ export const InputCard = React.forwardRef<HTMLTextAreaElement, InputCardProps>(
           </div>
         )}
         <textarea
-          ref={ref}
+          ref={textareaRef}
           rows={1}
           value={value}
           placeholder={placeholder}
-          onChange={(e) => onValueChange(e.target.value)}
+          onChange={(e) => {
+            onValueChange(e.target.value);
+            onChange?.(e);
+          }}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey && canSend) {
+            onKeyDown?.(e);
+            if (!e.defaultPrevented && !e.nativeEvent.isComposing && e.key === "Enter" && !e.shiftKey && canSend) {
               e.preventDefault();
               onSend?.();
             }
           }}
-          className={cn("w-full resize-none bg-transparent text-base text-text-primary lg:py-2 lg:text-xs outline-none placeholder:text-text-muted", className)}
+          className={cn("w-full resize-none overflow-y-hidden bg-transparent text-base text-text-primary lg:py-2 lg:text-xs outline-none placeholder:text-text-muted", className)}
           {...props}
         />
         <div className="flex items-center justify-between gap-2">
@@ -78,7 +109,7 @@ export const InputCard = React.forwardRef<HTMLTextAreaElement, InputCardProps>(
             <span />
           )}
           {canSend ? (
-            <Button aria-label="Enviar" onClick={onSend} iconOnly>
+            <Button variant="action" size="compact" aria-label="Enviar" onClick={onSend} iconOnly>
               <ArrowUp aria-hidden />
             </Button>
           ) : (

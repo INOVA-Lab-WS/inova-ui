@@ -23,11 +23,12 @@ export const chipVariants = cva(
       /** No label: square chip (32 or 40). Give it an aria-label. */
       iconOnly: { true: "", false: "" },
       size: {
-        small: "h-8 px-3 text-xs [&_svg]:size-4",
-        medium: "h-10 px-2 text-sm [&_svg]:size-5",
+        small: "h-8 gap-1 px-2 text-xs leading-4 [&_svg]:size-4",
+        medium: "h-10 px-2 text-sm leading-4 [&_svg]:size-5",
       },
     },
     compoundVariants: [
+      { appearance: ["ink", "action"], className: "leading-5" },
       { iconOnly: true, size: "small", className: "w-8 justify-center px-0" },
       { iconOnly: true, size: "medium", className: "w-10 justify-center px-0" },
     ],
@@ -50,7 +51,9 @@ export const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
     const Comp = asChild ? Slot : "button";
     return (
     <Comp ref={ref} {...(asChild ? {} : { type })} className={cn(chipVariants({ appearance, size, iconOnly }), className)} {...props}>
-      {icon}
+      {icon && (appearance === "ink" || appearance === "action") ? (
+        <span className="inline-flex size-6 shrink-0 items-center justify-center">{icon}</span>
+      ) : icon}
       <Slottable>{children}</Slottable>
       {count !== undefined && <span className="tabular-nums">{count}</span>}
       {onRemove && (

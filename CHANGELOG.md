@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.10 · 2026-10-10
+
+- **Composer:** acompanha os Chips da referência atual do Figma: ações pretas de 40px no celular e 32px no desktop, câmera com superfície `filled`, ícone GraphicEq de 16px e cartão com padding/gap de 16px. Mantém Falar, Enviar e seta de envio, o crescimento do texto e os handlers do consumidor.
+- **Chip:** tamanho `small` usa padding de 8px e gap de 4px; `ink` e `action` reservam uma célula de 24px para o ícone. Preserva cores, tamanhos e comportamentos existentes.
+
 ## 0.10.9 · 2026-10-09
 
 - **LoginForm:** remove a borda decorativa interna do avatar, nome e e-mail no desktop, conforme o protótipo aprovado. Mantém a borda externa do cartão e o foco do botão.

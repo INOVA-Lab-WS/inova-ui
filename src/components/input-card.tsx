@@ -1,12 +1,13 @@
 import * as React from "react";
-import { ArrowUp, AudioLines, Camera, X } from "lucide-react";
+import { ArrowUp, Camera, X } from "lucide-react";
 import { cn } from "../lib/cn";
-import { Button } from "./button";
+import { Chip } from "./chip";
+import { GraphicEqIcon } from "./graphic-eq-icon";
 
 /**
  * InputCard · Figma "input-card". White card: optional photo slots, the textarea, and the controls row.
  * The right action is "speak" while empty and "send" once there is text or a photo.
- * Both actions use the library's green action surface. The textarea grows with its content.
+ * Both actions use the library's black action Chip surface. The textarea grows with its content.
  */
 export interface InputCardPhoto {
   src: string;
@@ -60,7 +61,7 @@ export const InputCard = React.forwardRef<HTMLTextAreaElement, InputCardProps>(
       return () => observer.disconnect();
     }, [resizeTextarea]);
     return (
-      <div className={cn("flex flex-col gap-6 rounded-24 bg-surface-card p-5 font-sans lg:gap-4 lg:p-4", containerClassName)}>
+      <div className={cn("flex flex-col gap-4 rounded-24 bg-surface-card p-4 font-sans", containerClassName)}>
         {photos && photos.length > 0 && (
           <div className="flex gap-2">
             {photos.map((p, i) => (
@@ -102,21 +103,16 @@ export const InputCard = React.forwardRef<HTMLTextAreaElement, InputCardProps>(
         />
         <div className="flex items-center justify-between gap-2">
           {onCamera ? (
-            <Button variant="ghost" aria-label="Adicionar foto" onClick={onCamera} iconOnly>
-              <Camera aria-hidden />
-            </Button>
+            <Chip appearance="filled" size="medium" className="lg:size-8 lg:[&_svg]:size-4" aria-label="Adicionar foto" onClick={onCamera} iconOnly icon={<Camera aria-hidden />} />
           ) : (
             <span />
           )}
           {canSend ? (
-            <Button variant="action" size="compact" aria-label="Enviar" onClick={onSend} iconOnly>
-              <ArrowUp aria-hidden />
-            </Button>
+            <Chip appearance="action" size="medium" className="lg:size-8 lg:[&_svg]:size-4" aria-label="Enviar" onClick={onSend} iconOnly icon={<ArrowUp aria-hidden />} />
           ) : (
-            <Button variant="action" size="compact" {...speakProps}>
-              <AudioLines aria-hidden />
+            <Chip appearance="action" size="medium" icon={<GraphicEqIcon />} {...speakProps} className={cn("lg:h-8 lg:gap-1 lg:text-xs lg:leading-5 lg:[&_svg]:size-4", speakProps?.className)}>
               {speakLabel}
-            </Button>
+            </Chip>
           )}
         </div>
       </div>

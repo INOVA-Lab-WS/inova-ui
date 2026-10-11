@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.11 · 2026-10-11
+
+- **UserMessage áudio:** acompanha o visual atualizado do Figma com cápsula branca, padding de 8px, gap de 4px e ícones de 10px. O texto Ouvindo… e a transcrição seguem a tipografia responsiva. Mantém a API e o comportamento atual de reprodução.
+- **Code Connect:** exemplos de áudio pausado, reproduzindo e transcrevendo usam a API existente.
+
 ## 0.10.10 · 2026-10-10
 
 - **Composer:** acompanha os Chips da referência atual do Figma: ações pretas de 40px no celular e 32px no desktop, câmera com superfície `filled`, ícone GraphicEq de 16px e cartão com padding/gap de 16px. Mantém Falar, Enviar e seta de envio, o crescimento do texto e os handlers do consumidor.

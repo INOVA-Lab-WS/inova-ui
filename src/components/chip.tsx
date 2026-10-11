@@ -7,7 +7,7 @@ import { cn } from "../lib/cn";
 /** Chip · Figma "chip". Appearance filled/outline/ghost/ink/action, size small (32px) or medium (40px). */
 export const chipVariants = cva(
   [
-    "inline-flex shrink-0 items-center gap-2 rounded-pill font-sans font-medium whitespace-nowrap transition-colors outline-none",
+    "inline-flex shrink-0 items-center gap-2 rounded-pill font-sans font-medium whitespace-nowrap transition-colors outline-none select-none [-webkit-user-select:none] [-webkit-touch-callout:none]",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
     "disabled:pointer-events-none disabled:bg-surface-disabled disabled:text-text-disabled disabled:border-transparent",
   ],

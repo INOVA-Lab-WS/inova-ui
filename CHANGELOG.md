@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.12 · 2026-10-11
+
+- **Chip:** bloqueia seleção de texto e callout nativo ao pressionar e segurar, incluindo o controle Falar do Composer. Mantém handlers, links com `asChild`, dimensões e gestos de toque.
+
 ## 0.10.11 · 2026-10-11
 
 - **UserMessage áudio:** acompanha o visual atualizado do Figma com cápsula branca, padding de 8px, gap de 4px e ícones de 10px. O texto Ouvindo… e a transcrição seguem a tipografia responsiva. Mantém a API e o comportamento atual de reprodução.

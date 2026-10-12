@@ -34,6 +34,8 @@ export interface ImageViewerProps {
   nextLabel?: string;
 }
 
+const enter = "motion-safe:animate-[inova-fade-in_var(--inova-motion-duration-base)_var(--inova-motion-easing-enter)]";
+const actionEnter = "motion-safe:group-data-[state=open]/image-viewer:animate-[inova-fade-in_var(--inova-motion-duration-base)_var(--inova-motion-easing-enter)]";
 const glass = "bg-surface-glass backdrop-blur-[var(--inova-blur-glass)] text-text-on-ink transition-colors hover:bg-surface-glass/60";
 
 export function ImageViewerAction({ icon, className, children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement> & { icon?: React.ReactNode }) {
@@ -43,6 +45,7 @@ export function ImageViewerAction({ icon, className, children, ...props }: React
       className={cn(
         "flex flex-1 items-center justify-center gap-2 rounded-pill px-4 py-3 font-sans text-sm font-medium outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white [&_svg]:size-5",
         glass,
+        actionEnter,
         className,
       )}
       {...props}
@@ -105,6 +108,11 @@ export function ImageViewer({
     return Math.hypot(a.x - b.x, a.y - b.y);
   };
   const onPointerDown = (e: React.PointerEvent) => {
+    // A gesture owns opacity immediately; an entry animation must not override
+    // the inline drag/close feedback while its initial fade is still running.
+    e.currentTarget.closest('[role="dialog"]')?.getAnimations?.({ subtree: true }).forEach((animation) => {
+      if ("animationName" in animation && animation.animationName === "inova-fade-in") animation.cancel();
+    });
     e.currentTarget.setPointerCapture(e.pointerId);
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pointers.current.size === 2) {
@@ -201,12 +209,14 @@ export function ImageViewer({
             if (e.key === "ArrowLeft" && many) goTo(index - 1);
             else if (e.key === "ArrowRight" && many) goTo(index + 1);
           }}
-          className="fixed inset-0 z-overlay flex items-center justify-center font-sans outline-none motion-safe:data-[state=open]:animate-[inova-fade-in_var(--inova-motion-duration-base)_var(--inova-motion-easing-enter)]"
+          // Keep the dialog opaque: opacity on an ancestor isolates the child
+          // backdrop filter until the fade ends. Fade each visual layer instead.
+          className="group/image-viewer fixed inset-0 z-overlay flex items-center justify-center font-sans outline-none"
         >
           <Dialog.Title className="sr-only">{image?.alt}</Dialog.Title>
           <div
             aria-hidden
-            className="absolute inset-0 bg-surface-ink-translucent backdrop-blur-[var(--inova-blur-ink)] transition-opacity duration-[var(--inova-motion-duration-exit)]"
+            className={cn("absolute inset-0 bg-surface-ink-translucent backdrop-blur-[var(--inova-blur-ink)] transition-opacity duration-[var(--inova-motion-duration-exit)]", enter)}
             style={{ opacity: chrome }}
             onClick={() => onOpenChange(false)}
           />
@@ -214,7 +224,7 @@ export function ImageViewer({
           {many && (
             <div
               aria-hidden
-              className={cn("absolute left-1/2 top-[calc(var(--inova-safe-area-top)+1rem)] z-raised -translate-x-1/2 rounded-pill px-3 py-1 text-sm font-medium tabular-nums", glass)}
+              className={cn("absolute left-1/2 top-[calc(var(--inova-safe-area-top)+1rem)] z-raised -translate-x-1/2 rounded-pill px-3 py-1 text-sm font-medium tabular-nums", glass, enter)}
               style={{ opacity: chrome }}
             >
               {index + 1} / {images.length}
@@ -222,17 +232,17 @@ export function ImageViewer({
           )}
           <Dialog.Close
             aria-label={closeLabel}
-            className={cn("absolute right-4 top-[calc(var(--inova-safe-area-top)+1rem)] z-raised flex size-10 items-center justify-center rounded-pill outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white [&_svg]:size-5", glass)}
+            className={cn("absolute right-4 top-[calc(var(--inova-safe-area-top)+1rem)] z-raised flex size-10 items-center justify-center rounded-pill outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white [&_svg]:size-5", glass, enter)}
             style={{ opacity: chrome }}
           >
             <X aria-hidden />
           </Dialog.Close>
           {many && (
             <>
-              <button type="button" aria-label={previousLabel} onClick={() => goTo(index - 1)} className={cn("absolute left-4 top-1/2 z-raised hidden size-12 -translate-y-1/2 items-center justify-center rounded-pill outline-none focus-visible:outline-2 focus-visible:outline-white tablet:flex [&_svg]:size-6", glass)}>
+              <button type="button" aria-label={previousLabel} onClick={() => goTo(index - 1)} className={cn("absolute left-4 top-1/2 z-raised hidden size-12 -translate-y-1/2 items-center justify-center rounded-pill outline-none focus-visible:outline-2 focus-visible:outline-white tablet:flex [&_svg]:size-6", glass, enter)}>
                 <ChevronLeft aria-hidden />
               </button>
-              <button type="button" aria-label={nextLabel} onClick={() => goTo(index + 1)} className={cn("absolute right-4 top-1/2 z-raised hidden size-12 -translate-y-1/2 items-center justify-center rounded-pill outline-none focus-visible:outline-2 focus-visible:outline-white tablet:flex [&_svg]:size-6", glass)}>
+              <button type="button" aria-label={nextLabel} onClick={() => goTo(index + 1)} className={cn("absolute right-4 top-1/2 z-raised hidden size-12 -translate-y-1/2 items-center justify-center rounded-pill outline-none focus-visible:outline-2 focus-visible:outline-white tablet:flex [&_svg]:size-6", glass, enter)}>
                 <ChevronRight aria-hidden />
               </button>
             </>
@@ -251,7 +261,7 @@ export function ImageViewer({
                 src={image.src}
                 alt={image.alt}
                 draggable={false}
-                className="max-h-full max-w-full rounded-8 object-contain motion-reduce:!transition-none"
+                className={cn("max-h-full max-w-full rounded-8 object-contain motion-reduce:!transition-none", enter)}
                 style={{
                   transform: `translate(${pan.x}px, ${pan.y + dismissY}px) scale(${scale * shrink})`,
                   opacity: closing ? 0 : 1,

@@ -13,6 +13,8 @@ import { Button } from "./button";
 export interface MultiSelectOption {
   value: string;
   label: string;
+  /** Decorative leading icon or logo, also shown in the trigger for one chosen option. */
+  icon?: React.ReactNode;
   /** Supporting line under the label (12, muted), e.g. "dono: fulano". */
   hint?: string;
 }
@@ -71,6 +73,7 @@ export function MultiSelect({
   const filtered = query ? options.filter((o) => o.label.toLowerCase().includes(query.toLowerCase())) : options;
   const all = value.length === options.length && options.length > 0;
   const toggle = (v: string) => onValueChange(value.includes(v) ? value.filter((x) => x !== v) : [...value, v]);
+  const selectedOption = value.length === 1 ? options.find((option) => option.value === value[0]) : undefined;
   const triggerText =
     value.length === 0 ? placeholder : all ? (allSelectedLabel ?? allLabel) : value.length === 1 ? options.find((o) => o.value === value[0])?.label : `${value.length} selecionados`;
   return (
@@ -99,6 +102,7 @@ export function MultiSelect({
             error && "border-surface-danger",
           )}
         >
+          {selectedOption?.icon && <OptionIcon>{selectedOption.icon}</OptionIcon>}
           <span className={cn("min-w-0 flex-1 truncate", value.length === 0 || all ? "text-text-muted" : "text-text-primary")}>{triggerText}</span>
           {value.length > 0 && !all && (
             <span
@@ -164,14 +168,17 @@ export function MultiSelect({
               {filtered.length === 0 && <p className="px-2 py-2 text-sm text-text-muted">{noResults}</p>}
               {filtered.map((o, i) => (
                 <Option key={o.value} selected={value.includes(o.value)} onSelect={() => toggle(o.value)} tabIndex={query && i === 0 ? 0 : -1}>
-                  {o.hint ? (
-                    <span className="flex flex-col">
-                      <span>{o.label}</span>
-                      <span className="text-xs text-text-muted">{o.hint}</span>
-                    </span>
-                  ) : (
-                    o.label
-                  )}
+                  <span className="flex min-w-0 items-center gap-2">
+                    {o.icon && <OptionIcon>{o.icon}</OptionIcon>}
+                    {o.hint ? (
+                      <span className="flex min-w-0 flex-col">
+                        <span>{o.label}</span>
+                        <span className="text-xs text-text-muted">{o.hint}</span>
+                      </span>
+                    ) : (
+                      <span className="min-w-0">{o.label}</span>
+                    )}
+                  </span>
                 </Option>
               ))}
             </div>
@@ -235,4 +242,9 @@ function Option({
       <span className="min-w-0 flex-1">{children}</span>
     </div>
   );
+}
+
+/** Icons carry no accessible name: the option label names both the row and trigger. */
+function OptionIcon({ children }: { children: React.ReactNode }) {
+  return <span aria-hidden="true" className="inline-flex size-4 shrink-0 items-center justify-center [&>svg]:size-4 [&>img]:size-4 [&>img]:object-contain">{children}</span>;
 }

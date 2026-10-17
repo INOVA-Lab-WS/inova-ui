@@ -3,8 +3,9 @@
 // component=AreaChart
 import figma from "figma";
 const instance = figma.selectedInstance;
-const nativeState=instance.getEnum('state',{data:'data',zero:'zero','null-gap':'null-gap',loading:'loading',empty:'empty',missing:'missing'});
-const state=instance.getEnum('state',{data:'ready',zero:'ready','null-gap':'ready',loading:'loading',empty:'empty',missing:'unavailable'});
+const nativeState=instance.getEnum('state',{data:'data',zero:'zero','null-gap':'null-gap',loading:'loading',empty:'empty',missing:'missing',active:'data','active-null':'null-gap'});
+const state=instance.getEnum('state',{data:'ready',zero:'ready','null-gap':'ready',loading:'loading',empty:'empty',missing:'unavailable',active:'ready','active-null':'ready'});
+// Active/active-null are interaction previews: pointer, touch or keyboard governs the runtime active point.
 // Viewport is responsive in code. Both Figma options intentionally produce the same API.
 const viewport=instance.getEnum('viewport',{desktop:'desktop',mobile:'mobile'});
 const comparison=instance.getBoolean('show-comparison');

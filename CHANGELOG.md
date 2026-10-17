@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.12.0 · 2026-10-17
+
+- **PillTabs (#100):** controle segmentado com trilho muted, abas de raio8 e seleção branca com sombra. Mantém navegação, semântica, largura completa e rolagem.
+- **MultiSelect (#101):** `MultiSelectOption.icon` opcional mostra ícone/logo na opção e no gatilho com uma seleção. Sem ícone, a API continua funcionando como antes; Select nativo permanece igual.
+- **AreaChart (#102):** período ativo ganha guia vertical e pontos atual/anterior, com contorno branco e ausência respeitada por série, para ponteiro, toque e teclado.
+- **MetricTile (#103):** tendência no canto inferior direito nos dois contextos, separada de valor/legenda e sem aumentar a altura. Preserva a seleção corrigida na0.11.1.
+
 ## 0.11.1 · 2026-10-17
 
 - **MetricTile embutido (#99):** o KPI selecionado usa `surface-page`, sem linha verde inferior, conforme o Figma. Preserva foco por teclado, ajuda independente, dimensões e seleção; o cartão independente permanece igual.

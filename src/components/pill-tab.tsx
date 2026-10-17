@@ -3,14 +3,14 @@ import { Slot } from "@radix-ui/react-slot";
 import { cn } from "../lib/cn";
 
 /**
- * PillTab · Figma "pill-tab". Segmented tab pill (36px); selected uses the selected surface.
+ * PillTab · Figma "pill-tab". Segmented tab inside a muted rail; selected uses the card surface and raised shadow.
  * With asChild the child (e.g. a Link) carries the look; when each tab is a page, it is a link with aria-current="page", not role="tab".
  */
 export const pillTabClassName = (selected?: boolean) =>
   cn(
-    "inline-flex h-9 items-center gap-1 rounded-16 px-3 font-sans text-sm whitespace-nowrap no-underline transition-colors outline-none",
+    "inline-flex shrink-0 items-center justify-center gap-1 rounded-8 px-4 py-1.5 font-sans text-sm whitespace-nowrap no-underline transition-colors outline-none",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
-    selected ? "bg-surface-selected font-semibold text-text-primary" : "text-text-inactive hover:bg-surface-muted",
+    selected ? "bg-surface-card font-semibold text-text-primary shadow-raised" : "text-text-muted hover:bg-surface-control",
   );
 
 export interface PillTabProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -45,6 +45,6 @@ export interface PillTabsProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export function PillTabs({ className, navigation, fullWidth, ...props }: PillTabsProps) {
-  const cls = cn("flex items-center gap-1", fullWidth ? "w-full [&>*]:min-w-0 [&>*]:flex-1 [&>*]:justify-center" : "overflow-x-auto", className);
+  const cls = cn("inline-flex max-w-full items-center gap-1 rounded-12 bg-surface-muted p-1", fullWidth ? "w-full [&>*]:min-w-0 [&>*]:flex-1 [&>*]:justify-center" : "overflow-x-auto", className);
   return navigation ? <nav className={cls} {...props} /> : <div role="tablist" className={cls} {...props} />;
 }

@@ -214,11 +214,15 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 | `Table · TableRow · TableCell` | `table` |
 | `ActivityLog · ActivityLogRow` | `activity-log` |
 
-**KPIs e gráficos (0.11.0):** `MetricTile context="embedded"` compartilha conteúdo e ajuda com o cartão independente; `onActivate` seleciona sem alterar o evento DOM legado `onSelect`. `trend={{direction: "up", evaluation: "unfavorable", value: "12%"}}` representa custo crescente. A avaliação nunca é deduzida da direção.
+**KPIs e gráficos:** `MetricTile context="embedded"` compartilha conteúdo e ajuda com o cartão independente; `onActivate` seleciona sem alterar o evento DOM legado `onSelect`. `trend={{direction: "up", evaluation: "unfavorable", value: "12%"}}` representa custo crescente. A avaliação nunca é deduzida da direção. A tendência ocupa o canto inferior direito do cartão.
 
 `MetricChartCard` recebe uma tupla de 4 ou 6 `metrics` com `id`, `label` e `value`. Use `activeMetric`/`onActiveMetricChange` para controle externo ou `defaultActiveMetric` para estado interno; `selectable: false` exibe uma métrica informativa. O filho pode ser uma função `(id) => <AreaChart ... />` para trocar a série sem incorporar regras do produto à biblioteca.
 
 `AreaChart` recebe `data={[{label: "16/out", value: 0, previousValue: 10, date: "16/10", previousDate: "09/10"}]}` e `label` acessível. `comparison` ativa o período anterior; `showExtrema` mostra máximo/mínimo. `null` interrompe linha e preenchimento, enquanto zero permanece medido. `parts` em cada ponto adiciona linhas ao tooltip; `formatValue` formata valores. Estados: `ready`, `loading`, `empty`, `unavailable`. A biblioteca não calcula períodos nem indicadores.
+
+`MultiSelectOption.icon` aceita um ícone ou logo opcional (`ReactNode`), decorativo, ao lado do rótulo na lista e no gatilho com uma opção escolhida. Sem ícone, não há espaço reservado. O Select continua nativo.
+
+`PillTabs` usa um trilho segmentado; `PillTab` selecionada tem superfície branca e sombra. As APIs `navigation` e `fullWidth` permanecem.
 
 `BarChart` e `HorizontalBarChart` aceitam `selectedLabel` e `onSelectionChange`: clique, Enter ou Espaço selecionam; selecionar novamente limpa (`null`). Setas, Home e End percorrem as barras.
 

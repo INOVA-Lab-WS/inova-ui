@@ -47,6 +47,36 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ l
   const shown = !measured ? "Não medido" : typeof value === "number" ? new Intl.NumberFormat("pt-BR").format(value) : value;
   const labelId = React.useId();
   const valueId = React.useId();
+  const trendRef = React.useRef<HTMLSpanElement>(null);
+  const captionProbeRef = React.useRef<HTMLSpanElement>(null);
+  const [captionLines, setCaptionLines] = React.useState(2);
+  const [trendWidth, setTrendWidth] = React.useState(0);
+  const showTrend = !!trend && measured && !busy;
+  React.useLayoutEffect(() => {
+    const el = trendRef.current;
+    if (!el || !showTrend) return;
+    const measure = () => setTrendWidth(el.getBoundingClientRect().width);
+    measure();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [showTrend, trend]);
+  React.useLayoutEffect(() => {
+    const el = captionProbeRef.current;
+    if (!el || !showTrend) return;
+    const measure = () => {
+      const lineHeight = Number.parseFloat(getComputedStyle(el).lineHeight);
+      if (lineHeight > 0) setCaptionLines(Math.max(1, Math.min(2, Math.round(el.getBoundingClientRect().height / lineHeight))));
+    };
+    measure();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [caption, showTrend]);
+  // Keep the badge out of content flow, reserving its measured width where text can meet it.
+  const trendSpace = showTrend ? { paddingInlineEnd: trendWidth + 8 } : undefined;
   return (
     <div ref={ref} aria-busy={busy || undefined} data-context={context} data-state={busy ? "loading" : inactive ? "disabled" : active ? "selected" : state} className={cn(
       "relative isolate flex flex-col font-sans",
@@ -58,16 +88,9 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ l
       className,
     )} {...props}>
       {selectable && <button type="button" aria-labelledby={labelId} aria-describedby={valueId} aria-pressed={active} disabled={inactive} onClick={onActivate} className="absolute inset-0 z-raised rounded-[inherit] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary disabled:cursor-not-allowed" />}
-      <div className={cn("flex min-w-0 flex-col", (stat || embedded) && "gap-1")}>
+      <div className={cn("relative flex min-w-0 flex-col", (stat || embedded) && "gap-1")}>
       {layout === "variant" && marker && <span aria-hidden className={cn("mb-2 size-2.5 rounded-pill", markerClassName ?? "bg-chart-category1")} />}
       <span id={labelId} className={cn("pr-6 text-xs text-text-muted", stat && !embedded && "font-medium uppercase")}>{label}</span>
-      {help && (
-        <Tooltip text={help} placement="top-end">
-          <button type="button" aria-label={help} className="absolute right-3 top-3 z-header flex size-6 items-center justify-center rounded-pill focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary">
-            <Info aria-hidden className="size-3.5 text-text-muted" />
-          </button>
-        </Tooltip>
-      )}
       {busy ? (
         <>
           <span id={valueId} className="sr-only">Carregando</span>
@@ -76,12 +99,22 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ l
         </>
       ) : (
         <>
-          <span id={valueId} className={cn("tabular-nums", !measured ? "text-sm text-text-muted" : embedded ? "text-xl font-bold leading-7 text-text-primary" : stat ? "text-2xl font-bold text-text-primary" : "text-xl font-bold text-text-primary")}>{shown}</span>
-          {caption && <span className="line-clamp-2 text-xs text-text-muted">{caption}</span>}
-          {trend && measured && <TrendBadge {...trend} />}
+          <span id={valueId} style={trendSpace} className={cn("min-w-0 truncate tabular-nums", !measured ? "text-sm text-text-muted" : embedded ? "text-xl font-bold leading-7 text-text-primary" : stat ? "text-2xl font-bold text-text-primary" : "text-xl font-bold text-text-primary")}>{shown}</span>
+          {caption && <>
+            {showTrend && <span ref={captionProbeRef} aria-hidden className="pointer-events-none invisible absolute left-0 top-0 w-full line-clamp-2 text-xs text-text-muted">{caption}</span>}
+            <span style={showTrend ? { ...trendSpace, WebkitLineClamp: captionLines } : undefined} className="line-clamp-2 text-xs text-text-muted">{caption}</span>
+          </>}
         </>
       )}
       </div>
+      {help && (
+        <Tooltip text={help} placement="top-end">
+          <button type="button" aria-label={help} className="absolute right-3 top-3 z-header flex size-6 items-center justify-center rounded-pill focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary">
+            <Info aria-hidden className="size-3.5 text-text-muted" />
+          </button>
+        </Tooltip>
+      )}
+      {showTrend && <span ref={trendRef} data-metric-trend="" className="pointer-events-none absolute bottom-3 right-3 inline-flex max-w-[40%] items-end overflow-hidden"><TrendBadge {...trend} className={cn("max-w-full overflow-hidden whitespace-nowrap", trend.className)} /></span>}
     </div>
   );
 });

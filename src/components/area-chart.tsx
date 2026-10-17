@@ -50,6 +50,11 @@ function AreaChartPlot({ data, label, comparison, showExtrema, showLegend, serie
   const current = areaSegments(data.map(d => d.value), low, high);
   const previous = comparison ? areaSegments(data.map(d => d.previousValue), low, high) : [];
   const currentPoints = current.flat();
+  const activeX = active === null ? null : data.length === 1 ? 50 : active / (data.length - 1) * 100;
+  const activePoints = active === null ? [] : [
+    ...(measured(data[active].value) ? [{ series: "current", value: data[active].value, radius: 4 }] : []),
+    ...(comparison && measured(data[active].previousValue) ? [{ series: "previous", value: data[active].previousValue!, radius: 3 }] : []),
+  ];
   const extremes = showExtrema && currentPoints.length ? [currentPoints.reduce((a, b) => b.value > a.value ? b : a), currentPoints.reduce((a, b) => b.value < a.value ? b : a)].filter((p, i, all) => i === 0 || p.index !== all[0].index) : [];
   const shown = axisLabelIndexes(data.map(d => d.label), width, labelStep === "auto" ? undefined : labelStep);
   const tooltipRows = (index: number) => [{ label: seriesLabel, value: measured(data[index].value) ? data[index].value : null, date: data[index].date, colorClass: "text-chart-series1", lineStyle: "solid" as const }, ...(data[index].parts ?? []), ...(comparison ? [{ label: previousSeriesLabel, value: measured(data[index].previousValue) ? data[index].previousValue! : null, date: data[index].previousDate, colorClass: "text-chart-series1", lineStyle: "dashed" as const }] : [])];
@@ -65,8 +70,10 @@ function AreaChartPlot({ data, label, comparison, showExtrema, showLegend, serie
             {previous.map((points, i) => <g key={`previous-${i}`}><path d={linePath(points)} fill="none" stroke="currentColor" strokeDasharray="5 4" strokeWidth="2" vectorEffect="non-scaling-stroke" /></g>)}
           </svg>
           {[...current, ...previous].filter(points => points.length === 1).map((points, i) => <span key={`dot-${i}`} aria-hidden className="pointer-events-none absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-chart-series1" style={{ left: `${points[0].x}%`, top: `${(points[0].y + 4) / 108 * 100}%` }} />)}
+          {activeX !== null && <span aria-hidden data-active-guide="" className="pointer-events-none absolute top-0 border-l border-border-neutral" style={{ left: `${activeX}%`, bottom: `${4 / 108 * 100}%` }} />}
+          {activePoints.map(point => <span key={point.series} aria-hidden data-active-point={point.series} className="pointer-events-none absolute box-border -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface-card bg-chart-series1" style={{ left: `${activeX}%`, top: `${(100 - (point.value - low) / (high - low) * 100 + 4) / 108 * 100}%`, width: point.radius * 2, height: point.radius * 2 }} />)}
           <div className="absolute inset-0 flex">
-            {data.map((d, i) => <span key={i} {...bar(i)} role="img" aria-label={`${d.label}: ${tooltipRows(i).map(r => `${r.label}${r.date ? ` ${r.date}` : ""}: ${r.value === null ? missingValueLabel : formatValue(r.value)}`).join("; ")}`} className={cn("h-full min-w-0 flex-1 cursor-default", dim(i))} />)}
+            {data.map((d, i) => <span key={i} {...bar(i)} onPointerDown={event => { if (event.pointerType !== "mouse") event.currentTarget.focus(); }} role="img" aria-label={`${d.label}: ${tooltipRows(i).map(r => `${r.label}${r.date ? ` ${r.date}` : ""}: ${r.value === null ? missingValueLabel : formatValue(r.value)}`).join("; ")}`} className={cn("h-full min-w-0 flex-1 cursor-default", dim(i))} />)}
           </div>
           {active === null && extremes.map((p, i) => <ChartExtremeMarker key={p.index} label={`${i === 0 ? "Máx." : "Mín."} ${formatValue(p.value)}`} className="absolute max-w-[50%] truncate" style={{ left: `${p.x}%`, top: `${(p.y + 4) / 108 * 100}%`, transform: `translate(${p.x > 50 ? "-100%" : "0"}, ${p.y < 50 ? "0" : "-100%"})` }} />)}
           {active !== null && <ComparisonTooltip index={active} count={data.length} title={data[active].label} rows={tooltipRows(active)} formatValue={formatValue} missingValueLabel={missingValueLabel} />}

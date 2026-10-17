@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.11.0 · 2026-10-17
+
+- **MetricTile:** unifica KPIs independentes e integrados ao gráfico com a mesma estrutura; mantém layouts legados e adiciona seleção, estados, ajuda independente e tendência.
+- **TrendBadge:** direção e avaliação independentes, para representar inclusive custos crescentes sem sinalizar melhora.
+- **AreaChart:** valores reais, preenchimento segmentado em lacunas, comparação tracejada na mesma escala, datas, tooltip, extremos e estados de carregamento, vazio e sem medição. Zero continua sendo medido.
+- **MetricChartCard:** composição de 4 ou 6 KPIs, rolagem no celular e grade no desktop, com seleção controlada ou interna e gráfico fornecido pelo consumidor.
+- **BarChart / HorizontalBarChart:** seleção acessível por teclado e ponteiro, com limpeza ao selecionar novamente. Primitivos compartilhados de legenda, tooltip comparativo e marcador.
+- **Code Connect:** mapeamentos dos componentes aprovados no Figma, sem duplicar tabelas, filtros, ações ou agrupamentos descartados.
+
 ## 0.10.12 · 2026-10-11
 
 - **Chip:** bloqueia seleção de texto e callout nativo ao pressionar e segurar, incluindo o controle Falar do Composer. Mantém handlers, links com `asChild`, dimensões e gestos de toque.

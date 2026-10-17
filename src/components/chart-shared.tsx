@@ -12,14 +12,14 @@ export const nf = new Intl.NumberFormat("pt-BR");
 
 export type ChartState = "loading" | "empty" | "ready";
 
-export interface ChartLegendItem { label: string; colorClass: string }
+export interface ChartLegendItem { label: string; colorClass: string; lineStyle?: "solid" | "dashed" }
 
 export function ChartLegend({ items, className }: { items: ChartLegendItem[]; className?: string }) {
   return (
     <ul className={cn("flex flex-wrap gap-x-4 gap-y-2 text-xs text-text-muted", className)}>
       {items.map((it) => (
         <li key={it.label} className="inline-flex items-center gap-2">
-          <span aria-hidden className={cn("size-3 rounded-4", it.colorClass)} />
+          {it.lineStyle ? <ChartLineKey label={it.label} lineStyle={it.lineStyle} colorClass={it.colorClass} markerOnly /> : <span aria-hidden className={cn("size-3 rounded-4", it.colorClass)} />}
           {it.label}
         </li>
       ))}
@@ -146,7 +146,7 @@ export function useActiveBar(count: number) {
     ref: (el: HTMLElement | null) => {
       refs.current[i] = el;
     },
-    tabIndex: i === focusIndex ? 0 : -1,
+    tabIndex: i === Math.min(focusIndex, Math.max(0, count - 1)) ? 0 : -1,
     onMouseEnter: () => setActive(i),
     onMouseLeave: () => setActive((a) => (a === i ? null : a)),
     onFocus: () => {
@@ -167,13 +167,15 @@ export function useActiveBar(count: number) {
   });
   /** Classes for bar i: the others fade to 40% while one is active. */
   const dim = (i: number) => cn("outline-none transition-opacity motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-text-primary", active !== null && active !== i && "opacity-40");
-  return { active, bar, dim };
+  return { active: active !== null && active < count ? active : null, bar, dim };
 }
 
 export interface ChartTooltipRow {
   label: string;
-  value: number;
+  value: number | null;
   colorClass?: string;
+  date?: string;
+  lineStyle?: "solid" | "dashed";
 }
 
 /**
@@ -181,7 +183,9 @@ export interface ChartTooltipRow {
  * mark and value, and the total when given. Sits above the active bar, inside the chart (aligned to the edge near the
  * first and last bars).
  */
-export function ChartTooltip({ index, count, title, rows, total }: { index: number; count: number; title: string; rows: ChartTooltipRow[]; total?: number }) {
+export interface ChartTooltipProps { index: number; count: number; title: string; rows: ChartTooltipRow[]; total?: number; formatValue?: (value: number) => string; missingValueLabel?: string }
+
+export function ChartTooltip({ index, count, title, rows, total, formatValue = nf.format, missingValueLabel = "Sem medição" }: ChartTooltipProps) {
   const center = ((index + 0.5) / count) * 100;
   const edge = index < count / 4 ? "start" : index >= count - count / 4 ? "end" : "center";
   return (
@@ -194,19 +198,35 @@ export function ChartTooltip({ index, count, title, rows, total }: { index: numb
       style={edge === "start" ? { left: 0 } : edge === "end" ? { right: 0 } : { left: `${center}%` }}
     >
       <span className="font-medium text-text-primary">{title}</span>
-      {rows.map((r) => (
-        <span key={r.label} className="flex items-center gap-2">
-          {r.colorClass && <span aria-hidden className={cn("size-2.5 shrink-0 rounded-4", r.colorClass)} />}
-          <span className="min-w-0 flex-1 truncate text-text-muted">{r.label}</span>
-          <span className="font-medium tabular-nums text-text-primary">{nf.format(r.value)}</span>
+      {rows.map((r, i) => (
+        <span key={i} className="flex items-center gap-2">
+          {r.colorClass && (r.lineStyle ? <ChartLineKey label={r.label} lineStyle={r.lineStyle} colorClass={r.colorClass} markerOnly /> : <span aria-hidden className={cn("size-2.5 shrink-0 rounded-4", r.colorClass)} />)}
+          <span className="min-w-0 flex-1 truncate text-text-muted">{r.label}{r.date && ` · ${r.date}`}</span>
+          <span className="font-medium tabular-nums text-text-primary">{r.value === null || !Number.isFinite(r.value) ? missingValueLabel : formatValue(r.value)}</span>
         </span>
       ))}
       {total !== undefined && (
         <span className="flex items-center gap-2 border-t border-border-default pt-1">
           <span className="flex-1 text-text-muted">Total</span>
-          <span className="font-medium tabular-nums text-text-primary">{nf.format(total)}</span>
+          <span className="font-medium tabular-nums text-text-primary">{formatValue(total)}</span>
         </span>
       )}
     </div>
   );
 }
+
+
+export interface ChartLineKeyProps { label: string; lineStyle?: "solid" | "dashed"; colorClass?: string; className?: string; markerOnly?: boolean }
+/** A continuous or dashed series key. Color classes use text-* to color the border. */
+export function ChartLineKey({ label, lineStyle = "solid", colorClass = "text-chart-series1", className, markerOnly }: ChartLineKeyProps) {
+  const marker = <span aria-hidden className={cn("inline-block w-5 shrink-0 border-t-2", lineStyle === "dashed" ? "border-dashed" : "border-solid", colorClass)} />;
+  return markerOnly ? marker : <span className={cn("inline-flex items-center gap-2 text-xs text-text-muted", className)}>{marker}{label}</span>;
+}
+
+export interface ChartExtremeMarkerProps extends React.HTMLAttributes<HTMLSpanElement> { label: string }
+export function ChartExtremeMarker({ label, className, ...props }: ChartExtremeMarkerProps) {
+  return <span className={cn("pointer-events-none rounded-4 border border-border-default bg-surface-page px-1 text-chart-axis text-text-primary shadow-raised", className)} {...props}>{label}</span>;
+}
+
+/** Comparison tooltip shares numeric formatting, missing measurements and per-period dates with other charts. */
+export function ComparisonTooltip(props: ChartTooltipProps) { return <ChartTooltip {...props} />; }

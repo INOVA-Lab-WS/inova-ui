@@ -20,6 +20,9 @@ export interface BarChartProps extends React.HTMLAttributes<HTMLDivElement> {
   labelStep?: number | "auto";
   /** Name of the value in the tooltip (e.g. "Sessões"); defaults to `label`. */
   valueLabel?: string;
+  /** Controlled selected bucket; select it again to clear. */
+  selectedLabel?: string | null;
+  onSelectionChange?: (label: string | null) => void;
 }
 
 export function BarChart({ data, label, state = "ready", emptyMessage, density = "wide", labelStep = "auto", valueLabel, className, ...props }: BarChartProps) {
@@ -27,7 +30,7 @@ export function BarChart({ data, label, state = "ready", emptyMessage, density =
   return <BarChartPlot data={data} label={label} density={density} labelStep={labelStep} valueLabel={valueLabel} className={className} {...props} />;
 }
 
-function BarChartPlot({ data, label, density, labelStep, valueLabel, className, ...props }: Omit<BarChartProps, "state" | "emptyMessage">) {
+function BarChartPlot({ data, label, density, labelStep, valueLabel, selectedLabel, onSelectionChange, className, ...props }: Omit<BarChartProps, "state" | "emptyMessage">) {
   const max = Math.max(1, ...data.map((d) => d.value));
   const { active, bar, dim } = useActiveBar(data.length);
   return (
@@ -35,7 +38,7 @@ function BarChartPlot({ data, label, density, labelStep, valueLabel, className, 
       <div className="relative min-w-0">
         <div role="group" aria-label={label} className={cn("flex h-28 min-w-0 items-end overflow-hidden border-b border-border-default", barGap(data.length, density === "thin" ? "gap-1" : "gap-3"))}>
           {data.map((d, i) => (
-            <span key={d.label} {...bar(i)} aria-label={`${d.label}: ${nf.format(d.value)}`} className={cn("flex h-full min-w-0 flex-1 cursor-default items-end justify-center", dim(i))}>
+            <span key={d.label} {...bar(i)} role={onSelectionChange ? "button" : undefined} aria-pressed={onSelectionChange ? selectedLabel === d.label : undefined} onClick={onSelectionChange ? () => onSelectionChange(selectedLabel === d.label ? null : d.label) : undefined} onKeyDown={(e) => { bar(i).onKeyDown(e); if (onSelectionChange && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); if (!e.repeat) onSelectionChange(selectedLabel === d.label ? null : d.label); } }} aria-label={`${d.label}: ${nf.format(d.value)}`} className={cn("flex h-full min-w-0 flex-1 cursor-default items-end justify-center", dim(i), onSelectionChange && "cursor-pointer", selectedLabel != null && selectedLabel !== d.label && "opacity-40")}>
               <span className={cn("rounded-t-4", SERIES_COLORS[0], density === "thin" ? "w-1 max-w-full" : "w-full")} style={{ height: `${(d.value / max) * 100}%` }} />
             </span>
           ))}

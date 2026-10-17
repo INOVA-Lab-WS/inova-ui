@@ -3,14 +3,24 @@ import { Info } from "lucide-react";
 import { cn } from "../lib/cn";
 import { Tooltip } from "./tooltip";
 import { Skeleton } from "./skeleton";
+import { TrendBadge, type TrendBadgeProps } from "./trend-badge";
 
 /**
  * Metric tile · Figma "metric-tile": layouts stat, variant and count, with an "i" help trigger. "Não medido" is never 0.
- * Height (#91): every tile is at least --inova-size-metric-tile (136px), in any layout, with or without the dot or a
- * caption, so all tiles on a page match. It fits label, value and up to 2 caption lines (a 3rd is cut with an ellipsis).
+ * Height (#91): standalone tiles are at least --inova-size-metric-tile (136px), with or without the dot or a
+ * caption. Embedded tiles use the same content with 160px mobile width and a 96px minimum height.
+ * Captions are limited to two lines.
  */
 export interface MetricTileProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string;
+  /** The same KPI content, standalone or embedded in a metric/chart composition. */
+  context?: "standalone" | "embedded";
+  state?: "default" | "idle" | "selected" | "focus" | "static" | "disabled" | "loading" | "missing";
+  selected?: boolean;
+  disabled?: boolean;
+  /** Enables a native selection button, separate from the help trigger. */
+  onActivate?: () => void;
+  trend?: TrendBadgeProps;
   /** null or undefined renders "Não medido". */
   value?: number | string | null;
   layout?: "stat" | "variant" | "count";
@@ -26,32 +36,52 @@ export interface MetricTileProps extends React.HTMLAttributes<HTMLDivElement> {
   loading?: boolean;
 }
 
-export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ label, value, layout = "stat", caption, help, markerClassName, marker = true, loading, className, ...props }, ref) => {
+export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ label, value, layout = "stat", context = "standalone", state = "default", selected, disabled, onActivate, trend, caption, help, markerClassName, marker = true, loading, className, ...props }, ref) => {
   const stat = layout === "stat";
-  const measured = value !== null && value !== undefined;
+  const embedded = context === "embedded";
+  const busy = loading || state === "loading";
+  const inactive = disabled || state === "disabled" || busy;
+  const active = selected ?? state === "selected";
+  const selectable = !!onActivate && state !== "static";
+  const measured = state !== "missing" && value !== null && value !== undefined;
   const shown = !measured ? "Não medido" : typeof value === "number" ? new Intl.NumberFormat("pt-BR").format(value) : value;
+  const labelId = React.useId();
+  const valueId = React.useId();
   return (
-    <div ref={ref} aria-busy={loading || undefined} className={cn("relative flex min-h-[var(--inova-size-metric-tile)] flex-col rounded-16 border border-border-default bg-surface-card font-sans", stat ? "gap-1 p-5" : "p-4", className)} {...props}>
+    <div ref={ref} aria-busy={busy || undefined} data-context={context} data-state={busy ? "loading" : inactive ? "disabled" : active ? "selected" : state} className={cn(
+      "relative isolate flex flex-col font-sans",
+      embedded ? "min-h-24 w-40 shrink-0 gap-1 border-b-2 border-transparent p-4 desktop:w-auto" : "min-h-[var(--inova-size-metric-tile)] rounded-16 border border-border-default bg-surface-card",
+      !embedded && (stat ? "gap-1 p-5" : "p-4"),
+      active && (embedded ? "border-surface-action bg-surface-muted" : "border-surface-action"),
+      inactive && !busy && "opacity-50",
+      state === "focus" && "outline-2 outline-offset-2 outline-text-primary",
+      className,
+    )} {...props}>
+      {selectable && <button type="button" aria-labelledby={labelId} aria-describedby={valueId} aria-pressed={active} disabled={inactive} onClick={onActivate} className="absolute inset-0 z-raised rounded-[inherit] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary disabled:cursor-not-allowed" />}
+      <div className={cn("flex min-w-0 flex-col", (stat || embedded) && "gap-1")}>
       {layout === "variant" && marker && <span aria-hidden className={cn("mb-2 size-2.5 rounded-pill", markerClassName ?? "bg-chart-category1")} />}
-      <span className={cn("pr-6 text-xs text-text-muted", stat && "font-medium uppercase")}>{label}</span>
+      <span id={labelId} className={cn("pr-6 text-xs text-text-muted", stat && !embedded && "font-medium uppercase")}>{label}</span>
       {help && (
-        <Tooltip text={help}  placement="top-end">
-          <button type="button" aria-label={help} className="absolute right-3 top-3 flex size-6 items-center justify-center rounded-pill focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary">
+        <Tooltip text={help} placement="top-end">
+          <button type="button" aria-label={help} className="absolute right-3 top-3 z-header flex size-6 items-center justify-center rounded-pill focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary">
             <Info aria-hidden className="size-3.5 text-text-muted" />
           </button>
         </Tooltip>
       )}
-      {loading ? (
+      {busy ? (
         <>
-          <Skeleton className={stat ? "my-1 h-7 w-16" : "my-1 h-6 w-14"} />
+          <span id={valueId} className="sr-only">Carregando</span>
+          <Skeleton className={stat && !embedded ? "my-1 h-7 w-16" : "my-1 h-6 w-14"} />
           {caption !== undefined && <Skeleton shape="text" className="w-12" />}
         </>
       ) : (
         <>
-      <span className={cn("tabular-nums", !measured ? "text-sm text-text-muted" : stat ? "text-2xl font-bold text-text-primary" : "text-xl font-bold text-text-primary")}>{shown}</span>
-      {caption && <span className="line-clamp-2 text-xs text-text-muted">{caption}</span>}
+          <span id={valueId} className={cn("tabular-nums", !measured ? "text-sm text-text-muted" : embedded ? "text-xl font-bold leading-7 text-text-primary" : stat ? "text-2xl font-bold text-text-primary" : "text-xl font-bold text-text-primary")}>{shown}</span>
+          {caption && <span className="line-clamp-2 text-xs text-text-muted">{caption}</span>}
+          {trend && measured && <TrendBadge {...trend} />}
         </>
       )}
+      </div>
     </div>
   );
 });

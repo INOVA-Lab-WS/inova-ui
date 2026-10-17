@@ -73,3 +73,7 @@ export { linkClassName } from "./components/link";
 export { ChocolateMenuIcon } from "./components/header";
 export { Card, cardClassName, type CardProps } from "./components/card";
 export { Code, codeClassName } from "./components/code";
+
+export * from "./components/trend-badge";
+export * from "./components/area-chart";
+export * from "./components/metric-chart-card";

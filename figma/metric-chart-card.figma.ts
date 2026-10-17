@@ -1,0 +1,25 @@
+// url=https://www.figma.com/design/Ze0WiY6G9j2yLxKb55dDMK/INOVA-Lab-Library?node-id=1055-398
+// source=https://github.com/INOVA-Lab-WS/inova-ui/blob/main/src/components/metric-chart-card.tsx
+// component=MetricChartCard
+import figma from "figma";
+const instance = figma.selectedInstance;
+const count=instance.getEnum('metrics',{'4':4,'6':6});
+// Layout responds to the viewport; no invented viewport code prop.
+const viewport=instance.getEnum('viewport',{desktop:'desktop',mobile:'mobile'});
+const title=instance.getString('title');
+const showHeader=instance.getBoolean('show-header');
+const chart=instance.getInstanceSwap('chart');
+const chartCode=chart?.type==='INSTANCE' ? chart.executeTemplate().example : undefined;
+const metrics=instance.findConnectedInstances(n=>n.codeConnectId()==='metric-tile');
+const m0=metrics[0]?.type==='INSTANCE' ? metrics[0].executeTemplate().metadata?.props?.fields : undefined;
+const m1=metrics[1]?.type==='INSTANCE' ? metrics[1].executeTemplate().metadata?.props?.fields : undefined;
+const m2=metrics[2]?.type==='INSTANCE' ? metrics[2].executeTemplate().metadata?.props?.fields : undefined;
+const m3=metrics[3]?.type==='INSTANCE' ? metrics[3].executeTemplate().metadata?.props?.fields : undefined;
+const m4=metrics[4]?.type==='INSTANCE' ? metrics[4].executeTemplate().metadata?.props?.fields : undefined;
+const m5=metrics[5]?.type==='INSTANCE' ? metrics[5].executeTemplate().metadata?.props?.fields : undefined;
+const metricData=count===6 ? figma.code`[{id:"metric-1",${m0}},{id:"metric-2",${m1}},{id:"metric-3",${m2}},{id:"metric-4",${m3}},{id:"metric-5",${m4}},{id:"metric-6",${m5}}]` : figma.code`[{id:"metric-1",${m0}},{id:"metric-2",${m1}},{id:"metric-3",${m2}},{id:"metric-4",${m3}}]`;
+export default {
+ id:'metric-chart-card',imports:['import { MetricChartCard } from "@inova-lab-ws/ui"'],
+ example:figma.code`<MetricChartCard ${showHeader ? figma.code`title="${title}"` : ''} metrics={${metricData}}>${chartCode}</MetricChartCard>`,
+ metadata:{nestable:true,props:{viewport}}
+};

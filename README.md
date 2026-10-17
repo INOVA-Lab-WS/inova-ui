@@ -201,7 +201,11 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 
 | Componente | No Figma |
 | :--- | :--- |
-| `MetricTile` | `metric-tile` |
+| `MetricTile · MetricTileGroup` | `metric-tile` |
+| `TrendBadge` | `metric-trend` |
+| `MetricChartCard` | `metric-chart-card` |
+| `AreaChart` | `area-chart` |
+| `ChartLineKey · ComparisonTooltip · ChartExtremeMarker` | primitivas de gráficos |
 | `ProgressReadout` | `progress-readout` |
 | `BarChart` | `bar-chart` |
 | `HorizontalBarChart` | `horizontal-bar-chart` |
@@ -209,6 +213,15 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 | `DistributionChart` | `distribution-chart` |
 | `Table · TableRow · TableCell` | `table` |
 | `ActivityLog · ActivityLogRow` | `activity-log` |
+
+**KPIs e gráficos (0.11.0):** `MetricTile context="embedded"` compartilha conteúdo e ajuda com o cartão independente; `onActivate` seleciona sem alterar o evento DOM legado `onSelect`. `trend={{direction: "up", evaluation: "unfavorable", value: "12%"}}` representa custo crescente. A avaliação nunca é deduzida da direção.
+
+`MetricChartCard` recebe uma tupla de 4 ou 6 `metrics` com `id`, `label` e `value`. Use `activeMetric`/`onActiveMetricChange` para controle externo ou `defaultActiveMetric` para estado interno; `selectable: false` exibe uma métrica informativa. O filho pode ser uma função `(id) => <AreaChart ... />` para trocar a série sem incorporar regras do produto à biblioteca.
+
+`AreaChart` recebe `data={[{label: "16/out", value: 0, previousValue: 10, date: "16/10", previousDate: "09/10"}]}` e `label` acessível. `comparison` ativa o período anterior; `showExtrema` mostra máximo/mínimo. `null` interrompe linha e preenchimento, enquanto zero permanece medido. `parts` em cada ponto adiciona linhas ao tooltip; `formatValue` formata valores. Estados: `ready`, `loading`, `empty`, `unavailable`. A biblioteca não calcula períodos nem indicadores.
+
+`BarChart` e `HorizontalBarChart` aceitam `selectedLabel` e `onSelectionChange`: clique, Enter ou Espaço selecionam; selecionar novamente limpa (`null`). Setas, Home e End percorrem as barras.
+
 
 **Conversa**
 

@@ -1,0 +1,1 @@
+{"codeConnect":{"include":["figma/*.figma.ts"],"parser":"react","label":"React","importPaths":{"../src":"@inova-lab-ws/ui"}}}

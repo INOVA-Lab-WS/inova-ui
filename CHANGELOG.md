@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.1 · 2026-10-17
+
+- **MetricTile embutido (#99):** o KPI selecionado usa `surface-page`, sem linha verde inferior, conforme o Figma. Preserva foco por teclado, ajuda independente, dimensões e seleção; o cartão independente permanece igual.
+
 ## 0.11.0 · 2026-10-17
 
 - **MetricTile:** unifica KPIs independentes e integrados ao gráfico com a mesma estrutura; mantém layouts legados e adiciona seleção, estados, ajuda independente e tendência.

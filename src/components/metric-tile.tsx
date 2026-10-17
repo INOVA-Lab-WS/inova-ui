@@ -50,9 +50,9 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ l
   return (
     <div ref={ref} aria-busy={busy || undefined} data-context={context} data-state={busy ? "loading" : inactive ? "disabled" : active ? "selected" : state} className={cn(
       "relative isolate flex flex-col font-sans",
-      embedded ? "min-h-24 w-40 shrink-0 gap-1 border-b-2 border-transparent p-4 desktop:w-auto" : "min-h-[var(--inova-size-metric-tile)] rounded-16 border border-border-default bg-surface-card",
+      embedded ? "min-h-24 w-40 shrink-0 gap-1 p-4 desktop:w-auto" : "min-h-[var(--inova-size-metric-tile)] rounded-16 border border-border-default bg-surface-card",
       !embedded && (stat ? "gap-1 p-5" : "p-4"),
-      active && (embedded ? "border-surface-action bg-surface-muted" : "border-surface-action"),
+      active && (embedded ? "bg-surface-page" : "border-surface-action"),
       inactive && !busy && "opacity-50",
       state === "focus" && "outline-2 outline-offset-2 outline-text-primary",
       className,

@@ -82,6 +82,21 @@ try{
  await page.locator('#embedded button[aria-label="Independent help"]').click();check(prefix+'help does not select KPI',await page.locator('#selections').textContent()==='0');
  await page.locator('#embedded button[aria-pressed]').click();check(prefix+'KPI selection works',await page.locator('#selections').textContent()==='1');
  await page.locator('#card4 button[aria-pressed]').nth(2).click();check(prefix+'card selection drives render prop',await page.locator('#card4 output').textContent()==='k2');
+ const selectedCell=page.locator('#card4 [data-state="selected"]');
+ const selectedStyle=await selectedCell.evaluate(n=>{const s=getComputedStyle(n);return {background:s.backgroundColor,borders:[s.borderTopWidth,s.borderRightWidth,s.borderBottomWidth,s.borderLeftWidth],bottomColor:s.borderBottomColor,height:n.getBoundingClientRect().height};});
+ const baseline=process.env.EXPECT_METRIC_99_BASELINE==='1';
+ check(prefix+'embedded selected background '+(baseline?'baseline':'issue99'),selectedStyle.background===(baseline?'rgb(231, 228, 226)':'rgb(250, 248, 249)'),selectedStyle);
+ check(prefix+'embedded selected borders '+(baseline?'baseline':'issue99'),selectedStyle.borders.join(',')===(baseline?'0px,0px,2px,0px':'0px,0px,0px,0px'),selectedStyle);
+ if(baseline)check(prefix+'baseline bottom border green',selectedStyle.bottomColor==='rgb(59, 156, 74)',selectedStyle);
+ const idleBorders=await page.locator('#card4 [data-context="embedded"]').first().evaluate(n=>{const s=getComputedStyle(n);return[s.borderTopWidth,s.borderRightWidth,s.borderBottomWidth,s.borderLeftWidth]});
+ check(prefix+'unselected embedded border reservation '+(baseline?'baseline':'issue99'),idleBorders.join(',')===(baseline?'0px,0px,2px,0px':'0px,0px,0px,0px'),idleBorders);
+ const legacyStyle=await page.locator('#legacy > div').evaluate(n=>{const s=getComputedStyle(n);return {border:s.borderTopWidth,height:n.getBoundingClientRect().height}});
+ check(prefix+'standalone border and height preserved',legacyStyle.border==='1px'&&legacyStyle.height>=136,legacyStyle);
+ const selectionButton=selectedCell.locator('button[aria-pressed]');await selectionButton.focus();await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
+ const focusStyle=await selectionButton.evaluate(n=>{const s=getComputedStyle(n);return{focusVisible:n.matches(':focus-visible'),outline:s.outlineWidth,style:s.outlineStyle}});
+ check(prefix+'keyboard focus independent from selected fill',focusStyle.focusVisible&&focusStyle.outline==='2px'&&focusStyle.style==='solid',focusStyle);
+ await page.locator('#card4').screenshot({path:path.join(evidence,'selected-focus-'+viewport.width+'.png')});
+
  const trend=await page.locator('#trends [data-direction]').evaluateAll(nodes=>nodes.map(n=>({direction:n.dataset.direction,evaluation:n.dataset.evaluation,color:getComputedStyle(n).color,text:n.textContent})));
  check(prefix+'nine independent trend combinations',trend.length===9&&new Set(trend.map(t=>t.evaluation+':'+t.color)).size===3,trend);
  for(const id of ['vertical','horizontal']){

@@ -9,7 +9,7 @@ const primary=instance.getSlot('primary');
 const l0=instance.getString('filter-0-label'),s0=instance.getString('filter-0-summary'),a0=instance.getBoolean('filter-0-active');
 const l1=instance.getString('filter-1-label'),s1=instance.getString('filter-1-summary'),a1=instance.getBoolean('filter-1-active');
 const l2=instance.getString('filter-2-label'),s2=instance.getString('filter-2-summary'),a2=instance.getBoolean('filter-2-active');
-const f0=instance.getSlot('filter-0-field')??'',p0=instance.getSlot('filter-0-panel')??'';
+const f0=instance.getSlot('filter-0-field')??'',p0=instance.getSlot(view==='mobile-panel'?'filter-0-panel-mobile#1130:0':'filter-0-panel')??'';
 const f1=instance.getSlot('filter-1-field')??'',p1=instance.getSlot('filter-1-panel')??'';
 const f2=instance.getSlot('filter-2-field')??'',p2=instance.getSlot('filter-2-panel')??'';
 // Active count derives from the 3 active flags in code. View/open/back are internal responsive navigation, not public props.

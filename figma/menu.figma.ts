@@ -12,7 +12,7 @@ const showFooter = instance.getBoolean('show-footer');
 // Mount Header and this Menu under the same MenuProvider to share automatic mobile open/close state.
 export default {
  id:'menu', imports:['import { Menu } from "@inova-lab-ws/ui"'],
- example:figma.code`<Menu presentation="${presentation}" logo={<>${logo}</>} navigation={<>${navigation}</>} ${showFooter ? figma.code`footer={<>${footer}</>}` : 'showFooter={false}'} />`,
+ example:figma.code`<Menu presentation="${presentation}" ${logo ? figma.code`logo={<>${logo}</>}` : ''} ${navigation ? figma.code`navigation={<>${navigation}</>}` : ''} ${showFooter && footer ? figma.code`footer={<>${footer}</>}` : 'showFooter={false}'} />`,
  metadata:{nestable:true}
 };
 

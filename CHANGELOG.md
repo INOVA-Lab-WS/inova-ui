@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.13.0 · 2026-10-18
+
+- **MetricTile / MetricChartCard (#104, #106, #118):** marcador por ícone opcional; valores exatos maiores no celular; composição de2,4ou6KPIs, com corpo sem padding opcional.
+- **Table / TableRow (#105, #106):** moldura opcional, inset alinhado de12px e linhas interativas acessíveis com hover arredondado em todas as células, incluindo cabeçalho de linha. Controles internos mantêm sua ação independente.
+- **Composições (#107–#109, #111–#112):** PageHeader de seção, Thumbnail com sobreposições/rodapé/autor, PageGrid com carga contínua e estados, Breadcrumb/BreadcrumbBack e DetailLayout lateral sticky no desktop.
+- **Ações (#110, #113):** ação opcional em Toast e cópia compacta de SKU no ProductListRow com confirmação/erro.
+- **Filtros (#114–#116):** apresentações popover/sheet/responsive em seletores existentes, painéis controlados reutilizáveis, FilterBar agrupada no celular e Combobox com busca/criação/reset. Popovers existentes continuam como padrão.
+- **Menu (#117):** apresentação responsive com MenuProvider compartilhado com Header, fechamento por navegação/breakpoint e foco gerenciado.
+- **Avatar (#119):** variant logo com imagem contida, borda e respiro proporcional; documentação orienta recortar o viewBox do SVG.
+
 ## 0.12.0 · 2026-10-17
 
 - **PillTabs (#100):** controle segmentado com trilho muted, abas de raio8 e seleção branca com sombra. Mantém navegação, semântica, largura completa e rolagem.

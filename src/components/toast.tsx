@@ -1,6 +1,7 @@
 import * as React from "react";
-import { CircleCheck, CircleX, Info } from "lucide-react";
+import { CircleCheck, CircleX, Info, X } from "lucide-react";
 import { cn } from "../lib/cn";
+import { Button } from "./button";
 
 /**
  * Toast · Figma "toast". Same look as Alert plus a shadow.
@@ -13,11 +14,15 @@ const KIND = {
   info: { Icon: Info, cls: "bg-status-info-bg [&_svg]:text-status-info-fg" },
 } as const;
 
+export interface ToastAction { label: string; onClick: () => void }
+
 export interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
   kind?: keyof typeof KIND;
+  action?: ToastAction;
+  onDismiss?: () => void;
 }
 
-export function Toast({ kind = "success", children, className, ...props }: ToastProps) {
+export function Toast({ kind = "success", action, onDismiss, children, className, ...props }: ToastProps) {
   const { Icon, cls } = KIND[kind];
   return (
     <div
@@ -32,6 +37,8 @@ export function Toast({ kind = "success", children, className, ...props }: Toast
     >
       <Icon className="size-5 shrink-0" aria-hidden />
       <span className="min-w-0 flex-1">{children}</span>
+      {action && <Button variant="ghost" size="compact" onClick={event => { event.stopPropagation(); action.onClick(); }}>{action.label}</Button>}
+      {onDismiss && <Button variant="ghost" size="compact" iconOnly aria-label="Fechar aviso" onClick={event => { event.stopPropagation(); onDismiss(); }}><X aria-hidden /></Button>}
     </div>
   );
 }
@@ -60,10 +67,12 @@ type ToastKind = keyof typeof KIND;
 export interface ToastOptions {
   kind?: ToastKind;
   message: React.ReactNode;
+  action?: ToastAction;
   /** ms; null keeps it until closed. Default: toast-visible token (errors: null). */
   duration?: number | null;
 }
-interface ToastItem extends Required<Omit<ToastOptions, "duration">> {
+interface ToastItem extends Omit<ToastOptions, "duration" | "kind"> {
+  kind: ToastKind;
   id: number;
   duration: number | null;
   leaving: boolean;
@@ -89,30 +98,58 @@ function QueuedToast({ item, onDone }: { item: ToastItem; onDone: (id: number) =
   const timer = React.useRef<number | undefined>(undefined);
   const left = React.useRef(item.duration);
   const started = React.useRef(0);
-  const start = () => {
-    if (left.current === null) return;
-    started.current = Date.now();
-    timer.current = window.setTimeout(() => onDone(item.id), left.current);
-  };
-  const pause = () => {
-    if (left.current === null) return;
+  const paused = React.useRef(new Set<string>());
+  const consumed = React.useRef(false);
+  const leaving = React.useRef(item.leaving);
+  leaving.current = item.leaving;
+  const dismiss = () => {
+    if (consumed.current || leaving.current) return;
+    consumed.current = true;
     window.clearTimeout(timer.current);
+    timer.current = undefined;
+    onDone(item.id);
+  };
+  const start = () => {
+    if (left.current === null || timer.current !== undefined || paused.current.size || consumed.current || leaving.current) return;
+    started.current = Date.now();
+    timer.current = window.setTimeout(dismiss, left.current);
+  };
+  const pause = (reason: string) => {
+    paused.current.add(reason);
+    if (timer.current === undefined || left.current === null) return;
+    window.clearTimeout(timer.current);
+    timer.current = undefined;
     left.current = Math.max(0, left.current - (Date.now() - started.current));
   };
+  const resume = (reason: string) => { paused.current.delete(reason); start(); };
   React.useEffect(() => {
     start();
-    return () => window.clearTimeout(timer.current);
+    return () => { window.clearTimeout(timer.current); timer.current = undefined; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const action = item.action ? { label: item.action.label, onClick: () => {
+    if (consumed.current || leaving.current) return;
+    // Dismiss first to make even synchronous repeat activation a single action.
+    dismiss();
+    item.action?.onClick();
+  } } : undefined;
   return (
     <Toast
       kind={item.kind}
+      action={action}
+      onDismiss={action ? dismiss : undefined}
       tabIndex={0}
-      onPointerEnter={pause}
-      onPointerLeave={start}
-      onFocus={pause}
-      onBlur={start}
-      onClick={() => onDone(item.id)}
+      onPointerEnter={() => pause("pointer")}
+      onPointerLeave={() => resume("pointer")}
+      onFocus={() => pause("focus")}
+      onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) resume("focus"); }}
+      onClick={event => { if (event.target === event.currentTarget || !(event.target as Element).closest("button,a,input")) dismiss(); }}
+      onKeyDown={event => {
+        if (event.key === "Escape" || (event.target === event.currentTarget && (event.key === "Enter" || event.key === " "))) {
+          event.preventDefault();
+          dismiss();
+        }
+      }}
       className={cn(
         "cursor-pointer motion-reduce:animate-none",
         item.leaving
@@ -134,7 +171,7 @@ export function ToastProvider({ children, max = 3 }: { children?: React.ReactNod
   }, []);
   const api = React.useMemo<ToastApi>(
     () => ({
-      show: ({ kind = "success", message, duration }) => {
+      show: ({ kind = "success", message, duration, action }) => {
         const id = nextId.current++;
         const d = duration !== undefined ? duration : kind === "error" ? null : tokenMs("--inova-motion-duration-toast-visible", 2600);
         setItems((all) => {
@@ -142,7 +179,7 @@ export function ToastProvider({ children, max = 3 }: { children?: React.ReactNod
           const overflow = live.length + 1 - max;
           const leaving = new Set(live.slice(0, Math.max(0, overflow)).map((t) => t.id));
           leaving.forEach((lid) => window.setTimeout(() => setItems((cur) => cur.filter((t) => t.id !== lid)), tokenMs("--inova-motion-duration-exit", 200)));
-          return [...all.map((t) => (leaving.has(t.id) ? { ...t, leaving: true } : t)), { id, kind, message, duration: d, leaving: false }];
+          return [...all.map((t) => (leaving.has(t.id) ? { ...t, leaving: true } : t)), { id, kind, message, action, duration: d, leaving: false }];
         });
         return id;
       },

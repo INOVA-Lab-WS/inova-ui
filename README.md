@@ -226,6 +226,31 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 
 `BarChart` e `HorizontalBarChart` aceitam `selectedLabel` e `onSelectionChange`: clique, Enter ou Espaço selecionam; selecionar novamente limpa (`null`). Setas, Home e End percorrem as barras.
 
+**Composições e filtros (0.13.0).** `MetricTile icon={<Icon />}` substitui o marcador em `layout="variant"`; `MetricChartCard` aceita 2, 4 ou 6 KPIs e `bodyPadding="none"`. `Table frameless rowInset` permite integrar a tabela sem uma segunda moldura. `TableRow interactive onClick={...}` também funciona com Enter/Espaço; ações e links dentro da linha continuam independentes.
+
+`PageHeader size="section"` usa h2 com o mesmo slot `action`. `Thumbnail` oferece `badge`, `overlayAction`, `author` e `footer`; o controle principal e a ação ficam separados. `DetailLayout sidebar={...}` mantém o detalhe no fluxo, sticky no desktop e abaixo no celular. `Breadcrumb` recebe `items={[{label,href}]}`; `BreadcrumbBack` oferece o retorno dentro de um painel, com no máximo 8px até seus filhos.
+
+`PageGrid loadState="idle" onLoadMore={loadNextPage}` sinaliza o fim visível sem carregar dados por conta própria. Informe `loadKey` a cada página consumida, inclusive quando ela retornar zero itens, para rearmar o observador. `loadState="loading"|"error"|"end"` apresenta progresso, nova tentativa e fim. O consumidor controla a lista, o cursor e os erros.
+
+`toast.show({message: "Publicado", action: {label: "Ver", onClick: openDetail}})` adiciona uma ação independente. `ProductListRow copySku="123456"` oferece cópia compacta e anúncio de sucesso/erro; callbacks `onCopySuccess`/`onCopyError` ficam disponíveis.
+
+`MultiSelect` e `DateRangePicker` aceitam `presentation="popover"|"sheet"|"responsive"`; sem a prop, mantêm popover. Responsive usa painel abaixo de 768px. `MultiSelectPanel` e `DateRangePanel` são conteúdo controlado sem gatilho/portal, para compor dentro de outro painel. `FilterBar` recebe `primary` e `filters` com `id`, `label`, `summary`, `active`, `field` (desktop) e `panel` (conteúdo do painel móvel); cada painel pode usar esses seletores sem abrir outra modal.
+
+`Combobox` recebe `options` em ordem definida pelo consumidor, `value`/`onValueChange`, ícone/avatar opcionais e `allowCreate`/`onCreate` para criação. Retorne de `onCreate` um valor ou uma opção, inclusive por Promise. A biblioteca descarta resultados de consultas canceladas; a persistência e a ordenação por uso são do produto. `originalValue` permite voltar à escolha original; `onCancel` trata cancelamento. A lista nova usa apresentação responsiva por padrão.
+
+```tsx
+<MenuProvider>
+  <Header />
+  <Menu presentation="responsive" navigation={navigation} logo={logo} />
+  {children}
+</MenuProvider>
+```
+
+O Header abre o estado compartilhado automaticamente; `onMenuClick` explícito continua tendo prioridade. `Menu open/onOpenChange` permite controle externo. O menu responsive é lateral a partir de 768px e tela cheia abaixo disso, fecha ao navegar ou mudar de breakpoint e devolve foco ao gatilho. Os modos anteriores continuam funcionando sem provider.
+
+`Avatar variant="logo" src={url} name="Marca"` usa borda, superfície clara, `object-contain` e respiro de 1/6 do tamanho. **Recorte o viewBox dos SVGs ao desenho:** contain não remove margens vazias gravadas no arquivo; fontes com viewBoxes diferentes continuarão parecendo de tamanhos diferentes.
+
+
 
 **Conversa**
 

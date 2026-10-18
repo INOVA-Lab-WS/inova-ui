@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as Popover from "@radix-ui/react-popover";
+import { SelectionSurface, type SelectionPresentation } from "./selection-presentation";
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "../lib/cn";
 import { Button } from "./button";
@@ -18,6 +18,7 @@ export interface DateRangePreset {
   range: () => DateRange;
 }
 export interface DateRangePickerProps {
+  presentation?: SelectionPresentation;
   value: DateRange | null;
   onValueChange: (range: DateRange | null) => void;
   presets?: DateRangePreset[];
@@ -61,6 +62,7 @@ export function DateRangeDay({
       type="button"
       disabled={disabled}
       onClick={() => onSelect?.(date)}
+      aria-label={fmtFull.format(date)}
       aria-pressed={selected || edge}
       className={cn(
         "mx-auto flex size-9 items-center justify-center rounded-8 text-xs tabular-nums transition-colors outline-none",
@@ -75,16 +77,42 @@ export function DateRangeDay({
   );
 }
 
-export function DateRangePicker({ value, onValueChange, presets = defaultDatePresets, label, max = new Date(), className }: DateRangePickerProps) {
+export function DateRangePicker({ value, onValueChange, presets = defaultDatePresets, label, max = new Date(), className, presentation = "popover" }: DateRangePickerProps) {
   const [open, setOpen] = React.useState(false);
+  const id = React.useId();
+  const activePreset = presets.find((p) => value && same(p.range().from, value.from) && same(p.range().to, value.to));
+  const trigger = activePreset ? activePreset.label : value ? `${fmt.format(value.from)} – ${fmt.format(value.to)}` : "Escolha o período";
+  return <div className={cn("flex w-full flex-col gap-1 font-sans", className)}>
+    {label && <label htmlFor={id} className="text-sm font-medium text-text-primary">{label}</label>}
+    <SelectionSurface presentation={presentation} open={open} onOpenChange={setOpen} title={label ?? "Período"}
+      className="z-popover flex max-h-[var(--radix-popover-content-available-height)] w-80 max-w-[calc(100vw-16px)] flex-col overflow-y-auto rounded-16 border border-border-default bg-surface-card p-3 font-sans shadow-raised lg:w-88"
+      trigger={<button type="button"
+          id={id}
+          className={cn(
+            "flex h-14 w-full items-center gap-2 rounded-16 border border-border-default bg-surface-card px-3 text-left text-base lg:h-12 lg:text-sm",
+            "shadow-control hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
+          )}
+        >
+          <CalendarDays className="size-4 text-text-muted" aria-hidden />
+          <span className="min-w-0 flex-1 truncate text-text-primary">{trigger}</span>
+        </button>}>
+      <DateRangePanel value={value} onValueChange={onValueChange} presets={presets} max={max} onApply={() => setOpen(false)} />
+    </SelectionSurface>
+  </div>;
+}
+
+export interface DateRangePanelProps extends Omit<DateRangePickerProps, "presentation" | "label"> {
+  /** Called after a preset or a complete custom range is committed. */
+  onApply?: () => void;
+}
+/** Controlled value with a local custom-range draft; cancellation never commits it. */
+export function DateRangePanel({ value, onValueChange, presets = defaultDatePresets, max = new Date(), className, onApply }: DateRangePanelProps) {
   const [draft, setDraft] = React.useState<{ from: Date | null; to: Date | null }>({ from: value?.from ?? null, to: value?.to ?? null });
   const [month, setMonth] = React.useState(() => {
     const b = value?.to ?? new Date();
     return new Date(b.getFullYear(), b.getMonth(), 1);
   });
-  const id = React.useId();
   const activePreset = presets.find((p) => value && same(p.range().from, value.from) && same(p.range().to, value.to));
-  const trigger = activePreset ? activePreset.label : value ? `${fmt.format(value.from)} – ${fmt.format(value.to)}` : "Escolha o período";
   const first = new Date(month.getFullYear(), month.getMonth(), 1);
   const lead = first.getDay();
   const days = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
@@ -94,95 +122,77 @@ export function DateRangePicker({ value, onValueChange, presets = defaultDatePre
     else setDraft({ from: draft.from, to: d });
   };
   const summary = draft.from && draft.to ? `${fmtFull.format(draft.from)} – ${fmtFull.format(draft.to)}` : draft.from ? `${fmtFull.format(draft.from)} – …` : "Escolha a data inicial";
-  return (
-    <div className={cn("flex w-full flex-col gap-1 font-sans", className)}>
-      {label && (
-        <label htmlFor={id} className="text-sm font-medium text-text-primary">
-          {label}
-        </label>
-      )}
-      <Popover.Root open={open} onOpenChange={setOpen}>
-        <Popover.Trigger
-          id={id}
-          className={cn(
-            "flex h-14 w-full items-center gap-2 rounded-16 border border-border-default bg-surface-card px-3 text-left text-base lg:h-12 lg:text-sm",
-            "shadow-control hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary",
-          )}
+  React.useEffect(() => {
+    setDraft({ from: value?.from ?? null, to: value?.to ?? null });
+    const base = value?.to ?? new Date();
+    setMonth(new Date(base.getFullYear(), base.getMonth(), 1));
+  }, [value?.from?.getTime(), value?.to?.getTime()]);
+  return <div className={cn("flex min-h-0 flex-col gap-3", className)}>
+    <div className="flex flex-wrap gap-2">
+      {presets.map((p) => (
+        <Chip
+          key={p.label}
+          size="small"
+          appearance={activePreset?.label === p.label ? "action" : "filled"}
+          onClick={() => {
+            onValueChange(p.range());
+            onApply?.();
+          }}
         >
-          <CalendarDays className="size-4 text-text-muted" aria-hidden />
-          <span className="min-w-0 flex-1 truncate text-text-primary">{trigger}</span>
-        </Popover.Trigger>
-        <Popover.Portal>
-          <Popover.Content align="start" sideOffset={4} className="z-popover flex w-80 flex-col gap-3 rounded-16 lg:w-88 border border-border-default bg-surface-card p-3 font-sans shadow-raised">
-            <div className="flex flex-wrap gap-2">
-              {presets.map((p) => (
-                <Chip
-                  key={p.label}
-                  size="small"
-                  appearance={activePreset?.label === p.label ? "action" : "filled"}
-                  onClick={() => {
-                    onValueChange(p.range());
-                    setOpen(false);
-                  }}
-                >
-                  {p.label}
-                </Chip>
-              ))}
-            </div>
-            <div className="flex items-center justify-between">
-              <Button variant="ghost" size="desktop" iconOnly aria-label="Mês anterior" onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}>
-                <ChevronLeft aria-hidden />
-              </Button>
-              <span className="text-sm font-semibold capitalize">{fmtMonth.format(month)}</span>
-              <Button
-                variant="ghost"
-                size="desktop"
-                iconOnly
-                aria-label="Próximo mês"
-                disabled={new Date(month.getFullYear(), month.getMonth() + 1, 1) > max}
-                onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}
-              >
-                <ChevronRight aria-hidden />
-              </Button>
-            </div>
-            <div className="grid grid-cols-7 gap-y-1 text-center">
-              {["D", "S", "T", "Q", "Q", "S", "S"].map((d, i) => (
-                <span key={i} className="text-xs font-semibold text-text-muted">
-                  {d}
-                </span>
-              ))}
-              {Array.from({ length: lead }).map((_, i) => (
-                <span key={`e${i}`} />
-              ))}
-              {Array.from({ length: days }).map((_, i) => {
-                const d = new Date(month.getFullYear(), month.getMonth(), i + 1);
-                const edge = same(d, draft.from) || same(d, draft.to);
-                const inRange = !!draft.from && !!draft.to && d > draft.from && d < draft.to;
-                const band = !!draft.from && !!draft.to && !same(draft.from, draft.to) && (inRange || edge);
-                return (
-                  <div key={i} className={cn("flex h-9 items-center", band && "bg-surface-ink/10", band && same(d, draft.from) && "rounded-l-8", band && same(d, draft.to) && "rounded-r-8")}>
-                    <DateRangeDay date={d} edge={edge} today={same(d, new Date())} disabled={d > max} onSelect={pick} />
-                  </div>
-                );
-              })}
-            </div>
-            <div className="flex items-center justify-between gap-2 border-t border-border-default pt-3">
-              <span className="text-xs text-text-muted">{summary}</span>
-              <Chip
-                size="small"
-                appearance="action"
-                disabled={!draft.from || !draft.to}
-                onClick={() => {
-                  if (draft.from && draft.to) onValueChange({ from: draft.from, to: draft.to });
-                  setOpen(false);
-                }}
-              >
-                Aplicar
-              </Chip>
-            </div>
-          </Popover.Content>
-        </Popover.Portal>
-      </Popover.Root>
+          {p.label}
+        </Chip>
+      ))}
     </div>
-  );
+    <div className="flex items-center justify-between">
+      <Button variant="ghost" size="desktop" iconOnly aria-label="Mês anterior" onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}>
+        <ChevronLeft aria-hidden />
+      </Button>
+      <span className="text-sm font-semibold capitalize">{fmtMonth.format(month)}</span>
+      <Button
+        variant="ghost"
+        size="desktop"
+        iconOnly
+        aria-label="Próximo mês"
+        disabled={new Date(month.getFullYear(), month.getMonth() + 1, 1) > max}
+        onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}
+      >
+        <ChevronRight aria-hidden />
+      </Button>
+    </div>
+    <div className="grid grid-cols-7 gap-y-1 text-center">
+      {["D", "S", "T", "Q", "Q", "S", "S"].map((d, i) => (
+        <span key={i} className="text-xs font-semibold text-text-muted">
+          {d}
+        </span>
+      ))}
+      {Array.from({ length: lead }).map((_, i) => (
+        <span key={`e${i}`} />
+      ))}
+      {Array.from({ length: days }).map((_, i) => {
+        const d = new Date(month.getFullYear(), month.getMonth(), i + 1);
+        const edge = same(d, draft.from) || same(d, draft.to);
+        const inRange = !!draft.from && !!draft.to && d > draft.from && d < draft.to;
+        const band = !!draft.from && !!draft.to && !same(draft.from, draft.to) && (inRange || edge);
+        return (
+          <div key={i} className={cn("flex h-9 items-center", band && "bg-surface-ink/10", band && same(d, draft.from) && "rounded-l-8", band && same(d, draft.to) && "rounded-r-8")}>
+            <DateRangeDay date={d} edge={edge} today={same(d, new Date())} disabled={d > max} onSelect={pick} />
+          </div>
+        );
+      })}
+    </div>
+    <div className="flex items-center justify-between gap-2 border-t border-border-default pt-3">
+      <span className="text-xs text-text-muted">{summary}</span>
+      <Chip
+        size="small"
+        appearance="action"
+        disabled={!draft.from || !draft.to}
+        onClick={() => {
+          if (draft.from && draft.to) onValueChange({ from: draft.from, to: draft.to });
+          onApply?.();
+        }}
+      >
+        Aplicar
+      </Chip>
+    </div>
+  </div>;
 }

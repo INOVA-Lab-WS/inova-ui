@@ -1,4 +1,6 @@
 import * as React from "react";
+import * as Dialog from "@radix-ui/react-dialog";
+import { useMenu } from "./menu-context";
 import { cn } from "../lib/cn";
 import { useMinWidth } from "../lib/hooks";
 import { BREAKPOINTS } from "../lib/breakpoints";
@@ -23,7 +25,7 @@ import { Button } from "./button";
  * navigation can be a function that receives { collapsed }, so the app renders ActionCard context="rail" when
  * collapsed and context="menu" when open.
  */
-export type MenuPresentation = "sidebar" | "expanded" | "collapsed" | "fullscreen" | "rail";
+export type MenuPresentation = "sidebar" | "expanded" | "collapsed" | "fullscreen" | "rail" | "responsive";
 
 export interface MenuProps extends Omit<React.HTMLAttributes<HTMLElement>, "children"> {
   presentation?: MenuPresentation;
@@ -49,6 +51,8 @@ export interface MenuProps extends Omit<React.HTMLAttributes<HTMLElement>, "chil
   collapseLabel?: string;
   /** Fullscreen only: keep it mounted and toggle open, so it can animate out (motion.duration.base in, motion.duration.exit out). */
   open?: boolean;
+  /** responsive: controlled mobile open state; Header can share it through MenuProvider. */
+  onOpenChange?: (open: boolean) => void;
   /** Fullscreen only: called once the exit animation has finished. */
   onExitComplete?: () => void;
   /** Fullscreen only: closes the menu (X button and Esc). The app returns focus to the button that opened it. */
@@ -56,7 +60,7 @@ export interface MenuProps extends Omit<React.HTMLAttributes<HTMLElement>, "chil
   closeLabel?: string;
 }
 
-export const Menu = React.forwardRef<HTMLElement, MenuProps>(
+const MenuBase = React.forwardRef<HTMLElement, MenuProps & { escapeManaged?: boolean }>(
   (
     {
       presentation = "sidebar",
@@ -74,6 +78,8 @@ export const Menu = React.forwardRef<HTMLElement, MenuProps>(
       collapseLabel = "Recolher menu",
       open = true,
       onExitComplete,
+      onOpenChange: _onOpenChange,
+      escapeManaged = false,
       onClose,
       closeLabel = "Fechar menu",
       className,
@@ -110,13 +116,14 @@ export const Menu = React.forwardRef<HTMLElement, MenuProps>(
 
     const navRef = React.useRef<HTMLDivElement>(null);
     React.useEffect(() => {
-      if (!fullscreen) return;
-      navRef.current?.querySelector<HTMLElement>("a, button, [tabindex]:not([tabindex='-1'])")?.focus();
-      if (!onClose) return;
+      if (fullscreen && open) navRef.current?.querySelector<HTMLElement>("a, button, [tabindex]:not([tabindex='-1'])")?.focus();
+    }, [fullscreen, open]);
+    React.useEffect(() => {
+      if (!fullscreen || !open || !onClose || escapeManaged) return;
       const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
       window.addEventListener("keydown", onKey);
       return () => window.removeEventListener("keydown", onKey);
-    }, [fullscreen, onClose]);
+    }, [fullscreen, open, onClose, escapeManaged]);
 
     const nav = typeof navigation === "function" ? navigation({ collapsed }) : navigation;
     const logoNode = typeof logo === "function" ? logo({ collapsed }) : logo;
@@ -169,7 +176,7 @@ export const Menu = React.forwardRef<HTMLElement, MenuProps>(
             )}
           </div>
           <Divider className="w-full shrink-0" />
-          <div ref={navRef} className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-4">{nav}</div>
+          <div ref={navRef} data-menu-navigation="" className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-4">{nav}</div>
           {account && (
             <div className="flex shrink-0 flex-col gap-3 px-4 pb-6">
               <Divider className="w-full" />
@@ -224,7 +231,7 @@ export const Menu = React.forwardRef<HTMLElement, MenuProps>(
             )}
           </div>
         )}
-        <div ref={navRef} className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", collapsed ? "items-center gap-3 px-1 pt-4" : "gap-1 px-3 pt-4")}>
+        <div ref={navRef} data-menu-navigation="" className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", collapsed ? "items-center gap-3 px-1 pt-4" : "gap-1 px-3 pt-4")}>
           {nav}
         </div>
         {account && (
@@ -240,21 +247,41 @@ export const Menu = React.forwardRef<HTMLElement, MenuProps>(
     );
   },
 );
+MenuBase.displayName = "MenuBase";
+
+function ResponsiveMenu({ open: controlled, onOpenChange, onClose, ...props }: Omit<MenuProps, "presentation"> & { forwardedRef: React.ForwardedRef<HTMLElement> }) {
+  const { forwardedRef, ...baseProps } = props;
+  const tablet = useMinWidth(BREAKPOINTS.tablet);
+  const shared = useMenu();
+  const [own, setOwn] = React.useState(false);
+  const open = controlled ?? shared?.open ?? own;
+  const close = React.useCallback((next: boolean) => {
+    if (controlled === undefined) { if (shared) shared.setOpen(next); else setOwn(next); }
+    onOpenChange?.(next);
+    if (!next) onClose?.();
+  }, [controlled, shared, onOpenChange, onClose]);
+  const previousTablet = React.useRef(tablet);
+  React.useEffect(() => {
+    if (tablet !== previousTablet.current) { if (open) close(false); previousTablet.current = tablet; }
+  }, [tablet, open, close]);
+  if (tablet) return <MenuBase {...baseProps} ref={forwardedRef} presentation="sidebar" />;
+  return <Dialog.Root open={open} onOpenChange={close}><Dialog.Portal>
+    <Dialog.Content asChild onOpenAutoFocus={event => event.preventDefault()} onCloseAutoFocus={event => { if (shared?.triggerRef.current) { event.preventDefault(); shared.triggerRef.current.focus(); } }} onEscapeKeyDown={event => { event.preventDefault(); close(false); }}>
+      <div ref={forwardedRef as React.Ref<HTMLDivElement>} className="fixed inset-0 z-overlay outline-none" aria-describedby={undefined}>
+        <Dialog.Title className="sr-only">{baseProps.label ?? "Menu principal"}</Dialog.Title>
+        <MenuBase {...baseProps} presentation="fullscreen" escapeManaged open onClose={() => close(false)} onClick={event => {
+          baseProps.onClick?.(event);
+          const target = event.target instanceof Element ? event.target.closest("a[href],button,[role=menuitem]") : null;
+          if (target?.closest("[data-menu-navigation]") && !target.hasAttribute("disabled") && target.getAttribute("aria-disabled") !== "true" && target.getAttribute("aria-label") !== (baseProps.closeLabel ?? "Fechar menu")) close(false);
+        }} />
+      </div>
+    </Dialog.Content>
+  </Dialog.Portal></Dialog.Root>;
+}
+
+export const Menu = React.forwardRef<HTMLElement, MenuProps>(({ presentation = "sidebar", ...props }, ref) =>
+  presentation === "responsive" ? <ResponsiveMenu {...props} forwardedRef={ref} /> : <MenuBase {...props} presentation={presentation} ref={ref} />
+);
 Menu.displayName = "Menu";
 
-/**
- * PageGrid · Foundations "grid e breakpoints". The content grid: 4 columns on mobile, 8 on tablet, 12 from desktop,
- * with the gutter and margin of each range, and content limited to 1280px on wide screens. It starts where the
- * menu ends: put it beside the Menu, never under it.
- */
-export const PageGrid = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "mx-auto grid w-full max-w-[calc(var(--inova-content-max-width)+2*var(--inova-grid-margin))] grid-cols-[repeat(var(--inova-grid-columns),minmax(0,1fr))] gap-x-[var(--inova-grid-gutter)] px-[var(--inova-grid-margin)]",
-      className,
-    )}
-    {...props}
-  />
-));
-PageGrid.displayName = "PageGrid";
+export { PageGrid, type PageGridProps } from "./page-grid";

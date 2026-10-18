@@ -13,6 +13,7 @@ export const avatarVariants = cva(
     variants: {
       variant: {
         person: "",
+        logo: "bg-surface-card text-text-muted [&_img]:object-contain [&_img]:p-[16.6667%]",
         app: "bg-surface-card text-text-muted [&_img]:object-contain [&_img]:p-1",
       },
       size: {
@@ -23,6 +24,7 @@ export const avatarVariants = cva(
     },
     // app: the logo or fallback icon is 16px in small and medium, 20px in large (Figma avatar variant=app).
     compoundVariants: [
+      { variant: "logo", className: "[&_svg]:size-[66.6667%]" },
       { variant: "app", size: "small", className: "[&_svg]:size-4" },
       { variant: "app", size: "medium", className: "[&_svg]:size-4" },
       { variant: "app", size: "large", className: "[&_svg]:size-5" },
@@ -37,11 +39,12 @@ export interface AvatarProps extends React.HTMLAttributes<HTMLSpanElement>, Vari
   /** Person: only a photo they uploaded to the app, never the login provider's; falls back to the initial.
    *  App: the logo; falls back to the package icon. */
   src?: string;
+  /** Logo SVGs should use a tightly cropped viewBox; contain cannot remove whitespace inside the source. */
   icon?: React.ReactNode;
 }
 
 export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(({ className, variant, size, name, src, icon, ...props }, ref) => {
-  const app = variant === "app";
+  const app = variant === "app" || variant === "logo";
   // A photo the person uploaded; if it is missing or fails to load, the initial takes its place.
   const [failed, setFailed] = React.useState(false);
   React.useEffect(() => setFailed(false), [src]);

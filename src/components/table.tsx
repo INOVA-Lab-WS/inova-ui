@@ -9,6 +9,10 @@ import { Skeleton } from "./skeleton";
 export interface TableProps extends Omit<React.TableHTMLAttributes<HTMLTableElement>, "title" | "summary"> {
   /** Header row (a TableRow type="header"). */
   head?: React.ReactNode;
+  /** Remove the outer card border, radius and padding inside another surface. */
+  frameless?: boolean;
+  /** Align first/last cells with a 12px inset, including the header and loading rows. */
+  rowInset?: boolean;
   /** When true, shows emptyMessage instead of the body. */
   empty?: boolean;
   emptyMessage?: string;
@@ -58,15 +62,15 @@ function SkeletonLine({ row, columns }: { row: "avatar" | "text"; columns: numbe
   );
 }
 
-export const Table = React.forwardRef<HTMLTableElement, TableProps>(({ head, empty, emptyMessage = "Nenhum registro no filtro atual.", caption, busy, skeletonRows = 4, skeletonRow = "avatar", skeletonColumns = 4, title, summary, note, className, children, ...props }, ref) => (
-  <div className="flex w-full flex-col gap-4 relative overflow-x-auto rounded-16 border border-border-default bg-surface-card p-5 font-sans">
+export const Table = React.forwardRef<HTMLTableElement, TableProps>(({ head, frameless = false, rowInset = false, empty, emptyMessage = "Nenhum registro no filtro atual.", caption, busy, skeletonRows = 4, skeletonRow = "avatar", skeletonColumns = 4, title, summary, note, className, children, ...props }, ref) => (
+  <div className={cn("relative flex w-full flex-col gap-4 overflow-x-auto bg-surface-card font-sans", !frameless && "rounded-16 border border-border-default p-5")}>
     {(title || summary) && (
       <div className="flex items-baseline gap-3 text-sm">
         {title && <span className="font-semibold text-text-muted">{title}</span>}
         {summary && <span className="text-text-primary">{summary}</span>}
       </div>
     )}
-    <table ref={ref} aria-busy={busy || undefined} className={cn("w-full border-collapse font-sans", className)} {...props}>
+    <table ref={ref} aria-busy={busy || undefined} className={cn("w-full border-collapse font-sans", rowInset && "[&>thead>tr>:first-child]:pl-3 [&>thead>tr>:last-child]:pr-3 [&>tbody>tr>:first-child]:pl-3 [&>tbody>tr>:last-child]:pr-3 [&>tfoot>tr>:first-child]:pl-3 [&>tfoot>tr>:last-child]:pr-3", className)} {...props}>
       {caption && <caption className="sr-only">{caption}</caption>}
       {head && <thead>{head}</thead>}
       <tbody>{busy && !React.Children.count(children) ? Array.from({ length: skeletonRows }, (_, i) => (

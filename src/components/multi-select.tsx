@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as Popover from "@radix-ui/react-popover";
+import { SelectionSurface, type SelectionPresentation } from "./selection-presentation";
 import { Check, ChevronDown, Search, X } from "lucide-react";
 import { cn } from "../lib/cn";
 import { Button } from "./button";
@@ -19,6 +19,7 @@ export interface MultiSelectOption {
   hint?: string;
 }
 export interface MultiSelectProps {
+  presentation?: SelectionPresentation;
   options: MultiSelectOption[];
   /** Controlled value. Omit it and use defaultValue to let the component keep its own state. */
   value?: string[];
@@ -45,6 +46,7 @@ export interface MultiSelectProps {
 }
 
 export function MultiSelect({
+  presentation = "popover",
   options,
   value: controlled,
   defaultValue = [],
@@ -68,11 +70,9 @@ export function MultiSelect({
     if (controlled === undefined) setOwn(v);
     onChange?.(v);
   };
-  const [query, setQuery] = React.useState("");
+  const [open, setOpen] = React.useState(false);
   const id = React.useId();
-  const filtered = query ? options.filter((o) => o.label.toLowerCase().includes(query.toLowerCase())) : options;
   const all = value.length === options.length && options.length > 0;
-  const toggle = (v: string) => onValueChange(value.includes(v) ? value.filter((x) => x !== v) : [...value, v]);
   const selectedOption = value.length === 1 ? options.find((option) => option.value === value[0]) : undefined;
   const triggerText =
     value.length === 0 ? placeholder : all ? (allSelectedLabel ?? allLabel) : value.length === 1 ? options.find((o) => o.value === value[0])?.label : `${value.length} selecionados`;
@@ -87,8 +87,9 @@ export function MultiSelect({
         (Array.isArray(form) ? form : [form]).flatMap((f) =>
           value.map((v) => <input key={`${f ?? ""}:${v}`} type="hidden" name={name} value={v} form={f} />),
         )}
-      <Popover.Root>
-        <Popover.Trigger
+      <SelectionSurface presentation={presentation} open={open} onOpenChange={setOpen} title={label ?? "Selecionar opções"}
+        className="z-popover flex max-h-[var(--radix-popover-content-available-height)] w-[var(--radix-popover-trigger-width)] flex-col gap-1 rounded-12 border border-border-default bg-surface-card p-2 font-sans shadow-raised"
+        trigger={<button type="button"
           id={id}
           disabled={disabled}
           aria-haspopup="listbox"
@@ -110,6 +111,7 @@ export function MultiSelect({
               aria-label="Limpar seleção"
               onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 onValueChange([]);
               }}
               className="inline-flex text-text-muted"
@@ -118,78 +120,9 @@ export function MultiSelect({
             </span>
           )}
           <ChevronDown className="size-4 text-text-muted" aria-hidden />
-        </Popover.Trigger>
-        <Popover.Portal>
-          <Popover.Content
-            align="start"
-            sideOffset={4}
-            collisionPadding={8}
-            className="z-popover flex max-h-[var(--radix-popover-content-available-height)] w-[var(--radix-popover-trigger-width)] flex-col gap-1 rounded-12 border border-border-default bg-surface-card p-2 font-sans shadow-raised"
-          >
-            {searchable && (
-              <div className="mb-1 flex h-10 items-center gap-2 rounded-8 border border-border-default px-3">
-                <Search className="size-4 text-text-muted" aria-hidden />
-                <input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Pesquisar"
-                  aria-label="Pesquisar opções"
-                  className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-text-muted"
-                />
-              </div>
-            )}
-            <div
-              role="listbox"
-              aria-multiselectable="true"
-              aria-label={typeof label === "string" ? label : undefined}
-              className="flex max-h-64 min-h-0 flex-col gap-1 overflow-y-auto overscroll-contain"
-              onKeyDown={(e) => {
-                const items = Array.from(e.currentTarget.querySelectorAll<HTMLElement>('[role="option"]'));
-                const i = items.indexOf(document.activeElement as HTMLElement);
-                const go = (n: number) => {
-                  e.preventDefault();
-                  items[(n + items.length) % items.length]?.focus();
-                };
-                if (e.key === "ArrowDown") go(i + 1);
-                else if (e.key === "ArrowUp") go(i - 1);
-                else if (e.key === "Home") go(0);
-                else if (e.key === "End") go(items.length - 1);
-                else if (e.key === " " || e.key === "Enter") {
-                  e.preventDefault();
-                  (document.activeElement as HTMLElement)?.click();
-                }
-              }}
-            >
-              {!query && (
-                <Option selected={all} strong onSelect={() => onValueChange(all ? [] : options.map((o) => o.value))} tabIndex={0}>
-                  {allLabel}
-                </Option>
-              )}
-              {filtered.length === 0 && <p className="px-2 py-2 text-sm text-text-muted">{noResults}</p>}
-              {filtered.map((o, i) => (
-                <Option key={o.value} selected={value.includes(o.value)} onSelect={() => toggle(o.value)} tabIndex={query && i === 0 ? 0 : -1}>
-                  <span className="flex min-w-0 items-center gap-2">
-                    {o.icon && <OptionIcon>{o.icon}</OptionIcon>}
-                    {o.hint ? (
-                      <span className="flex min-w-0 flex-col">
-                        <span>{o.label}</span>
-                        <span className="text-xs text-text-muted">{o.hint}</span>
-                      </span>
-                    ) : (
-                      <span className="min-w-0">{o.label}</span>
-                    )}
-                  </span>
-                </Option>
-              ))}
-            </div>
-            {value.length > 0 && !all && (
-              <Button variant="ghost" size="desktop" onClick={() => onValueChange([])}>
-                Limpar seleção ({value.length})
-              </Button>
-            )}
-          </Popover.Content>
-        </Popover.Portal>
-      </Popover.Root>
+        </button>}>
+          <MultiSelectPanel options={options} value={value} onValueChange={onValueChange} label={label} allLabel={allLabel} searchable={searchable ?? (presentation === "popover" ? false : options.length > 8)} noResults={noResults} />
+      </SelectionSurface>
       {error && (
         <p id={`${id}-error`} className="text-xs text-surface-danger">
           {error}
@@ -247,4 +180,85 @@ function Option({
 /** Icons carry no accessible name: the option label names both the row and trigger. */
 function OptionIcon({ children }: { children: React.ReactNode }) {
   return <span aria-hidden="true" className="inline-flex size-4 shrink-0 items-center justify-center [&>svg]:size-4 [&>img]:size-4 [&>img]:object-contain">{children}</span>;
+}
+
+export interface MultiSelectPanelProps {
+  options: MultiSelectOption[];
+  value: string[];
+  onValueChange: (value: string[]) => void;
+  label?: React.ReactNode;
+  allLabel?: string;
+  searchable?: boolean;
+  noResults?: string;
+  className?: string;
+}
+/** Controlled selection content; no trigger, popover or sheet. */
+export function MultiSelectPanel({ options, value, onValueChange, label, allLabel = "Todos", searchable = options.length > 8, noResults = "Nada encontrado.", className }: MultiSelectPanelProps) {
+  const [query, setQuery] = React.useState("");
+  const filtered = query ? options.filter((o) => o.label.toLowerCase().includes(query.toLowerCase())) : options;
+  const all = value.length === options.length && options.length > 0;
+  const toggle = (v: string) => onValueChange(value.includes(v) ? value.filter((x) => x !== v) : [...value, v]);
+  return <div className={cn("flex min-h-0 flex-col gap-1", className)}>
+    {searchable && (
+      <div className="mb-1 flex h-10 items-center gap-2 rounded-8 border border-border-default px-3">
+        <Search className="size-4 text-text-muted" aria-hidden />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Pesquisar"
+          aria-label="Pesquisar opções"
+          className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-text-muted"
+        />
+      </div>
+    )}
+    <div
+      role="listbox"
+      aria-multiselectable="true"
+      aria-label={typeof label === "string" ? label : undefined}
+      className="flex max-h-64 min-h-0 flex-col gap-1 overflow-y-auto overscroll-contain"
+      onKeyDown={(e) => {
+        const items = Array.from(e.currentTarget.querySelectorAll<HTMLElement>('[role="option"]'));
+        const i = items.indexOf(document.activeElement as HTMLElement);
+        const go = (n: number) => {
+          e.preventDefault();
+          items[(n + items.length) % items.length]?.focus();
+        };
+        if (e.key === "ArrowDown") go(i + 1);
+        else if (e.key === "ArrowUp") go(i - 1);
+        else if (e.key === "Home") go(0);
+        else if (e.key === "End") go(items.length - 1);
+        else if (e.key === " " || e.key === "Enter") {
+          e.preventDefault();
+          (document.activeElement as HTMLElement)?.click();
+        }
+      }}
+    >
+      {!query && (
+        <Option selected={all} strong onSelect={() => onValueChange(all ? [] : options.map((o) => o.value))} tabIndex={0}>
+          {allLabel}
+        </Option>
+      )}
+      {filtered.length === 0 && <p className="px-2 py-2 text-sm text-text-muted">{noResults}</p>}
+      {filtered.map((o, i) => (
+        <Option key={o.value} selected={value.includes(o.value)} onSelect={() => toggle(o.value)} tabIndex={query && i === 0 ? 0 : -1}>
+          <span className="flex min-w-0 items-center gap-2">
+            {o.icon && <OptionIcon>{o.icon}</OptionIcon>}
+            {o.hint ? (
+              <span className="flex min-w-0 flex-col">
+                <span>{o.label}</span>
+                <span className="text-xs text-text-muted">{o.hint}</span>
+              </span>
+            ) : (
+              <span className="min-w-0">{o.label}</span>
+            )}
+          </span>
+        </Option>
+      ))}
+    </div>
+    {value.length > 0 && !all && (
+      <Button variant="ghost" size="desktop" onClick={() => onValueChange([])}>
+        Limpar seleção ({value.length})
+      </Button>
+    )}
+  </div>;
 }

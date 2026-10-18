@@ -8,7 +8,7 @@ import { TrendBadge, type TrendBadgeProps } from "./trend-badge";
 /**
  * Metric tile · Figma "metric-tile": layouts stat, variant and count, with an "i" help trigger. "Não medido" is never 0.
  * Height (#91): standalone tiles are at least --inova-size-metric-tile (136px), with or without the dot or a
- * caption. Embedded tiles use the same content with 160px mobile width and a 96px minimum height.
+ * caption. Embedded tiles use the same content with a minimum 160px mobile width that grows to fit the full value, and a 96px minimum height.
  * Captions are limited to two lines.
  */
 export interface MetricTileProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -30,13 +30,15 @@ export interface MetricTileProps extends React.HTMLAttributes<HTMLDivElement> {
   help?: string;
   /** layout="variant": colour of the 10px category marker (a bg-* class). Default chart-category1. */
   markerClassName?: string;
+  /** Decorative monochrome icon replacing the variant dot. */
+  icon?: React.ReactNode;
   /** layout="variant": false hides the marker and its space, the scene-tile look without the dot (#88). Default true. */
   marker?: boolean;
   /** While loading: the value and caption become skeletons and the tile gets aria-busy. */
   loading?: boolean;
 }
 
-export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ label, value, layout = "stat", context = "standalone", state = "default", selected, disabled, onActivate, trend, caption, help, markerClassName, marker = true, loading, className, ...props }, ref) => {
+export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ label, value, layout = "stat", context = "standalone", state = "default", selected, disabled, onActivate, trend, caption, help, markerClassName, icon, marker = true, loading, className, style, ...props }, ref) => {
   const stat = layout === "stat";
   const embedded = context === "embedded";
   const busy = loading || state === "loading";
@@ -47,6 +49,8 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ l
   const shown = !measured ? "Não medido" : typeof value === "number" ? new Intl.NumberFormat("pt-BR").format(value) : value;
   const labelId = React.useId();
   const valueId = React.useId();
+  const valueProbeRef = React.useRef<HTMLSpanElement>(null);
+  const [mobileValueWidth, setMobileValueWidth] = React.useState(0);
   const trendRef = React.useRef<HTMLSpanElement>(null);
   const captionProbeRef = React.useRef<HTMLSpanElement>(null);
   const [captionLines, setCaptionLines] = React.useState(2);
@@ -75,12 +79,23 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ l
     observer.observe(el);
     return () => observer.disconnect();
   }, [caption, showTrend]);
+  React.useLayoutEffect(() => {
+    const el = valueProbeRef.current;
+    if (!el || !embedded) return;
+    const measure = () => setMobileValueWidth(Math.ceil(el.getBoundingClientRect().width));
+    measure();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [embedded, shown, busy]);
+  const mobileStyle = embedded ? { "--metric-mobile-width": `${Math.max(160, mobileValueWidth + 32 + (showTrend ? trendWidth + 8 : 0))}px` } as React.CSSProperties : undefined;
   // Keep the badge out of content flow, reserving its measured width where text can meet it.
   const trendSpace = showTrend ? { paddingInlineEnd: trendWidth + 8 } : undefined;
   return (
-    <div ref={ref} aria-busy={busy || undefined} data-context={context} data-state={busy ? "loading" : inactive ? "disabled" : active ? "selected" : state} className={cn(
+    <div ref={ref} style={{ ...mobileStyle, ...style }} aria-busy={busy || undefined} data-context={context} data-state={busy ? "loading" : inactive ? "disabled" : active ? "selected" : state} className={cn(
       "relative isolate flex flex-col font-sans",
-      embedded ? "min-h-24 w-40 shrink-0 gap-1 p-4 desktop:w-auto" : "min-h-[var(--inova-size-metric-tile)] rounded-16 border border-border-default bg-surface-card",
+      embedded ? "min-h-24 min-w-40 w-[var(--metric-mobile-width,160px)] shrink-0 gap-1 p-4 desktop:min-w-0 desktop:w-auto" : "min-h-[var(--inova-size-metric-tile)] rounded-16 border border-border-default bg-surface-card",
       !embedded && (stat ? "gap-1 p-5" : "p-4"),
       active && (embedded ? "bg-surface-page" : "border-surface-action"),
       inactive && !busy && "opacity-50",
@@ -89,7 +104,9 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ l
     )} {...props}>
       {selectable && <button type="button" aria-labelledby={labelId} aria-describedby={valueId} aria-pressed={active} disabled={inactive} onClick={onActivate} className="absolute inset-0 z-raised rounded-[inherit] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary disabled:cursor-not-allowed" />}
       <div className={cn("relative flex min-w-0 flex-col", (stat || embedded) && "gap-1")}>
-      {layout === "variant" && marker && <span aria-hidden className={cn("mb-2 size-2.5 rounded-pill", markerClassName ?? "bg-chart-category1")} />}
+      {layout === "variant" && (icon != null || marker) && (icon != null
+        ? <span aria-hidden="true" className="mb-2 inline-flex size-2.5 shrink-0 items-center justify-center text-text-muted [&>svg]:size-2.5 [&>img]:size-2.5">{icon}</span>
+        : <span aria-hidden className={cn("mb-2 size-2.5 rounded-pill", markerClassName ?? "bg-chart-category1")} />)}
       <span id={labelId} className={cn("pr-6 text-xs text-text-muted", stat && !embedded && "font-medium uppercase")}>{label}</span>
       {busy ? (
         <>
@@ -99,7 +116,7 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ l
         </>
       ) : (
         <>
-          <span id={valueId} style={trendSpace} className={cn("min-w-0 truncate tabular-nums", !measured ? "text-sm text-text-muted" : embedded ? "text-xl font-bold leading-7 text-text-primary" : stat ? "text-2xl font-bold text-text-primary" : "text-xl font-bold text-text-primary")}>{shown}</span>
+          <span id={valueId} style={trendSpace} className={cn("min-w-0 tabular-nums", embedded ? "whitespace-nowrap desktop:truncate" : "truncate", !measured ? "text-sm text-text-muted" : embedded ? "text-xl font-bold leading-7 text-text-primary" : stat ? "text-2xl font-bold text-text-primary" : "text-xl font-bold text-text-primary")}>{shown}</span>
           {caption && <>
             {showTrend && <span ref={captionProbeRef} aria-hidden className="pointer-events-none invisible absolute left-0 top-0 w-full line-clamp-2 text-xs text-text-muted">{caption}</span>}
             <span style={showTrend ? { ...trendSpace, WebkitLineClamp: captionLines } : undefined} className="line-clamp-2 text-xs text-text-muted">{caption}</span>
@@ -107,6 +124,7 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(({ l
         </>
       )}
       </div>
+      {embedded && !busy && <span ref={valueProbeRef} aria-hidden="true" className={cn("pointer-events-none invisible absolute left-0 top-0 w-max whitespace-nowrap tabular-nums", measured ? "text-xl font-bold leading-7" : "text-sm")}>{shown}</span>}
       {help && (
         <Tooltip text={help} placement="top-end">
           <button type="button" aria-label={help} className="absolute right-3 top-3 z-header flex size-6 items-center justify-center rounded-pill focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary">

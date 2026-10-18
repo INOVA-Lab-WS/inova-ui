@@ -3,6 +3,7 @@
 // component=MultiSelect
 import figma from 'figma';
 const instance=figma.selectedInstance;
+const presentation=instance.getEnum('presentation',{popover:'popover',sheet:'sheet',responsive:'responsive'});
 const viewport=instance.getEnum('viewport',{desktop:'desktop',mobile:'mobile'});
 const state=instance.getEnum('state',{'closed-empty':'closed-empty','closed-single':'closed-single','closed-multiple':'closed-multiple',open:'open','option-selected':'option-selected','option-unselected':'option-unselected','option-hover':'option-hover','all-selected':'all-selected','search-results':'search-results','search-none':'search-none'});
 const allLabel=instance.getString('option-0-label');
@@ -28,7 +29,7 @@ const selected=state==='all-selected'?'["option-1","option-2","option-3"]':state
 // Custom single/multiple trigger display strings have no counterpart in the runtime's option-derived labels/count.
 export default {
  id:'multi-select',imports:['import { MultiSelect } from "@inova-lab-ws/ui"'],
- example:figma.code`<MultiSelect label={<span className="sr-only">${accessibleName}</span>} allLabel="${allLabel}" placeholder="${placeholder}" allSelectedLabel="${allSelectedLabel}" noResults="${noResults}" ${searchable?'searchable':''} defaultValue={${selected}} options={[
+ example:figma.code`<MultiSelect presentation="${presentation}" label={<span className="sr-only">${accessibleName}</span>} allLabel="${allLabel}" placeholder="${placeholder}" allSelectedLabel="${allSelectedLabel}" noResults="${noResults}" ${searchable?'searchable':''} defaultValue={${selected}} options={[
  {value:"option-1",label:"${label1}"${code1?figma.code`,icon:(${code1})`:''}},
  {value:"option-2",label:"${label2}"${code2?figma.code`,icon:(${code2})`:''}},
  {value:"option-3",label:"${label3}"${code3?figma.code`,icon:(${code3})`:''}}

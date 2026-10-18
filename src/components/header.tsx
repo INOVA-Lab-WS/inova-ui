@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useMenu } from "./menu-context";
 import { cn } from "../lib/cn";
 import { Avatar } from "./avatar";
 import { LogoPlaceholder } from "./logos";
@@ -54,6 +55,7 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
     },
     ref,
   ) => {
+    const menu = useMenu();
     const right = rightSlot === undefined ? <Avatar size={viewport === "mobile" ? "medium" : "small"} name={userName} /> : rightSlot;
     return (
       <header
@@ -67,12 +69,12 @@ export const Header = React.forwardRef<HTMLElement, HeaderProps>(
       >
         {leadingAction ?? (
           <button
-            ref={menuButtonRef}
+            ref={node => { if (menu) menu.triggerRef.current = node; if (typeof menuButtonRef === "function") menuButtonRef(node); else if (menuButtonRef) menuButtonRef.current = node; }}
             type="button"
             aria-label={menuLabel}
-            aria-expanded={menuExpanded}
-            onClick={onMenuClick}
-            className={cn("inline-flex size-8 items-center justify-center rounded-8 text-text-primary outline-none hover:bg-surface-control-hover focus-visible:outline-2 focus-visible:outline-text-primary [&_svg]:size-5", viewport === "desktop" && "hidden")}
+            aria-expanded={menuExpanded ?? menu?.open}
+            onClick={onMenuClick ?? (menu ? () => menu.setOpen(!menu.open) : undefined)}
+            className={cn("inline-flex size-8 items-center justify-center rounded-8 text-text-primary outline-none hover:bg-surface-control-hover focus-visible:outline-2 focus-visible:outline-text-primary [&_svg]:size-5", viewport === "desktop" && "hidden", menu && !onMenuClick && "tablet:hidden")}
           >
             <ChocolateMenuIcon />
           </button>

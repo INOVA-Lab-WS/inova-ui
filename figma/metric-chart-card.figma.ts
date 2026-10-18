@@ -9,10 +9,12 @@ const viewport=instance.getEnum('viewport',{desktop:'desktop',mobile:'mobile'});
 const bodyPadding=instance.getEnum('body-padding',{default:'default',none:'none'});
 const title=instance.getString('title');
 const showHeader=instance.getBoolean('show-header');
-const chart=instance.getInstanceSwap('chart');
+// Resolve the actual bound legacy child; the swap definition alone has no instance context on the server.
+const chartChild=instance.findInstance('area chart');
+const chart=chartChild.type==='INSTANCE'?chartChild:instance.getInstanceSwap('chart');
 const chartCode=chart?.type==='INSTANCE' ? chart.executeTemplate().example : undefined;
-const bodySlot=instance.getSlot(viewport==='mobile'?'body#1123:191':'body#1123:184');
-const bodyCode=bodySlot??chartCode??'';
+const bodySlot=instance.getSlot('body');
+const bodyCode=bodySlot?.length?bodySlot:chartCode??'';
 const metrics=instance.findConnectedInstances(n=>n.codeConnectId()==='metric-tile');
 const m0=metrics[0]?.type==='INSTANCE' ? metrics[0].executeTemplate().metadata?.props?.fields : undefined;
 const m1=metrics[1]?.type==='INSTANCE' ? metrics[1].executeTemplate().metadata?.props?.fields : undefined;

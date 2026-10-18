@@ -51,7 +51,7 @@ export function DetailLayer({ open, onOpenChange, title, image, media, onImageCl
         <Dialog.Title className="sr-only">{title}</Dialog.Title>
         <div className="relative flex min-h-full flex-col lg:h-full lg:flex-row" onClick={closeBackground}>
           <div onClick={closeBackground} className="relative flex shrink-0 items-center justify-center px-4 pb-8 pt-[calc(var(--inova-safe-area-top)+4.5rem)] lg:h-full lg:min-w-0 lg:flex-1 lg:p-6">
-            {media ?? (onImageClick && image ? <button type="button" onClick={onImageClick} aria-label={imageActionLabel} className="flex w-full items-center justify-center rounded-16 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white lg:h-full">{imageContent}</button> : imageContent)}
+            {media ?? (onImageClick && image ? <button type="button" onClick={onImageClick} aria-label={imageActionLabel} className="flex w-full items-center justify-center rounded-16 outline-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white lg:h-full">{imageContent}</button> : imageContent)}
           </div>
           <aside className="relative -mt-4 flex min-w-0 flex-1 flex-col gap-6 rounded-t-24 bg-surface-card px-4 pb-[calc(var(--inova-safe-area-bottom)+2rem)] pt-6 lg:my-4 lg:mr-4 lg:w-[var(--inova-detail-panel-width)] lg:flex-none lg:overflow-y-auto lg:overscroll-contain lg:rounded-16 lg:p-6 lg:pt-16">
             {children}

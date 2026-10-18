@@ -3,9 +3,10 @@
 ## 0.14.0 · 2026-10-18
 
 - **AreaChart / Badge / ForecastCard (#120–#122):** previsão distinta da comparação anterior, faixa provável com lacunas, cores categóricas e cartão de período previsto com composição por origem.
-- **Thumbnail (#123–#125, #128):** aparência sem moldura com conteúdo espaçado, tamanho compacto e rail, proporção 4:3, imagem reserva e navegação por router; AuthorLine, ThumbnailSkeleton e SeeAll reutilizáveis.
+- **Thumbnail (#123–#125, #128):** aparência sem moldura com padding global de 4px como o cartão do chat, fundo transparente/bege e conteúdo espaçado em 8px, tamanho compacto e rail, proporção 4:3, imagem reserva e navegação por router; AuthorLine, ThumbnailSkeleton e SeeAll reutilizáveis.
 - **FilterBar (#126):** Limpar tudo opcional no rodapé móvel e gatilho com Button da biblioteca.
 - **DetailLayer (#127):** composição modal de foto e painel, responsiva, com foco, fechamento por teclado/fundo e ação de zoom; fechar o ImageViewer devolve o foco ao controle de origem. DetailLayout permanece no fluxo.
+- **Ajustes durante a entrega:** fundo do KPI selecionado acompanha os cantos do MetricChartCard sem cortar foco/ajuda; foco visível sólido nos controles de Thumbnail, rail e zoom.
 
 ## 0.13.0 · 2026-10-18
 

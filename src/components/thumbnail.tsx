@@ -11,7 +11,7 @@ export function thumbnailFrameClassName(appearance: ThumbnailAppearance = "defau
   return cn(
     "relative isolate flex shrink-0 flex-col rounded-16 font-sans",
     size === "compact" ? "w-[42vw] max-w-[180px] snap-start" : "w-32",
-    appearance === "frameless" ? "border-0 bg-transparent p-0 transition-colors hover:bg-surface-muted" : "border border-border-default bg-surface-card p-1",
+    appearance === "frameless" ? "border-0 bg-transparent p-1 transition-colors hover:bg-surface-muted" : "border border-border-default bg-surface-card p-1",
   );
 }
 
@@ -56,7 +56,7 @@ export function Thumbnail({ src, alt = "", swatch, caption, metadata, fallback, 
   const interactive = !!href || !!asChild || isButton;
   const split = interactive && !!(asChild || overlayAction || author || footer);
   const Comp = (split ? "div" : href ? "a" : isButton ? "button" : "div") as React.ElementType;
-  const control = cn("cursor-pointer text-left outline-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary", appearance === "default" && !unavailable && "hover:border-green-primary");
+  const control = cn("cursor-pointer text-left outline-none transition-colors focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary", appearance === "default" && !unavailable && "hover:border-green-primary");
   const navigationLabel = ariaLabel ?? (typeof caption === "string" ? caption : alt || "Abrir imagem");
   const cardClick: React.MouseEventHandler<HTMLElement> = event => {
     if (unavailable) { event.preventDefault(); return; }

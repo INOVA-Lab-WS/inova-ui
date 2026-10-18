@@ -3,10 +3,13 @@
 // component=Menu
 import figma from 'figma';
 const instance = figma.selectedInstance;
-const presentation = instance.getEnum('presentation', { collapsed:'collapsed', fullscreen:'fullscreen', expanded:'expanded', 'collapsed-hover':'collapsed', responsive:'responsive' });
-const logo = instance.getSlot('logo');
-const navigation = instance.getSlot('navigation');
-const footer = instance.getSlot('footer');
+const nativePresentation = instance.getEnum('presentation', { collapsed:'collapsed', fullscreen:'fullscreen', expanded:'expanded', 'collapsed-hover':'collapsed-hover', responsive:'responsive' });
+const presentation = nativePresentation === 'collapsed-hover' ? 'collapsed' : nativePresentation;
+// The legacy collapsed-hover preview has no valid native SLOT defaults; keep its slots application-supplied.
+const hasNativeSlots = nativePresentation !== 'collapsed-hover';
+const logo = hasNativeSlots ? instance.getSlot('logo') : undefined;
+const navigation = hasNativeSlots ? instance.getSlot('navigation') : undefined;
+const footer = hasNativeSlots ? instance.getSlot('footer') : undefined;
 const showFooter = instance.getBoolean('show-footer');
 // collapsed-hover is the native hover preview of collapsed; viewport previews the responsive CSS layout.
 // Mount Header and this Menu under the same MenuProvider to share automatic mobile open/close state.

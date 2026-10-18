@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.14.0 · 2026-10-18
+
+- **AreaChart / Badge / ForecastCard (#120–#122):** previsão distinta da comparação anterior, faixa provável com lacunas, cores categóricas e cartão de período previsto com composição por origem.
+- **Thumbnail (#123–#125, #128):** aparência sem moldura com conteúdo espaçado, tamanho compacto e rail, proporção 4:3, imagem reserva e navegação por router; AuthorLine, ThumbnailSkeleton e SeeAll reutilizáveis.
+- **FilterBar (#126):** Limpar tudo opcional no rodapé móvel e gatilho com Button da biblioteca.
+- **DetailLayer (#127):** composição modal de foto e painel, responsiva, com foco, fechamento por teclado/fundo e ação de zoom; fechar o ImageViewer devolve o foco ao controle de origem. DetailLayout permanece no fluxo.
+
 ## 0.13.0 · 2026-10-18
 
 - **MetricTile / MetricChartCard (#104, #106, #118):** marcador por ícone opcional; valores exatos maiores no celular; composição de2,4ou6KPIs, com corpo sem padding opcional.

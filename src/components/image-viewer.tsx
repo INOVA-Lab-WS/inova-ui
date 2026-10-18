@@ -68,6 +68,7 @@ export function ImageViewer({
   previousLabel = "Imagem anterior",
   nextLabel = "Próxima imagem",
 }: ImageViewerProps) {
+  const opener = React.useRef<HTMLElement | null>(null);
   const [inner, setInner] = React.useState(defaultIndex);
   const index = indexProp ?? inner;
   const many = images.length > 1;
@@ -205,6 +206,13 @@ export function ImageViewer({
       <Dialog.Portal>
         <Dialog.Content
           aria-describedby={undefined}
+          onOpenAutoFocus={() => {
+            if (document.activeElement instanceof HTMLElement) opener.current = document.activeElement;
+          }}
+          onCloseAutoFocus={(event) => {
+            event.preventDefault();
+            if (opener.current?.isConnected) opener.current.focus({ preventScroll: true });
+          }}
           onKeyDown={(e) => {
             if (e.key === "ArrowLeft" && many) goTo(index - 1);
             else if (e.key === "ArrowRight" && many) goTo(index + 1);

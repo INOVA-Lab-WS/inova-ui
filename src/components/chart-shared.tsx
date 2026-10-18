@@ -173,6 +173,8 @@ export function useActiveBar(count: number) {
 export interface ChartTooltipRow {
   label: string;
   value: number | null;
+  /** Optional display-ready value, for example a probable interval. Numeric defaults remain unchanged. */
+  valueText?: string;
   colorClass?: string;
   date?: string;
   lineStyle?: "solid" | "dashed";
@@ -202,7 +204,7 @@ export function ChartTooltip({ index, count, title, rows, total, formatValue = n
         <span key={i} className="flex items-center gap-2">
           {r.colorClass && (r.lineStyle ? <ChartLineKey label={r.label} lineStyle={r.lineStyle} colorClass={r.colorClass} markerOnly /> : <span aria-hidden className={cn("size-2.5 shrink-0 rounded-4", r.colorClass)} />)}
           <span className="min-w-0 flex-1 truncate text-text-muted">{r.label}{r.date && ` · ${r.date}`}</span>
-          <span className="font-medium tabular-nums text-text-primary">{r.value === null || !Number.isFinite(r.value) ? missingValueLabel : formatValue(r.value)}</span>
+          <span className="font-medium tabular-nums text-text-primary">{r.valueText ?? (r.value === null || !Number.isFinite(r.value) ? missingValueLabel : formatValue(r.value))}</span>
         </span>
       ))}
       {total !== undefined && (

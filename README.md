@@ -226,6 +226,24 @@ Todos os componentes da INOVA Lab Library estão no pacote, cada um com Code Con
 
 `BarChart` e `HorizontalBarChart` aceitam `selectedLabel` e `onSelectionChange`: clique, Enter ou Espaço selecionam; selecionar novamente limpa (`null`). Setas, Home e End percorrem as barras.
 
+**Previsão e mídia (0.14.0).** `AreaChart` aceita pontos `{label, value, projected, low, high}`. `projectedLabel` e `rangeLabel` personalizam a legenda e a dica; previsão neutra tracejada e faixa provável são independentes da comparação com o período anterior. Limites ausentes ou inválidos deixam lacunas, sem virar zero. `ForecastCard` recebe `period`, `value`, `range`, `target`, `targetStatus` e 2 grupos opcionais em `breakdown`; valores, avaliação da meta e `formatValue` pertencem ao consumidor. `ForecastCardGroup` organiza os cartões em colunas no desktop e rolagem lateral no celular. `Badge color="category1"` até `category5` usa os tons categóricos dos gráficos, claros por padrão; cores antigas e `disabled` continuam com o mesmo significado.
+
+`Thumbnail appearance="frameless" size="compact" aspectRatio="4:3"` mantém a mídia nas bordas e o conteúdo com 8px de respiro. Compact ocupa 42vw, até 180px; `ThumbnailRail` fornece rolagem com snap e gap de 12px. `fallbackSrc` é tentado uma vez se a imagem principal falhar; trocar `src` reinicia a tentativa. `ThumbnailSkeleton` compartilha aparência, tamanho e proporção com o cartão. `AuthorLine name="Ana" store="Loja"` fornece avatar e texto truncado; `SeeAll` fornece o link da ação de seção.
+
+```tsx
+<ThumbnailRail>
+  <Thumbnail asChild appearance="frameless" size="compact" aspectRatio="4:3"
+    src={photo} fallbackSrc={backupPhoto} caption="Ambiente" overlayAction={<Button onClick={save}>Salvar</Button>}>
+    <Link href={detailUrl}>Abrir ambiente</Link>
+  </Thumbnail>
+</ThumbnailRail>
+<PageHeader size="section" title="Ambientes" action={<SeeAll asChild><Link href="/all">Ver todos</Link></SeeAll>} />
+```
+
+O link principal do `Thumbnail` e as ações são irmãos; não coloque um link envolvendo o cartão inteiro. `FilterBar onClearAll={clearFilters}` acrescenta “Limpar tudo” ao rodapé móvel sem fechar o painel; `showClearAll={false}` esconde a ação e `clearAllLabel` altera seu texto.
+
+`DetailLayer` é a composição **modal** de imagem e painel: `open`, `onOpenChange`, `title`, `image={{src,alt}}` e os filhos do painel. No desktop, a imagem fica contida à esquerda e o painel de 400px rola por dentro; no celular, a camada inteira rola. `panelWidth` altera a largura desktop. `onImageClick` oferece a ação de zoom; o consumidor pode abrir `ImageViewer`, que devolve o foco ao controle que o abriu quando o zoom fecha. `initialFocusRef` e `returnFocusRef` permitem escolher o foco inicial e de retorno. Escape, clique no fundo e fechar são gerenciados pela camada. `DetailLayout` continua sendo a composição lateral **no fluxo**, sem modal.
+
 **Composições e filtros (0.13.0).** `MetricTile icon={<Icon />}` substitui o marcador em `layout="variant"`; `MetricChartCard` aceita 2, 4 ou 6 KPIs e `bodyPadding="none"`. `Table frameless rowInset` permite integrar a tabela sem uma segunda moldura. `TableRow interactive onClick={...}` também funciona com Enter/Espaço; ações e links dentro da linha continuam independentes.
 
 `PageHeader size="section"` usa h2 com o mesmo slot `action`. `Thumbnail` oferece `badge`, `overlayAction`, `author` e `footer`; o controle principal e a ação ficam separados. `DetailLayout sidebar={...}` mantém o detalhe no fluxo, sticky no desktop e abaixo no celular. `Breadcrumb` recebe `items={[{label,href}]}`; `BreadcrumbBack` oferece o retorno dentro de um painel, com no máximo 8px até seus filhos.

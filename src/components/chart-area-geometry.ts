@@ -25,3 +25,14 @@ export function linePath(points: AreaPoint[]) { return points.map((p, i) => `${i
 export function areaPath(points: AreaPoint[], baseline: number) {
   return `${linePath(points)} L${points[points.length - 1].x},${baseline} L${points[0].x},${baseline} Z`;
 }
+
+export interface AreaRangeDatum { projected?: boolean; low?: number | null; high?: number | null }
+/** A probable interval is valid independently of its center value; either missing bound splits the polygon. */
+export function rangeSegments(data: AreaRangeDatum[], low: number, high: number): { lower: AreaPoint[]; upper: AreaPoint[] }[] {
+  const lower = areaSegments(data.map(d => d.projected && measured(d.low) && measured(d.high) && d.low <= d.high ? d.low : null), low, high);
+  const upper = areaSegments(data.map(d => d.projected && measured(d.low) && measured(d.high) && d.low <= d.high ? d.high : null), low, high);
+  return lower.map((points, index) => ({ lower: points, upper: upper[index] }));
+}
+export function rangePath(segment: { lower: AreaPoint[]; upper: AreaPoint[] }) {
+  return `${linePath(segment.upper)} ${segment.lower.slice().reverse().map(p => `L${p.x},${p.y}`).join(" ")} Z`;
+}

@@ -4,7 +4,7 @@
 import figma from "figma";
 const instance = figma.selectedInstance;
 const layout = instance.getEnum('layout', {stat:'stat',variant:'variant',count:'count',embedded:'embedded'});
-const state = instance.getEnum('state', {default:'default',idle:'idle',selected:'selected',focus:'focus',static:'static',loading:'loading',missing:'missing'});
+const state = instance.getEnum('state', {default:'default',idle:'idle',selected:'selected',focus:'focus',static:'static',loading:'loading',missing:'missing',disabled:'disabled'});
 const markerContent=instance.getEnum('marker-content',{default:'default',icon:'icon'});
 const iconInstance=markerContent==='icon'?instance.getInstanceSwap('icon'):undefined;
 const iconCode=iconInstance?.type==='INSTANCE'?iconInstance.executeTemplate().example:undefined;

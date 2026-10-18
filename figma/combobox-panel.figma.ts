@@ -3,7 +3,7 @@
 // component=ComboboxPanel
 import figma from "figma";
 const instance=figma.selectedInstance;
-const state=instance.getEnum('state',{results:'results',empty:'empty',create:'create',error:'error'});
+const state=instance.getEnum('state',{results:'results',empty:'empty',create:'create',error:'error',creating:'creating'});
 const label0=instance.getString('option-0-label');
 const label1=instance.getString('option-1-label');
 const label2=instance.getString('option-2-label');
@@ -19,10 +19,11 @@ const searchPlaceholder=instance.getString('searchPlaceholder');
 const emptyText=instance.getString('emptyText');
 const createLabel=instance.getString('createLabel');
 const createErrorText=instance.getString('createErrorText');
-const allowCreate=state==='create'||state==='error';
+const allowCreate=state==='create'||state==='error'||state==='creating';
 const cancel=instance.findInstance('Cancel');
 const reset=instance.findInstance('Reset original');
 const cancelLabel=cancel.type==='INSTANCE'?cancel.getString('label'):undefined;
 const resetLabel=reset.type==='INSTANCE'?reset.getString('label'):undefined;
-// Search/create/error are user-driven states; no forced state/query prop exists. Persist onCreate in the application.
+// Search/create/error/creating are user-driven previews; no forced state/query prop exists.
+// The runtime disables options and displays Criando… while the caller's creation promise is pending.
 export default {id:'combobox-panel',imports:['import { ComboboxPanel } from "@inova-lab-ws/ui"'],example:figma.code`<ComboboxPanel options={${effectiveOptions}} value={null} onValueChange={(value) => { /* Commit chosen value. */ }} originalValue="option-0" searchPlaceholder="${searchPlaceholder}" emptyText="${emptyText}" createLabel="${createLabel}" createErrorText="${createErrorText}" ${cancelLabel?figma.code`cancelLabel="${cancelLabel}"`:''} ${resetLabel?figma.code`resetLabel="${resetLabel}"`:''} ${allowCreate?figma.code`allowCreate onCreate={(query) => query}`:''} />`,metadata:{nestable:true,props:{options:effectiveOptions,searchPlaceholder,emptyText,createLabel,createErrorText,allowCreate}}};

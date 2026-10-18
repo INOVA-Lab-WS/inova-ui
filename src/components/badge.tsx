@@ -7,10 +7,20 @@ export const badgeVariants = cva(
   "inline-flex shrink-0 items-center gap-1 rounded-8 px-2 py-1 font-sans text-xs font-medium whitespace-nowrap [&_svg]:size-3",
   {
     variants: {
-      color: { green: "", red: "", yellow: "", blue: "", beige: "", disabled: "" },
+      color: { green: "", red: "", yellow: "", blue: "", beige: "", disabled: "", category1: "", category2: "", category3: "", category4: "", category5: "" },
       tone: { dark: "", light: "" },
     },
     compoundVariants: [
+      { color: "category1", tone: "dark", className: "bg-chart-category1 text-text-primary" },
+      { color: "category1", tone: "light", className: "bg-chart-category1/15 text-text-primary" },
+      { color: "category2", tone: "dark", className: "bg-chart-category2 text-text-primary" },
+      { color: "category2", tone: "light", className: "bg-chart-category2/15 text-text-primary" },
+      { color: "category3", tone: "dark", className: "bg-chart-category3 text-text-primary" },
+      { color: "category3", tone: "light", className: "bg-chart-category3/15 text-text-primary" },
+      { color: "category4", tone: "dark", className: "bg-chart-category4 text-text-on-ink" },
+      { color: "category4", tone: "light", className: "bg-chart-category4/15 text-text-primary" },
+      { color: "category5", tone: "dark", className: "bg-chart-category5 text-text-primary" },
+      { color: "category5", tone: "light", className: "bg-chart-category5/15 text-text-primary" },
       { color: "green", tone: "dark", className: "bg-surface-action text-text-on-action" },
       { color: "green", tone: "light", className: "bg-green-secondary text-green-secondary-foreground" },
       { color: "red", tone: "dark", className: "bg-surface-danger text-text-on-action" },
@@ -28,7 +38,7 @@ export const badgeVariants = cva(
   },
 );
 
-type BadgeColor = "green" | "red" | "yellow" | "blue" | "beige" | "disabled";
+export type BadgeColor = "green" | "red" | "yellow" | "blue" | "beige" | "disabled" | "category1" | "category2" | "category3" | "category4" | "category5";
 type BadgeTone = "dark" | "light";
 /** @deprecated names from before the color x tone matrix; they map to the new pairs. */
 type LegacyVariant = "default" | "secondary" | "outline" | "muted" | "warning" | "destructive" | "error" | "native-muted" | "native-outline" | "native-secondary" | "native-warning";
@@ -59,7 +69,7 @@ export interface BadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 
 }
 
 export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(({ className, color, tone, variant, icon, children, ...props }, ref) => {
-  const [c, t] = variant ? legacy[variant] : [color ?? "green", tone ?? "dark"];
+  const [c, t] = variant ? legacy[variant] : [color ?? "green", tone ?? (color?.startsWith("category") ? "light" : "dark")];
   return (
     <span ref={ref} className={cn(badgeVariants({ color: c, tone: t }), className)} {...props}>
       {icon}

@@ -1,0 +1,40 @@
+{
+  "codeConnect": {
+    "include": [
+      "figma/metric-tile.figma.ts",
+      "figma/metric-chart-card.figma.ts",
+      "figma/table.figma.ts",
+      "figma/table-row.figma.ts",
+      "figma/multi-select.figma.ts",
+      "figma/date-range-picker.figma.ts",
+      "figma/multi-select-panel.figma.ts",
+      "figma/date-range-panel.figma.ts",
+      "figma/filter-bar.figma.ts",
+      "figma/combobox.figma.ts",
+      "figma/combobox-panel.figma.ts",
+      "figma/page-header.figma.ts",
+      "figma/thumbnail.figma.ts",
+      "figma/page-grid.figma.ts",
+      "figma/toast.figma.ts",
+      "figma/breadcrumb.figma.ts",
+      "figma/breadcrumb-back.figma.ts",
+      "figma/detail-layout.figma.ts",
+      "figma/product-list-row.figma.ts",
+      "figma/menu.figma.ts",
+      "figma/header.figma.ts",
+      "figma/avatar.figma.ts",
+      "figma/pill-tab.figma.ts",
+      "figma/pill-tabs.figma.ts",
+      "figma/area-chart.figma.ts",
+      "figma/badge.figma.ts",
+      "figma/forecast-card.figma.ts",
+      "figma/thumbnail-rail.figma.ts",
+      "figma/thumbnail-skeleton.figma.ts",
+      "figma/author-line.figma.ts",
+      "figma/see-all.figma.ts",
+      "figma/detail-layer.figma.ts"
+    ],
+    "parser": "react",
+    "label": "React"
+  }
+}

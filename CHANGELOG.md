@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.14.2 · 2026-11-24
+
+- **ActionCard (#132):** no contexto rail, o rótulo fica centralizado sob o ícone também com `asChild` (ex.: envolvendo um Link). Antes, só o caminho com botão próprio centralizava, e um rótulo em 2 linhas ficava à esquerda.
+
 ## 0.14.1 · 2026-10-27
 
 - **MetricChartCard (#129):** aceita de 2 a 6 métricas tipadas e usa a mesma quantidade de colunas no desktop. Com 3 KPIs não sobra uma coluna vazia; com 5 não há quebra para uma segunda linha. Rolagem mobile, seleção, cantos e foco preservados.
